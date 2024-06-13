@@ -9,36 +9,41 @@ import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
 import CandidateRegister from './pages/CandidateRegister';
+import screening from './Components/ApplyJob/screening';
 
 
-const router=createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:"/",
-    element:<Home />,
+    path: "/",
+    element: <Home />,
   },
   {
-    path:"/jobs",
-    element:<JobList />,
+    path: "/jobs",
+    element: <JobList />,
   },
   {
-    path:"/candidate",
-    element:<CandidateProfile />,
+    path: "/candidate",
+    element: <CandidateProfile />,
   },
   {
-    path:"/jobview",
-    element:<JobView />,
+    path: "/jobview",
+    element: <JobView />,
   },
   {
-    path:"/apply",
-    element:<Apply />,
+    path: "/apply",
+    element: <Apply />,
   },
   {
-    path:"/candidate/register",
-    element:<CandidateRegister />,
+    path: "/jobs/screening",
+    element: <screening />,
   },
   {
-    path:"*",
-    element:<PageNotFound />,
+    path: "/candidate/register",
+    element: <CandidateRegister />,
+  },
+  {
+    path: "*",
+    element: <PageNotFound />,
   },
 ]);
 
