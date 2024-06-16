@@ -7,12 +7,12 @@
 /* Global styles */
 
 :root {
-  --primary-color: #0cbf55;
-  --primary-color-low: #328956;
-  --primary-color-dark:#1c775e;
-  --secondary-color: #0b222f;
+  --primary-color: #01A9E0;
+  --primary-color-low: #A5E1F4;
+  --primary-color-dark:#0000EE;
+  --secondary-color: #0d0b2c00;
   --text-color: #333;
-  --text-color-secondary: #f6f6f6;
+  --text-color-secondary: #000000;
   --text-color-white:#ffffff;
   --background-color: #f0f0f0;
   font-family: 'URWGeometricRegular';
