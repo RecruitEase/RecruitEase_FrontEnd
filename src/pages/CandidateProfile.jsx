@@ -26,8 +26,8 @@ function CandidateProfile() {
         return <MyInformation />;
       case "Saved Items":
         return <SavedItems />;
-      case "Draft":
-        return <Draft />;
+      // case "Draft":
+      //   return <Draft />;
       default:
         return <div>Draft Content</div>;
     }
@@ -36,7 +36,7 @@ function CandidateProfile() {
   const imageUrl="https://www.resumonk.com/assets/template-thumbnails/regal-0061058b06687d67e513234d9169de15ae663a638197357a947a0f5571dbdd9c.jpg"
   const cvFileName="cv.pdf"
 
-  const comletePresentage ="50"
+  const comletePresentage ="75"
   return (
     
     <div id="wrapper">

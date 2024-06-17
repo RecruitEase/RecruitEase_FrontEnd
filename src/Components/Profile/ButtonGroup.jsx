@@ -35,12 +35,12 @@ const ButtonGroup = ({ onButtonClick, defaultActive }) => {
                 >
                     Saved Items
                 </button>
-                <button 
+                {/* <button 
                     className={`button ${activeButton === "Draft" ? 'active' : ''}`} 
                     onClick={() => handleButtonClick("Draft")}
                 >
                     Draft
-                </button>
+                </button> */}
             </div>
         </div>
     );
