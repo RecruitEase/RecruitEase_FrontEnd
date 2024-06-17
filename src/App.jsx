@@ -9,6 +9,10 @@ import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
 import CandidateRegister from './pages/CandidateRegister';
+import screening from './Components/ApplyJob/screening';
+import Layout from './Components/LoginRegister/Layout';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 
 const router=createBrowserRouter([
@@ -21,10 +25,6 @@ const router=createBrowserRouter([
     element:<JobList />,
   },
   {
-    path:"/candidate",
-    element:<CandidateProfile />,
-  },
-  {
     path:"/jobview",
     element:<JobView />,
   },
@@ -33,12 +33,20 @@ const router=createBrowserRouter([
     element:<Apply />,
   },
   {
-    path:"/candidate/register",
-    element:<CandidateRegister />,
+    path: "/jobs/screening",
+    element: <screening />,
   },
   {
-    path:"*",
-    element:<PageNotFound />,
+    path: "*",
+    element: <PageNotFound />,
+  },
+  {
+    path: "/candidate",
+    element: <Layout />,
+    children: [
+      { path: "register", element: <Register /> },
+      { path: "login", element: <Login /> }
+    ]
   },
 ]);
 
