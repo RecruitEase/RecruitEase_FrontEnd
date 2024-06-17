@@ -1,15 +1,15 @@
 // components/Layout.js
 import * as React from 'react';
 import { Outlet } from 'react-router-dom';
-import CandidateNavbar from './CandidateNavbar';
+import Navbar from './Navbar';
 
-const CandidateLayout = () => {
+const Layout = () => {
   return (
     <>
-      <CandidateNavbar />
+      <Navbar />
       <Outlet />
     </>
   );
 };
 
-export default CandidateLayout;
+export default Layout;

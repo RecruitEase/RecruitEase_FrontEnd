@@ -29,7 +29,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 
 const defaultTheme = createTheme();
 
-export default function CandidateLogin() {
+export default function RecruiterLogin() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -57,7 +57,7 @@ export default function CandidateLogin() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Candidate Sign in
+          Recruiter Sign in
           </Typography>
           <Box
             component="form"

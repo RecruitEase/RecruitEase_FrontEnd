@@ -8,9 +8,11 @@ import CandidateProfile from './pages/CandidateProfile';
 import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
-import CandidateLayout from './Components/LoginRegister/CandidateLayout';
+import Layout from './Components/LoginRegister/Layout';
 import CandidateLogin from './pages/CandidateLogin';
 import CandidateRegister from './pages/CandidateRegister';
+import RecruiterLogin from './pages/RecruiterLogin';
+import RecruiterRegister from './pages/RecruiterRegister';
 
 
 const router=createBrowserRouter([
@@ -40,10 +42,18 @@ const router=createBrowserRouter([
   // },
   {
     path: "/candidate",
-    element: <CandidateLayout />,
+    element: <Layout />,
     children: [
       { path: "register", element: <CandidateRegister /> },
       { path: "login", element: <CandidateLogin /> }
+    ]
+  },
+  {
+    path: "/recruiter",
+    element: <Layout />,
+    children: [
+      { path: "register", element: <RecruiterRegister /> },
+      { path: "login", element: <RecruiterLogin /> }
     ]
   },
 ]);
