@@ -8,43 +8,42 @@ import CandidateProfile from './pages/CandidateProfile';
 import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
+import CandidateLayout from './Components/LoginRegister/CandidateLayout';
+import CandidateLogin from './pages/CandidateLogin';
 import CandidateRegister from './pages/CandidateRegister';
-import Layout from './Components/LoginRegister/Layout';
-import Login from './pages/Login';
-import Register from './pages/Register';
 
 
 const router=createBrowserRouter([
-  {
-    path:"/",
-    element:<Home />,
-  },
-  {
-    path:"/jobs",
-    element:<JobList />,
-  },
-  {
-    path:"/jobview",
-    element:<JobView />,
-  },
-  {
-    path:"/apply",
-    element:<Apply />,
-  },
-  {
-    path: "/jobs/screening",
-    element: <screening />,
-  },
-  {
-    path: "*",
-    element: <PageNotFound />,
-  },
+  // {
+  //   path:"/",
+  //   element:<Home />,
+  // },
+  // {
+  //   path:"/jobs",
+  //   element:<JobList />,
+  // },
+  // {
+  //   path:"/jobview",
+  //   element:<JobView />,
+  // },
+  // {
+  //   path:"/apply",
+  //   element:<Apply />,
+  // },
+  // {
+  //   path: "/jobs/screening",
+  //   element: <screening />,
+  // },
+  // {
+  //   path: "*",
+  //   element: <PageNotFound />,
+  // },
   {
     path: "/candidate",
-    element: <Layout />,
+    element: <CandidateLayout />,
     children: [
-      { path: "register", element: <Register /> },
-      { path: "login", element: <Login /> }
+      { path: "register", element: <CandidateRegister /> },
+      { path: "login", element: <CandidateLogin /> }
     ]
   },
 ]);
