@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.div-margins div,
+.div-margins p,
+.div-margins h1 {
+  @apply m-4; /* Adjust margin size as needed (e.g., m-4 for 1rem margin) */
+}
+
+
+/* Container for both sections */
+#container {
+  display: flex; /* Enable Flexbox layout */
+  width: 100%;
+   /* Make container fill the width of the page */
+}
+
+/* Style the left section */
+#leftContainer {
+  flex-direction: column; 
+  padding: 1em; 
+  border-right: 1px solid #ddd; 
+  background-color: #f5f5f5; 
+  max-width: 70%;
+}
+
+/* Style the right section */
+#rightContainer {
+  flex-direction: column; 
+  padding: 1em;
+  max-width: 30%;
+}
+

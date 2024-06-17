@@ -1,0 +1,92 @@
+.relatedjobs{
+  margin: 80px auto;
+  padding: 0 80px;
+  position: relative;
+  
+}
+.control {
+  display: flex;
+  align-items: center; 
+  gap: 10px;
+}
+
+.next-btn, .back-btn {
+  padding: 15px;
+  width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: #20b1c5;
+}
+
+ /* .next-btn, .back-btn{
+   position: absolute; 
+   top: 50%;  
+  transform: translateY(-50%);
+  padding: 15px;
+  width: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  background: #212EA0;
+}  */
+
+
+/* .back-btn{
+  right: auto;
+  left: 0;
+} */
+
+.slider{
+  overflow: hidden;
+  
+}
+.slider ul{
+  display: flex;
+  width: 100%;  
+  overflow-x: hidden;
+  transition:0.5s ;
+  
+}
+.slider ul li{
+  list-style: none;
+  width: 60%;
+  padding: 10px;
+}
+
+.slide{
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  padding: 20px;
+  border-radius: 10px;
+  color: #151414;
+  line-height: 1;
+  
+}
+
+.slide .c_logo{
+  width: 60px;
+  height: 40px;
+  border-radius:5px;
+  margin-right: 10px;
+  border:none;
+}
+
+.slide .icon {
+  margin-right: 10px;
+  width: 15px; 
+  height: 15px; 
+}
+
+.user-info{
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.user-info span{
+  padding-left: 80px;
+}
+
+.user-info h3{
+  color: #212EA0;
+}
+
