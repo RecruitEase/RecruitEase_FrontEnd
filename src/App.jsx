@@ -9,7 +9,6 @@ import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
 import CandidateRegister from './pages/CandidateRegister';
-import screening from './Components/ApplyJob/screening';
 import Layout from './Components/LoginRegister/Layout';
 import Login from './pages/Login';
 import Register from './pages/Register';
