@@ -29,7 +29,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function CandidateLogin() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
