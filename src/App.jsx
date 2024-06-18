@@ -16,36 +16,37 @@ import RecruiterRegister from './pages/RecruiterRegister';
 
 
 const router=createBrowserRouter([
-  // {
-  //   path:"/",
-  //   element:<Home />,
-  // },
-  // {
-  //   path:"/jobs",
-  //   element:<JobList />,
-  // },
-  // {
-  //   path:"/jobview",
-  //   element:<JobView />,
-  // },
-  // {
-  //   path:"/apply",
-  //   element:<Apply />,
-  // },
-  // {
-  //   path: "/jobs/screening",
-  //   element: <screening />,
-  // },
-  // {
-  //   path: "*",
-  //   element: <PageNotFound />,
-  // },
+  {
+    path:"/",
+    element:<Home />,
+  },
+  {
+    path:"/jobs",
+    element:<JobList />,
+  },
+  {
+    path:"/jobview",
+    element:<JobView />,
+  },
+  {
+    path:"/apply",
+    element:<Apply />,
+  },
+  {
+    path: "/jobs/screening",
+    element: <screening />,
+  },
+  {
+    path: "*",
+    element: <PageNotFound />,
+  },
   {
     path: "/candidate",
     element: <Layout />,
     children: [
       { path: "register", element: <CandidateRegister /> },
-      { path: "login", element: <CandidateLogin /> }
+      { path: "login", element: <CandidateLogin /> },
+      { index: true, element: <CandidateProfile /> }
     ]
   },
   {
