@@ -9,7 +9,7 @@ import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
 import CandidateRegister from './pages/CandidateRegister';
-import screening from './Components/ApplyJob/screening';
+import Screening from './Components/ApplyJob/Screening';
 
 
 const router = createBrowserRouter([
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/jobs/screening",
-    element: <screening />,
+    element: <Screening />,
   },
   {
     path: "/candidate/register",
