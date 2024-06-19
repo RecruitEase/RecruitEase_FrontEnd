@@ -9,7 +9,7 @@ import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
 import CandidateRegister from './pages/CandidateRegister';
-import Screening from './Components/ApplyJob/Screening';
+import Screening from './pages/Screening';
 
 
 const router = createBrowserRouter([
