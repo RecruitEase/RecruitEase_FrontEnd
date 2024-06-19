@@ -47,12 +47,18 @@ export default function Jobs() {
                 width: '100%',
                 height: 100,
                 borderRadius: 1,
+                margin: 1,
                 bgcolor: 'primary.main',
                
               }}
             >
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
+              <Box sx={{ minWidth: 120 }}
+              width={9/10}
+              >
+                <FormControl
+                margin='normal'
+                fullWidth
+                >
                   <InputLabel id="demo-simple-select-label">Age</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
