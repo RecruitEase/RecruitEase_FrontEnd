@@ -3,7 +3,6 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import Home from './pages/Home';
-import JobList from './pages/JobList';
 import CandidateProfile from './pages/CandidateProfile';
 import JobView from './pages/JobView';
 import Apply from './pages/Apply';
@@ -14,6 +13,8 @@ import CandidateRegister from './pages/CandidateRegister';
 import Screening from './Components/ApplyJob/Screening';
 import RecruiterLogin from './pages/RecruiterLogin';
 import RecruiterRegister from './pages/RecruiterRegister';
+import Jobs from './pages/Jobs';
+import CandidateLayout from './Components/Candidate/CandidateLayout';
 import Screening from './pages/Screening';
 
 
@@ -23,6 +24,13 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
+    path:"/jobs",
+    element:<CandidateLayout />,
+    children:[
+      {index:true,element:<Jobs />},
+
+    ]
+    
     path: "/jobs",
     element: <JobList />,
   },
