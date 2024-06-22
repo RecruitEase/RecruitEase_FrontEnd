@@ -1,4 +1,15 @@
 /* eslint-disable no-unused-vars */
+declare interface HeaderBoxProps {
+  type?: "title" | "greeting";
+  title: string;
+  subtext: string;
+  user: string;
+}
+
+
+
+
+
 
 //examples........
 declare type SearchParamProps = {
@@ -149,12 +160,7 @@ declare interface BankInfoProps {
   type: "full" | "card";
 }
 
-declare interface HeaderBoxProps {
-  type?: "title" | "greeting";
-  title: string;
-  subtext: string;
-  user?: string;
-}
+
 
 declare interface MobileNavProps {
   user: User;
