@@ -1,0 +1,5 @@
+.bodyContent{
+    margin: 0px 100px;
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
