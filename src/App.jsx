@@ -14,6 +14,7 @@ import CandidateRegister from './pages/CandidateRegister';
 import Screening from './Components/ApplyJob/Screening';
 import RecruiterLogin from './pages/RecruiterLogin';
 import RecruiterRegister from './pages/RecruiterRegister';
+import Screening from './pages/Screening';
 
 
 const router = createBrowserRouter([
