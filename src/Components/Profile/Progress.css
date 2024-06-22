@@ -1,0 +1,22 @@
+.progress-main{
+    margin-top: 12px;
+    display: flex;
+    padding-left: 100px;
+    margin-top: 60px;
+}
+
+.progress-content{
+    display: flex;
+    width: 300px;
+    background-color:#1976d236;
+    border: 2px solid;
+    border-radius: 10px;
+    border-color: #1976d2;
+    padding: 15px;
+}
+.progressText{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 20px;
+}

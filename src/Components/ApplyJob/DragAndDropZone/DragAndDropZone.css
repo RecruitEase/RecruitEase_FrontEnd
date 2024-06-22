@@ -1,0 +1,12 @@
+.drag-drop-zone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  gap: 20px;  ;
+}
+
+.drag-drop-zone.active {
+  border-color: #007bff; /* Example of active state border color */
+}
+
