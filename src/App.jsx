@@ -10,16 +10,18 @@ import PageNotFound from './pages/PageNotFound';
 import Layout from './Components/LoginRegister/Layout';
 import CandidateLogin from './pages/CandidateLogin';
 import CandidateRegister from './pages/CandidateRegister';
+import Screening from './Components/ApplyJob/Screening';
 import RecruiterLogin from './pages/RecruiterLogin';
 import RecruiterRegister from './pages/RecruiterRegister';
 import Jobs from './pages/Jobs';
 import CandidateLayout from './Components/Candidate/CandidateLayout';
+import Screening from './pages/Screening';
 
 
-const router=createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:"/",
-    element:<Home />,
+    path: "/",
+    element: <Home />,
   },
   {
     path:"/jobs",
@@ -29,18 +31,20 @@ const router=createBrowserRouter([
 
     ]
     
+    path: "/jobs",
+    element: <JobList />,
   },
   {
     path:"/jobview",
     element:<JobView />,
   },
   {
-    path:"/apply",
-    element:<Apply />,
+    path: "/apply",
+    element: <Apply />,
   },
   {
     path: "/jobs/screening",
-    element: <screening />,
+    element: <Screening />,
   },
   {
     path: "*",
