@@ -9,7 +9,7 @@ const Draft = () => {
             </div>
             <br/>
             <div className="draft-empty">
-                <div className="draft-empty-comtent"><p>No Draft Aplications Founds!</p></div>
+                <div className="draft-empty-comtent"><p>No Draft Applications Founds!</p></div>
             </div>
 
         </div>

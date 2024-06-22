@@ -6,12 +6,65 @@ import ProfileImage from '../Components/Profile/ProfileImage'
 import ButtonGroup from '../Components/Profile/ButtonGroup'
 import StatusOfApplications from '../Components/Profile/StatusOfApplications'
 import SavedItems from '../Components/Profile/SavedItems'
-import Draft from '../Components/Profile/Draft'
+// import Draft from '../Components/Profile/Draft'
 import MyInformation from '../Components/Profile/MyInformation'
 import CVimage from '../Components/Profile/CVimage'
 import Progress from '../Components/Profile/Progress'
 
 import "../css/CandidateProfile.css"
+
+ const cvStatus =  [ 
+  {
+    imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCyQf24jHxfrpCpW3zkOCGhLExH6IUDvfH1A&s",
+    position : "Software Engineer",
+    companyName : "IFS",
+    status : "Shortlist"
+    
+  },
+  {
+    imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCyQf24jHxfrpCpW3zkOCGhLExH6IUDvfH1A&s",
+    position : "Software Engineer",
+    companyName : "IFS",
+    status : "Selected"
+    
+  },
+  {
+    imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCyQf24jHxfrpCpW3zkOCGhLExH6IUDvfH1A&s",
+    position : "Software Engineer",
+    companyName : "IFS",
+    status : "Rejected"
+    
+  },
+  {
+    imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCyQf24jHxfrpCpW3zkOCGhLExH6IUDvfH1A&s",
+    position : "Software Engineer",
+    companyName : "IFS",
+    status : "InterviewCalled"
+    
+  },
+  {
+    imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCyQf24jHxfrpCpW3zkOCGhLExH6IUDvfH1A&s",
+    position : "Software Engineer",
+    companyName : "IFS",
+    status : "Withdrawn"
+    
+  },
+  {
+    imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCyQf24jHxfrpCpW3zkOCGhLExH6IUDvfH1A&s",
+    position : "Software Engineer",
+    companyName : "IFS",
+    status : "UnderReview"
+    
+  },
+  {
+    imageUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCyQf24jHxfrpCpW3zkOCGhLExH6IUDvfH1A&s",
+    position : "Software Engineer",
+    companyName : "IFS",
+    status : "Submitted"
+    
+  }
+]
+
 
 
 function CandidateProfile() {
@@ -21,13 +74,13 @@ function CandidateProfile() {
   const renderContent = () => {
     switch (selectedSection) {
       case "Status of Applications":
-        return <StatusOfApplications />;
+        return <StatusOfApplications cvStatus={cvStatus}/>;
       case "My Information":
         return <MyInformation />;
       case "Saved Items":
         return <SavedItems />;
-      case "Draft":
-        return <Draft />;
+      // case "Draft":
+      //   return <Draft />;
       default:
         return <div>Draft Content</div>;
     }
@@ -36,7 +89,7 @@ function CandidateProfile() {
   const imageUrl="https://www.resumonk.com/assets/template-thumbnails/regal-0061058b06687d67e513234d9169de15ae663a638197357a947a0f5571dbdd9c.jpg"
   const cvFileName="cv.pdf"
 
-  const comletePresentage ="50"
+  const comletePresentage ="75"
   return (
     
     <div id="wrapper">
