@@ -57,12 +57,9 @@ function ApplyJob() {
           </div>
 
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }} className=' justify-center'>
-            {/* <Link to="/screening" style={{ textDecoration: 'none' }}> */}
-            <Button endDecorator={<KeyboardArrowRight />} className=' bg-green-300'>
+            <Button component={Link} to="/jobs/screening" endDecorator={<KeyboardArrowRight />} sx={{ backgroundColor: "green" }}>
               Apply For Job
             </Button>
-            {/* </Link> */}
-            <MenuLink url="/jobs/screening" urlText="screening" />
           </Box>
 
         </div>
