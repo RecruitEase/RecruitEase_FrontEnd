@@ -8,8 +8,11 @@ import CandidateProfile from './pages/CandidateProfile';
 import JobView from './pages/JobView';
 import Apply from './pages/Apply';
 import PageNotFound from './pages/PageNotFound';
+import Layout from './Components/LoginRegister/Layout';
+import CandidateLogin from './pages/CandidateLogin';
 import CandidateRegister from './pages/CandidateRegister';
-import screening from './Components/ApplyJob/screening';
+import RecruiterLogin from './pages/RecruiterLogin';
+import RecruiterRegister from './pages/RecruiterRegister';
 
 
 const router = createBrowserRouter([
@@ -22,12 +25,8 @@ const router = createBrowserRouter([
     element: <JobList />,
   },
   {
-    path: "/candidate",
-    element: <CandidateProfile />,
-  },
-  {
-    path: "/jobview",
-    element: <JobView />,
+    path:"/jobview",
+    element:<JobView />,
   },
   {
     path: "/apply",
@@ -38,12 +37,25 @@ const router = createBrowserRouter([
     element: <screening />,
   },
   {
-    path: "/candidate/register",
-    element: <CandidateRegister />,
-  },
-  {
     path: "*",
     element: <PageNotFound />,
+  },
+  {
+    path: "/candidate",
+    element: <Layout />,
+    children: [
+      { path: "register", element: <CandidateRegister /> },
+      { path: "login", element: <CandidateLogin /> },
+      { index: true, element: <CandidateProfile /> }
+    ]
+  },
+  {
+    path: "/recruiter",
+    element: <Layout />,
+    children: [
+      { path: "register", element: <RecruiterRegister /> },
+      { path: "login", element: <RecruiterLogin /> }
+    ]
   },
 ]);
 
