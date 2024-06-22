@@ -15,22 +15,22 @@ import RecruiterLogin from './pages/RecruiterLogin';
 import RecruiterRegister from './pages/RecruiterRegister';
 
 
-const router=createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path:"/",
-    element:<Home />,
+    path: "/",
+    element: <Home />,
   },
   {
-    path:"/jobs",
-    element:<JobList />,
+    path: "/jobs",
+    element: <JobList />,
   },
   {
     path:"/jobview",
     element:<JobView />,
   },
   {
-    path:"/apply",
-    element:<Apply />,
+    path: "/apply",
+    element: <Apply />,
   },
   {
     path: "/jobs/screening",
