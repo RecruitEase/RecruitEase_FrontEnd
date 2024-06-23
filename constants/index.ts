@@ -1,6 +1,6 @@
 export const recruiterSidebarLinks = [
   {
-    imgURL: "/icons/home.svg",
+    imgURL: "/icons/dashboard.svg",
     route: "/recruiter",
     label: "Dashboard",
   },

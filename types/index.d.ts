@@ -6,6 +6,14 @@ declare interface HeaderBoxProps {
   user: string;
 }
 
+declare interface IconProps  {
+  fill?: string;
+  size?: number;
+  height?: number;
+  width?: number;
+  [key: string]: any;
+}
+
 
 declare interface TotalVacacyProps {
   activeVacancies:number,
@@ -37,11 +45,14 @@ declare type User = {
   joinedDate:string;
   profilePic: string;
 };
-
+declare interface NavbarUserProps {
+  user: User;
+}
 
 declare interface SideBarProps {
   user: User;
 }
+
 
 
 

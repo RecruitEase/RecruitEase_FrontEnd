@@ -30,6 +30,7 @@ module.exports = {
             1: "rgba(255, 255, 255, 0.10)",
           },
           recruitBlue: "#0179FE", //main blue
+          whiteText:'#FFFFFF',
           primaryText: '#000000',
           secondaryText: '#333333',
           tertiaryText: '#666666',
@@ -90,6 +91,7 @@ module.exports = {
             1: "rgba(255, 255, 255, 0.10)",
           },
           recruitBlue: "#0179FE", //main blue
+          whiteText:'#000000',
           primaryText: '#FFFFFF', // White for primary text
           secondaryText: '#CCCCCC', // Light grey for secondary text
           tertiaryText: '#999999', // Medium grey for tertiary text
