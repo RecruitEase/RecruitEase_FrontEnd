@@ -1,3 +1,32 @@
+export const recruiterSidebarLinks = [
+  {
+    imgURL: "/icons/home.svg",
+    route: "/recruiter",
+    label: "Dashboard",
+  },
+  {
+    imgURL: "/icons/dollar-circle.svg",
+    route: "/recruiter/settings",
+    label: "Settings",
+  },
+    {
+        imgURL: "/icons/home.svg",
+        route: "/",
+        label: "Home",
+    },
+
+];
+
+
+
+
+
+
+
+
+
+
+
 // mock data
 // export const sidebarLinks = [
 //   {
