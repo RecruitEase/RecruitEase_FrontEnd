@@ -1,3 +1,6 @@
+import {Navbar} from "@/components/navbar";
+import SideBar from "@/components/dashboard/SideBar";
+import {Link} from "@nextui-org/link";
 
 export default function RootLayout({
                                        children,
@@ -5,8 +8,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <main>
-            {children}
-        </main>
+        <>
+            <Navbar />
+                <main className="flex h-screen w-full mt-4">
+                    {children}
+                </main>
+        </>
     );
 }

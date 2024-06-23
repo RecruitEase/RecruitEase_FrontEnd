@@ -39,6 +39,7 @@ module.exports = {
           warningText: '#FF0000',
           successText: '#28A745',
           infoText: '#17A2B8',
+          inputLabel:'#333333',
           indigo: {
             500: "#6172F3",
             700: "#3538CD",
@@ -100,6 +101,7 @@ module.exports = {
           warningText: '#FF4C4C', // Light red for warning text
           successText: '#58D68D', // Light green for success text
           infoText: '#33CFFF', // Light teal for info text
+          inputLabel:'#CCCCCC',
           indigo: {
             500: "#6172F3",
             700: "#3538CD",
