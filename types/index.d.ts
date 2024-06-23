@@ -7,6 +7,57 @@ declare interface HeaderBoxProps {
 }
 
 
+declare interface TotalVacacyProps {
+  activeVacancies:number,
+  filledVacancies:number
+}
+
+
+declare interface AnimatedCounterProps {
+  end:number,
+  prefix?:string,
+  duration?:number,
+  start?:number
+}
+
+declare interface DoughnutChartProps {
+  active:number,
+  filled:number,
+}
+
+declare type User = {
+  $id: string;
+  email: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  gender: string;
+  mobile: string;
+  joinedDate:string;
+  profilePic: string;
+};
+
+
+declare interface SideBarProps {
+  user: User;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -37,21 +88,7 @@ declare type LoginUser = {
   password: string;
 };
 
-declare type User = {
-  $id: string;
-  email: string;
-  userId: string;
-  dwollaCustomerUrl: string;
-  dwollaCustomerId: string;
-  firstName: string;
-  lastName: string;
-  address1: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  dateOfBirth: string;
-  ssn: string;
-};
+
 
 declare type NewUserParams = {
   userId: string;
@@ -225,9 +262,6 @@ declare interface RightSidebarProps {
   banks: Bank[] & Account[];
 }
 
-declare interface SiderbarProps {
-  user: User;
-}
 
 declare interface RecentTransactionsProps {
   accounts: Account[];
@@ -253,9 +287,6 @@ declare interface CategoryProps {
   category: CategoryCount;
 }
 
-declare interface DoughnutChartProps {
-  accounts: Account[];
-}
 
 declare interface PaymentTransferFormProps {
   accounts: Account[];

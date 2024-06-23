@@ -33,7 +33,7 @@ module.exports = {
           primaryText: '#000000',
           secondaryText: '#333333',
           tertiaryText: '#666666',
-          subtext: '#999999',
+          subtext: '#475467',
           accentText: '#007BFF',
           warningText: '#FF0000',
           successText: '#28A745',
@@ -93,7 +93,7 @@ module.exports = {
           primaryText: '#FFFFFF', // White for primary text
           secondaryText: '#CCCCCC', // Light grey for secondary text
           tertiaryText: '#999999', // Medium grey for tertiary text
-          subtext: '#666666', // Dark grey for subtext
+          subtext: '#8C8C8C', // Dark grey for subtext
           accentText: '#66B2FF', // Lighter blue for accent
           warningText: '#FF4C4C', // Light red for warning text
           successText: '#58D68D', // Light green for success text
