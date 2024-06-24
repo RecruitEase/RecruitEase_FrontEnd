@@ -12,8 +12,7 @@ const RecruiterDashboard = () => {
     const filledVacancies=5;
 
     return (
-        <section className="home">
-            <div className="home-content">
+
                 <header className="home-header">
                     <HeaderBox
                     type="greeting"
@@ -28,8 +27,7 @@ const RecruiterDashboard = () => {
                         filledVacancies={filledVacancies?filledVacancies:0}
                     />
                 </header>
-            </div>
-        </section>
+
     );
 };
 

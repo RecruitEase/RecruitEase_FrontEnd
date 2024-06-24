@@ -15,9 +15,8 @@ export default function RootLayout({
     return (
         <>
         <Navbar />
-    <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
+    <main className=" pt-16 flex-grow">
         <main className="flex h-screen w-full">
-            <SideBar user={loggedIn} />
             {children}
         </main>
     </main>
