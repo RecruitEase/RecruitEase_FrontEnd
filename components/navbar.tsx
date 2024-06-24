@@ -114,7 +114,7 @@ export const Navbar = () => {
 
 
 
-
+console.log(theme)
   return (
       <NextUINavbar maxWidth="xl" onMenuOpenChange={setIsMenuOpen} isBordered>
         <NavbarBrand>
@@ -122,13 +122,13 @@ export const Navbar = () => {
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               className="sm:hidden"
           />
-          {theme=='light'?(<Image
-              src="/logos/logoSVGBlack.svg"
+          { theme==='dark'?(<Image className={"w-3/5"}
+              src="/logos/logoSVG.svg"
               width={1511}
               height={281}
               alt="RecruitEase"
-          />):(<Image
-              src="/logos/logoSVG.svg"
+          />):(<Image className={"w-3/5"}
+              src="/logos/logoSVGBlack.svg"
               width={1511}
               height={281}
               alt="RecruitEase"

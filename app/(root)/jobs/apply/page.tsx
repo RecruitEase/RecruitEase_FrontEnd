@@ -1,15 +1,11 @@
 import React from 'react';
 
-const Home = () => {
+const Apply = () => {
     return (
-        <section className="home">
-            <div className="home-content">
-                <header className="home-header">
-                    Welcome, Chathura
-                </header>
-            </div>
-        </section>
+        <>
+        Apply jobs
+        </>
     );
 };
 
-export default Home;
+export default Apply;
