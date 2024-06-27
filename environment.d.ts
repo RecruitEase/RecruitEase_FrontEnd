@@ -2,7 +2,8 @@
 declare global {
     namespace NodeJS {
         interface ProcessEnv {
-            API_GATEWAY_URL: RequestInfo | URL;
+            API_GATEWAY_BASE_URL:string;
+            API_GATEWAY_LOGIN: RequestInfo | URL;
             AUTH_GOOGLE_ID: string;
             AUTH_GOOGLE_SECRET: string;
             // add more environment variables and their types here

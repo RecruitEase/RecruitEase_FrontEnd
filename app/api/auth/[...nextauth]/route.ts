@@ -18,7 +18,7 @@ const handler= NextAuth({
                 // Add logic here to look up the user from the credentials supplied
                 // const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
 
-                const res=await fetch(process.env.API_GATEWAY_URL,{
+                const res=await fetch(process.env.API_GATEWAY_LOGIN,{
                     method:'POST',
                     headers:{
                         'Content-Type':'application/json'
