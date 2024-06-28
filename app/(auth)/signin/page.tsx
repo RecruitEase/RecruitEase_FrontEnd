@@ -1,19 +1,32 @@
 "use client"
 import React, {useRef} from 'react';
 import {signIn} from "next-auth/react";
+import {useRouter} from "next/navigation";
 const SignIn = () => {
-
+    const router = useRouter()
     const email=useRef("");
     const password=useRef("");
 
     const handleSubmit=async ()=>{
-        const result=await signIn('credentials',{
-            email:email.current,
-            password:password.current,
-            redirect:true,
-            callbackUrl:"/"
+        try{
+            const result = await signIn('credentials', {
+                email: email.current,
+                password: password.current,
+                redirect: false,
+            });
+            console.log("dsdes",result);
 
-        });
+            if (result?.status == 200) {
+                router.push('/');
+            } else {
+                //not logged in
+                //handle error here
+
+            }
+        }catch(error){
+            // @ts-ignore
+            console.log(error.message);
+        }
 
     }
 
