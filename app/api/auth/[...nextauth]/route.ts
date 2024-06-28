@@ -30,7 +30,6 @@ const handler= NextAuth({
                 });
                 const user=await res.json();
 
-
                 if (user) {
                     console.log("cdcd",user)
                     // Any object returned will be saved in `user` property of the JWT
@@ -43,7 +42,9 @@ const handler= NextAuth({
                 }
             }
         })
-    ],
+    ],pages:{
+        signIn:"/signin"
+    },
     callbacks:{
         //to keep the data coming from backend saved without missing the attributes
         async jwt({token,user}){

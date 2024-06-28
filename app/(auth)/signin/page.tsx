@@ -1,5 +1,22 @@
-import React from 'react';
+"use client"
+import React, {useRef} from 'react';
+import {signIn} from "next-auth/react";
 const SignIn = () => {
+
+    const email=useRef("");
+    const password=useRef("");
+
+    const handleSubmit=async ()=>{
+        const result=await signIn('credentials',{
+            email:email.current,
+            password:password.current,
+            redirect:true,
+            callbackUrl:"/"
+
+        });
+
+    }
+
     return (
         <div className="font-[sans-serif]">
             <div className="grid lg:grid-cols-3 md:grid-cols-2 items-center gap-4 h-full">
@@ -25,7 +42,7 @@ const SignIn = () => {
                             <div className="relative flex items-center">
                                 <input name="email" type="text" required
                                        className="w-full text-sm text-gray-800 bg-gray-100 focus:bg-transparent focus:text-primaryText px-4 py-3.5 rounded-md outline-blue-600"
-                                       placeholder="Enter email"/>
+                                       placeholder="Enter email" onChange={(e)=>(email.current=e.target.value)}/>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
                                      className="w-[18px] h-[18px] absolute right-4" viewBox="0 0 682.667 682.667">
                                     <defs>
@@ -48,7 +65,7 @@ const SignIn = () => {
                         <div className="mt-4">
                             <label className="text-inputLabel text-[15px] mb-2 block">Password</label>
                             <div className="relative flex items-center">
-                                <input name="password" type="password" required
+                                <input onChange={(e)=>(password.current=e.target.value)} name="password" type="password" required
                                        className="w-full text-sm text-gray-800 bg-gray-100 focus:bg-transparent focus:text-primaryText px-4 py-3.5 rounded-md outline-blue-600"
                                        placeholder="Enter password"/>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
@@ -77,7 +94,7 @@ const SignIn = () => {
                             </div>
                         </div>
                         <div className="mt-8">
-                            <button type="button"
+                            <button onClick={handleSubmit} type="button"
                                     className="w-full shadow-xl py-3 px-6 text-sm tracking-wide rounded-md text-white bg-recruitBlue hover:bg-blue-700 focus:outline-none">
                                 Sign in
                             </button>
