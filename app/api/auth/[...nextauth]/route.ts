@@ -28,15 +28,22 @@ const handler= NextAuth({
                         password:credentials?.password
                     })
                 });
+                console.log(res)
                 const user=await res.json();
 
                 if (user) {
-                    console.log("cdcd",user)
+
+                    if(user.errors!=''){
+                        throw new Error(user.errors)
+                    }else{
+                        return user
+
+                    }
                     // Any object returned will be saved in `user` property of the JWT
-                    return user
                 } else {
+                    // console.log("Dedesdwedw")
                     // If you return null then an error will be displayed advising the user to check their details.
-                    return null
+                    throw new Error(JSON.stringify({error:user.errors,status:false}))
 
                     // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
                 }
