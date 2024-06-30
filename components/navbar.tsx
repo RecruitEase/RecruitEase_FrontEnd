@@ -38,6 +38,7 @@ import {Avatar} from "@nextui-org/avatar";
 import React, {useState} from "react";
 import Image from "next/image";
 import {useTheme} from "next-themes";
+import {signOut, useSession} from "next-auth/react";
 
 
 
@@ -45,23 +46,23 @@ export const Navbar = () => {
 
   const {theme,setTheme}=useTheme();
 
-  const user={
-    firstName:'Chathura',
-    lastName:'Lakshan',
-    email:"chathura@gmail.com",
-    role:'recruiter'
-  };
 
-  const isLoggedIn=true;
+  //for user session state
+  const { data: session } = useSession();
+  console.log({ session });
+
+  const user=session?.user;
+
+  const isLoggedIn=!!session?.user
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems =isLoggedIn? [
     {label:"Home",url:"/"},
     {label:"Explore",url:"/jobs"},
-    {label:"Dashboard",url:`/${user.role}`},
-    {label:"Profile",url:`/${user.role}/profile`},
-    {label:"Settings",url:`/${user.role}/settings`},
+    {label:"Dashboard",url:`/${user?.role}`},
+    {label:"Profile",url:`/${user?.role}/profile`},
+    {label:"Settings",url:`/${user?.role}/settings`},
     {label:"Help & Feedback",url:"/help"},
     {label:"Contact Us",url:"/contact"},
   ]:[
@@ -73,9 +74,9 @@ export const Navbar = () => {
 
   const avatarItems = isLoggedIn?[
     {label:"signin",url:`/`},
-    {label:"Dashboard",url:`/${user.role}`},
-    {label:"Profile",url:`/${user.role}/profile`},
-    {label:"Settings",url:`/${user.role}/settings`},
+    {label:"Dashboard",url:`/${user?.role}`},
+    {label:"Profile",url:`/${user?.role}/profile`},
+    {label:"Settings",url:`/${user?.role}/settings`},
     {label:"Chats",url:"/chats"},
     {label:"logout",url:"/logout"},
   ]:[];
@@ -114,7 +115,7 @@ export const Navbar = () => {
 
 
 
-console.log(theme)
+// console.log(theme)
   return (
       <NextUINavbar maxWidth="xl" onMenuOpenChange={setIsMenuOpen} isBordered>
         <NavbarBrand>
@@ -257,7 +258,7 @@ console.log(theme)
                   {avatarItems.map((item, index) => {
                     if (index == avatarItems.length - 1) {
                       return (
-                          <DropdownItem key={"logout-key"} href={"/logout"}>
+                          <DropdownItem key={"logout-key"} color={"danger"} onClick={()=>signOut()}>
                             Log Out
                           </DropdownItem>
                       )
@@ -265,7 +266,7 @@ console.log(theme)
                       return (
                           <DropdownItem key="profile" className="h-14 gap-2">
                             <p className="font-semibold">Signed in as</p>
-                            <p className="font-semibold">{user.email}</p>
+                            <p className="font-semibold">{user?.email}</p>
                           </DropdownItem>
 
                       )

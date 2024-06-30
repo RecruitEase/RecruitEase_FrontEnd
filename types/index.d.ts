@@ -34,20 +34,33 @@ declare interface DoughnutChartProps {
 }
 
 declare type User = {
-  $id: string;
-  email: string;
-  userId: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  gender: string;
-  mobile: string;
-  joinedDate:string;
-  profilePic: string;
+     id:string,
+     email:string,
+     role:string,
+     roleDetails:RoleDetails,
+     createdAt:string,
+    isActive:boolean,
+     accessToken:string,
+     refreshToken:string
 };
-declare interface NavbarUserProps {
-  user: User;
-}
+declare type RoleDetails = {
+  firstName:string,
+  lastName:string,
+  address:string,
+  mobileNumber:string,
+  profilePic:boolean,
+  adminId?:string,
+  moderatorId?:string,
+  candidateId?:string,
+  profileStatus?:string,
+  nic?:string,
+  dob?:string,
+  recruiterId?:string,
+  companyName?:string,
+  website?:string,
+  businessRegistrationNumber?:string,
+};
+
 
 declare interface SideBarProps {
   user: User;
