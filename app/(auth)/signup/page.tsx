@@ -1,49 +1,48 @@
 import React from "react";
 import {Card, CardHeader, CardBody, CardFooter, Image, Button} from "@nextui-org/react";
+import {Link} from "@nextui-org/link";
 
 export default function Signup() {
     return (
-        <div className="w-full gap-2 grid grid-cols-12  px-8 mt-12">
+        <div className="w-full h-2/3 gap-2 grid grid-cols-12  px-8 mt-12">
 
             <Card isFooterBlurred className="w-full col-span-6 ">
                 <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                    <p className="text-tiny text-white/60 uppercase font-bold">Register as</p>
-                    <h1 className="text-black font-medium text-2xl">Candidate</h1>
+                    {/*<p className="text-tiny text-white font-bold text-[1.5rem]">Register as a</p>*/}
+                    <h1 className="text-black font-bold text-[2rem]">Job Seeker</h1>
                 </CardHeader>
                 <Image
                     removeWrapper
                     alt="Card example background"
-                    className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
-                    src="hhttps://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.hrreporter.com%2Ffocus-areas%2Frecruitment-and-staffing%2Fjob-ads-for-hr-positions-continue-to-soar%2F365414&psig=AOvVaw1BVYTanvuo3d_oFB5UB5UO&ust=1719902462720000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMjDm5mehYcDFQAAAAAdAAAAABAV"
+                    className="z-0 w-full h-full scale-100 -translate-y-6 object-cover"
+                    src="https://www.glassdoor.com/employers/app/uploads/sites/2/2020/06/employer-brand-make-or-break-hiring.png"
                 />
-                <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <CardFooter className="absolute bg-white/80 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                     <div>
-                        <p className="text-black text-tiny">Available soon.</p>
-                        <p className="text-black text-tiny">Get notified.</p>
+                        <h1 className={"text-[1.5rem] text-"}>Register as a <span className={"text-recruitBlue"}>Job Seeker</span></h1>
                     </div>
-                    <Button className="text-tiny" color="primary" radius="full" size="sm">
-                        Notify Me
+                    <Button className="text-lg" color="primary" radius="full" size="lg" as={Link} href={"/signup/candidate"}>
+                        Register
                     </Button>
                 </CardFooter>
             </Card>
-            <Card isFooterBlurred className="w-full col-span-6">
-                <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                    <p className="text-tiny text-white/60 uppercase font-bold">Register as</p>
-                    <h4 className="text-black font-medium text-2xl">Recruiter</h4>
+            <Card isFooterBlurred  className="w-full col-span-6">
+                <CardHeader  className="absolute z-10 top-1 flex-col items-start">
+                    {/*<p className="text-tiny text-white font-bold text-[1.5rem]">Register as a</p>*/}
+                    <h1 className="text-black font-bold text-[2rem]">Recruiter</h1>
                 </CardHeader>
                 <Image
                     removeWrapper
                     alt="Card example background"
-                    className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
-                    src="https://nextui.org/images/card-example-6.jpeg"
+                    className="z-0 w-full h-full scale-125 -translate-y-[-5px] object-cover"
+                    src="https://info.ehl.edu/hubfs/Blog-EHL-Insights/Blog-Header-EHL-Insights/employer%20branding.jpeg"
                 />
-                <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+                <CardFooter className="absolute bg-white/80 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
                     <div>
-                        <p className="text-black text-tiny">Available soon.</p>
-                        <p className="text-black text-tiny">Get notified.</p>
+                        <h1 className={"text-[1.5rem] text-"}>Register as a <span className={"text-recruitBlue"}>Recruiter</span></h1>
                     </div>
-                    <Button className="text-tiny" color="primary" radius="full" size="sm">
-                        Notify Me
+                    <Button className="text-lg" color="primary" radius="full" size="lg" as={Link} href={"/signup/recruiter"}>
+                        Register
                     </Button>
                 </CardFooter>
             </Card>

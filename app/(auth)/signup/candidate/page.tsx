@@ -5,6 +5,8 @@ import {Input} from "@nextui-org/input";
 import {EyeFilledIcon, EyeSlashFilledIcon} from "@/components/icons";
 import {DatePicker} from "@nextui-org/date-picker";
 import {CalendarDate, DateInput} from "@nextui-org/react";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import {Button} from "@nextui-org/button";
 
 const MAX_STEPS = 3;
 
@@ -24,9 +26,20 @@ const CandidateSignUp: React.FC = () => {
         isValid && setFormStep(cur => cur + 1);
     };
 
-    const handleFormCompletion = (values: FieldValues) => {
-        window.alert(JSON.stringify(values, null, 2));
+    const axios=useAxiosAuth();
+
+    const [axiosLoading,setAxiosLoading]=React.useState(false);
+
+    const handleFormCompletion = async (values: FieldValues) => {
+        setAxiosLoading(true);
+        await axios.post('/auth/register-candidate',JSON.stringify(values, null, 2)).then((res)=>{
+            console.log(res);
+        })
+
+        // window.alert(JSON.stringify(values, null, 2));
         setFormStep(cur => cur + 1);
+        setAxiosLoading(false);
+
     };
 
     return (
@@ -206,6 +219,27 @@ const CandidateSignUp: React.FC = () => {
                                 </div>
 
                                 <div className={"m-1 p-2"}>
+                                    <label htmlFor="address">Address</label>
+                                    <Input
+                                        placeholder={"Enter your address"}
+                                        type="text"
+                                        id="address"
+                                        variant="bordered"
+                                        {...register('address', {
+                                            required: {
+                                                value: true,
+                                                message: "Please enter your address",
+                                            },
+                                        })}
+                                    />
+                                    {errors.address && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors.address?.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className={"m-1 p-2"}>
                                     <label htmlFor="mobileNumber">Mobile Number</label>
                                     <Input
                                         placeholder={"Enter your mobile number"}
@@ -319,17 +353,17 @@ const CandidateSignUp: React.FC = () => {
                             </section>
                         )}
                         {formStep < 3 && (
-                            <button
+                            <Button isLoading={axiosLoading}
                                 disabled={!isValid}
                                 onClick={formStep === 2 ? undefined : handleStepCompletion}
                                 type={formStep === 2 ? "submit" : "button"}
                                 className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 w-full disabled:bg-gray-400"
                             >
                                 {formStep === 2 ? "Register" : "Next"}
-                            </button>
+                            </Button>
                         )}
-                        <pre>{JSON.stringify(watch(), null, 2)}</pre>
-                        <pre>{formStep}</pre>
+                        {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
+                        {/*<pre>{formStep}</pre>*/}
                     </form>
                 </div>
             </div>
