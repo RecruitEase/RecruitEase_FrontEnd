@@ -17,9 +17,7 @@ const ProfileImage=({profileData})=> {
                 <p className="text-26">{profileData.name}</p>
                 <p className="text-large text-default-500">{profileData.thumbnail}</p>
             </div>
-            <div className="flex flex-row">
-Sajith
-            </div>
+
             {/*<Card className="w-full min-w-[400px] shadow-none p-0">*/}
             {/*    <CardHeader className="flex gap-3 pl-0">*/}
             {/*        <Image*/}
