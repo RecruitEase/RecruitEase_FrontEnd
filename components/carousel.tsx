@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { Image } from '@nextui-org/react';
 
-const images = [
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSpaY0tF99xM90L3_GHqKLapOUSu70Nu3iozdE20Qdvo7aHF5P65_nb2n2Ww&s',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSpaY0tF99xM90L3_GHqKLapOUSu70Nu3iozdE20Qdvo7aHF5P65_nb2n2Ww&s',
-    // \'/docs/images/carousel/carousel-3.svg\',\n' +
-    // '    \'/docs/images/carousel/carousel-4.svg\',\n' +
-    // '    \'/docs/images/carousel/carousel-5.svg',
-];
-
 const Carousel: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const images = [
+        'https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/79e09a107825591.5fafef7735182.png',
+        'https://th.bing.com/th/id/R.7bc77e35761679a63b8eed1612d83e16?rik=Fd8Guusz74GhKw&pid=ImgRaw&r=0',
+        // '/docs/images/carousel/carousel-3.svg',
+        // '/docs/images/carousel/carousel-4.svg',
+        // '/docs/images/carousel/carousel-5.svg',
+    ];
 
     const prevSlide = () => {
         const isFirstSlide = currentIndex === 0;
@@ -29,23 +28,26 @@ const Carousel: React.FC = () => {
     };
 
     return (
-        <div className="relative w-full" data-carousel="static">
+        <div className="relative w-full">
             <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
                 {images.map((src, index) => (
                     <div
                         key={index}
-                        className={`${index === currentIndex ? 'block' : 'hidden'} duration-700 ease-in-out`}
-                        data-carousel-item={index === currentIndex ? 'active' : ''}
+                        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-700 ease-in-out ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
                     >
                         <Image
                             src={src}
                             alt={`Carousel ${index + 1}`}
-                            className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                            className="h-full w-full"
                         />
+
                     </div>
+
+
                 ))}
+
             </div>
-            <div className="absolute z-30 flex -translate-x-1/2 space-x-3 bottom-5 left-1/2">
+            <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-3 z-10">
                 {images.map((_, index) => (
                     <button
                         key={index}
@@ -53,54 +55,43 @@ const Carousel: React.FC = () => {
                         className={`w-3 h-3 rounded-full ${index === currentIndex ? 'bg-blue-600' : 'bg-gray-400'}`}
                         aria-current={index === currentIndex ? 'true' : 'false'}
                         aria-label={`Slide ${index + 1}`}
-                        data-carousel-slide-to={index}
                         onClick={() => goToSlide(index)}
                     ></button>
                 ))}
             </div>
             <button
                 type="button"
-                className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                data-carousel-prev
+                className="absolute top-1/2 transform -translate-y-1/2 left-0 z-10 flex items-center justify-center w-12 h-12 bg-gray-800/50 text-white rounded-full focus:outline-none"
                 onClick={prevSlide}
             >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
-          <svg
-              className="w-4 h-4 text-white transform rotate-180"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-          >
-            <path
-                fillRule="evenodd"
-                d="M10 3.586l-1.293 1.293a1 1 0 01-1.414-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L10 3.586zM4.293 7.293a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L10 4.414 5.707 8.707a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-            />
-          </svg>
-          <span className="sr-only">Previous</span>
-        </span>
+                <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path d="M15 19l-7-7 7-7" />
+                </svg>
             </button>
             <button
                 type="button"
-                className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                data-carousel-next
+                className="absolute top-1/2 transform -translate-y-1/2 right-0 z-10 flex items-center justify-center w-12 h-12 bg-gray-800/50 text-white rounded-full focus:outline-none"
                 onClick={nextSlide}
             >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
-          <svg
-              className="w-4 h-4 text-white"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-          >
-            <path
-                fillRule="evenodd"
-                d="M10 3.586l-1.293 1.293a1 1 0 01-1.414-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L10 3.586zM4.293 7.293a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L10 4.414 5.707 8.707a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-            />
-          </svg>
-          <span className="sr-only">Next</span>
-        </span>
+                <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path d="M9 5l7 7-7 7" />
+                </svg>
             </button>
         </div>
     );
