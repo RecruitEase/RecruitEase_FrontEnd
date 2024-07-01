@@ -103,6 +103,10 @@ const SignUp: React.FC = () => {
                                                 value: true,
                                                 message: "Please enter your email address",
                                             },
+                                            pattern: {
+                                                value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                                message: "Invalid email address"
+                                            }
                                         })}
                                     />
                                     {errors.email && (
@@ -163,6 +167,10 @@ const SignUp: React.FC = () => {
                                                 value: true,
                                                 message: "Please enter your first name",
                                             },
+                                            pattern: {
+                                                value: /^[A-Za-z]+(?:['-][A-Za-z]+)*$/,
+                                                message: "Invalid first name"
+                                            }
                                         })}
                                     />
                                     {errors.firstName && (
@@ -184,6 +192,10 @@ const SignUp: React.FC = () => {
                                                 value: true,
                                                 message: "Please enter your last name",
                                             },
+                                            pattern: {
+                                                value: /^[A-Za-z]+(?:['-][A-Za-z]+)*$/,
+                                                message: "Invalid last name"
+                                            }
                                         })}
                                     />
                                     {errors.lastName && (
@@ -205,6 +217,10 @@ const SignUp: React.FC = () => {
                                                 value: true,
                                                 message: "Please enter your mobile number",
                                             },
+                                            pattern: {
+                                                value: /^(070|071|072|075|076|077|078|074)\d{7}$/,
+                                                message: "Invalid Sri Lankan mobile number"
+                                            }
                                         })}
                                     />
                                     {errors.mobileNumber && (
@@ -226,6 +242,10 @@ const SignUp: React.FC = () => {
                                                 value: true,
                                                 message: "Please enter your NIC number",
                                             },
+                                            pattern: {
+                                                value: /^(?:\d{9}[VvXx]|\d{12})$/,
+                                                message: "Invalid Sri Lankan NIC number"
+                                            }
                                         })}
                                     />
                                     {errors.nic && (
@@ -237,16 +257,16 @@ const SignUp: React.FC = () => {
 
                                 <div className={"m-1 p-2"}>
                                     <label htmlFor="dob">Date of Birth.</label>
-                                    <Input  className="max-w"
-                                               label="Birth date" id="dob"
-                                               variant="bordered"
-                                                type={"date"}
-                                               {...register('dob', {
-                                                   required: {
-                                                       value: true,
-                                                       message: "Please enter your date of birth",
-                                                   },
-                                               })}/>
+                                    <Input className="max-w"
+                                           label="Birth date" id="dob"
+                                           variant="bordered"
+                                           type={"date"}
+                                           {...register('dob', {
+                                               required: {
+                                                   value: true,
+                                                   message: "Please enter your date of birth",
+                                               },
+                                           })}/>
 
 
                                     {errors.nic && (
@@ -305,10 +325,11 @@ const SignUp: React.FC = () => {
                                 type={formStep === 2 ? "submit" : "button"}
                                 className="mt-6 bg-green-600 text-white rounded px-8 py-6 w-full disabled:bg-gray-400"
                             >
-                                Next
+                                {formStep === 2 ? "Register" : "Next"}
                             </button>
                         )}
                         <pre>{JSON.stringify(watch(), null, 2)}</pre>
+                        <pre>{formStep}</pre>
                     </form>
                 </div>
             </div>
