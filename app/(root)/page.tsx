@@ -3,7 +3,8 @@ import React from 'react';
 import {Button} from "@nextui-org/button";
 import { signIn, signOut, useSession } from "next-auth/react";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
     const { data: session } = useSession();
@@ -16,23 +17,27 @@ const Home = () => {
             console.log(res);
         })
     }
+
+    const notify = () => toast("Wow so easy!");
     return (
         <section className="home">
             <div className="home-content">
                 <header className="home-header">
                     Welcome, Chathura
-                    {session?.user?(
+                    {session?.user ? (
                         <>
-                        <p>{session.user.email}</p>
-                        <Button onClick={()=>signOut()}>sign out</Button>
+                            <p>{session.user.email}</p>
+                            <Button onClick={() => signOut()}>sign out</Button>
                         </>
-                    ):(
-                        <Button onClick={()=>signIn()} >Signin</Button>
+                    ) : (
+                        <Button onClick={() => signIn()}>Signin</Button>
 
                     )}
 
-                    <Button onClick={()=>axiosTest()} >test</Button>
-
+                    <Button onClick={() => axiosTest()}>test</Button>
+                    <div>
+                        <button onClick={notify}>Notify!</button>
+                    </div>
                 </header>
             </div>
         </section>

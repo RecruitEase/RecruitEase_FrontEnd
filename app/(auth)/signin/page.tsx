@@ -5,6 +5,9 @@ import {useRouter} from "next/navigation";
 import {Button} from "@nextui-org/button";
 import {Input} from "@nextui-org/input";
 import {EyeFilledIcon, EyeSlashFilledIcon, MailIcon} from "@/components/icons";
+import {Bounce, toast} from "react-toastify";
+
+
 const SignIn = () => {
     const [isLoading,setIsLoading]=useState<boolean>(false);
     const [errorText,setErrorText]=useState<string>('');
@@ -34,11 +37,33 @@ const SignIn = () => {
             // console.log("dsdes",result);
 
             if (result?.status == 200) {
+                toast.success('Logged in successfully!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
                 router.push('/');
                 setIsLoading(false);
             } else {
                 //not logged in
                 //handle error here
+                toast.error('Authentication Error!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
                 setErrorText(result?.error ? result?.error:"Something went wrong");
                 setIsLoading(false);
 
