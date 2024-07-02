@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { Image } from '@nextui-org/react';
 
-const Carousel: React.FC = () => {
+interface CarouselProps {
+    images: string[];
+}
+
+const Carousel: React.FC<CarouselProps> = ({ images }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const images = [
-        'https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/79e09a107825591.5fafef7735182.png',
-        'https://th.bing.com/th/id/R.7bc77e35761679a63b8eed1612d83e16?rik=Fd8Guusz74GhKw&pid=ImgRaw&r=0',
-        // '/docs/images/carousel/carousel-3.svg',
-        // '/docs/images/carousel/carousel-4.svg',
-        // '/docs/images/carousel/carousel-5.svg',
-    ];
 
     const prevSlide = () => {
         const isFirstSlide = currentIndex === 0;
@@ -40,12 +37,8 @@ const Carousel: React.FC = () => {
                             alt={`Carousel ${index + 1}`}
                             className="h-full w-full"
                         />
-
                     </div>
-
-
                 ))}
-
             </div>
             <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-3 z-10">
                 {images.map((_, index) => (
@@ -73,7 +66,7 @@ const Carousel: React.FC = () => {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                 >
-                    <path d="M15 19l-7-7 7-7" />
+                    <path d="M15 19l-7-7 7-7"/>
                 </svg>
             </button>
             <button
@@ -90,7 +83,7 @@ const Carousel: React.FC = () => {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                 >
-                    <path d="M9 5l7 7-7 7" />
+                    <path d="M9 5l7 7-7 7"/>
                 </svg>
             </button>
         </div>

@@ -3,12 +3,23 @@
 import React, { useState } from "react";
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button } from "@nextui-org/react";
 import { Avatar } from "@nextui-org/react";
-import {Chip} from "@nextui-org/react";
+import { Chip } from "@nextui-org/react";
 import Carousel from "@/components/carousel";
-import {ScrollShadow} from "@nextui-org/react";
+import { ScrollShadow } from "@nextui-org/react";
+import carousel from "@/components/carousel";
 
+interface PersonalDetailsProps {
+    aboutMe: string;
+    skills: string[];
+    experience: string[];
+    education: string[];
+    location: string;
+    email: string;
+    avatars: string[];
+    carousel:string[];
+}
 
-const PersonalDetails = () => {
+const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email, avatars,carousel }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpand = () => {
@@ -16,128 +27,104 @@ const PersonalDetails = () => {
     };
 
     return (
-        <div className={"flex gap-4"}>
-            <div className={"aboutme"}>
+        <div className="flex gap-4">
+            <div className="aboutme">
                 <Card className="min-w-[400px] flex-1">
-
                     <CardHeader className="flex gap-3">
                         <p className="text-md font-bold">About me</p>
                     </CardHeader>
-                    <Divider/>
-
+                    <Divider />
                     <ScrollShadow className="w-full h-[120px] pl-4">
-                        I'm a Product Designer based in Dallas, Texas. I specialize in UX/UI design, product design, and
-                                code development. I'm always striving to grow and learn something new, trying to do stuff that is
-                                outside my comfort zone.
-                                My work has been featured on Dribble, Behance, Webflow, Awwwards, CSS Winner, Mobbin,
-                                and Editor X.
-                                I'm a Product Designer based in Dallas, Texas. I specialize in UX/UI design, product design, and
-                                code development. I'm always striving to grow and learn something new, trying to do stuff that is
-                                outside my comfort zone.
-                                My work has been featured on Dribble, Behance, Webflow, Awwwards, CSS Winner, Mobbin,
-                              and Editor X.
+                        {aboutMe}
                     </ScrollShadow>
-                    <Divider/>
-
+                    <Divider />
                 </Card>
+
                 <Card className="min-w-[400px] flex-1 mt-4">
-                    <CardHeader >
+                    <CardHeader>
                         <p className="text-md font-bold">Skills</p>
                     </CardHeader>
-                    <Divider/>
+                    <Divider />
                     <CardBody>
                         <ScrollShadow className="w-full h-[90px] pl-4">
                             <div className="flex flex-row flex-wrap gap-2">
-                                <Chip size="lg" className={"w-2"}>UX Design</Chip>
-                                <Chip size="lg" className={"max-w-2"}>Product Design</Chip>
-                                <Chip size="lg">Figma</Chip>
-                                <Chip size="lg">Web flow</Chip>
-                                <Chip size="lg">Web flow</Chip>
-                                <Chip size="lg">Web flow</Chip>
-                                <Chip size="lg">Web flow</Chip>
-                                <Chip size="lg">Web flow</Chip>
-
+                                {skills.map((skill, index) => (
+                                    <Chip key={index} size="lg" className="w-2">{skill}</Chip>
+                                ))}
                             </div>
                         </ScrollShadow>
                     </CardBody>
-                    <Divider/>
+                    <Divider />
 
-                    <CardHeader >
+                    <CardHeader>
                         <p className="text-md font-bold">Experience</p>
                     </CardHeader>
-                    <Divider/>
+                    <Divider />
                     <CardBody>
                         <ScrollShadow className="w-full h-[138px] pl-4">
-                            <p>I specialise in UX/ Ul design, product design and no-code development.</p>
-                            <p>I specialise in UX/ Ul design, product design and no-code development.</p>
-
+                            {experience.map((item, index) => (
+                                <p key={index}>{item}</p>
+                            ))}
                         </ScrollShadow>
                     </CardBody>
-                    <Divider/>
+                    <Divider />
 
-                    <CardHeader >
+                    <CardHeader>
                         <p className="text-md font-bold">Education</p>
                     </CardHeader>
-                    <Divider/>
+                    <Divider />
                     <CardBody>
                         <ScrollShadow className="w-full h-[100px] pl-4">
-                            <p>I specialise in UX/ Ul design, product design and no-code development.</p>
-                            <p>I specialise in UX/ Ul design, product design and no-code development.</p>
-                            <p>I specialise in UX/ Ul design, product design and no-code development.</p>
-                            <p>I specialise in UX/ Ul design, product design and no-code development.</p>
-                            <p>I specialise in UX/ Ul design, product design and no-code development.</p>
+                            {education.map((item, index) => (
+                                <p key={index}>{item}</p>
+                            ))}
                         </ScrollShadow>
                     </CardBody>
-                    <Divider/>
-
-
+                    <Divider />
                 </Card>
             </div>
-            <div className={"details"}>
+
+            <div className="details">
                 <Card className="min-w-[400px] flex-1">
                     <CardHeader className="flex gap-3">
                         <p className="text-md font-bold">Location</p>
                     </CardHeader>
-                    <Divider/>
+                    <Divider />
                     <CardBody>
-                        <p>Udugampola, Gampaha</p>
+                        <p>{location}</p>
                     </CardBody>
-                    <Divider/>
+                    <Divider />
 
                     <CardHeader className="flex gap-3">
                         <p className="text-md font-bold">Email</p>
                     </CardHeader>
-                    <Divider/>
+                    <Divider />
                     <CardBody>
-                        <p>sajithbandara@gmail.com</p>
+                        <p>{email}</p>
                     </CardBody>
-                    <Divider/>
+                    <Divider />
 
                     <CardBody>
-                        <div className="flex gap-4 items-center ">
-                            <Avatar isBordered radius="full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVsHgTWMCMNXjzm54tNMtwsXMQwe0Hej-t0arbxvcXtQxbh7hlxRdmJtOvFg&s" />
-                            <Avatar isBordered radius="full" src="https://cdn-icons-png.freepik.com/256/3955/3955056.png" />
-                            <Avatar isBordered radius="full" src="https://www.vectorlogo.zone/logos/github/github-tile.svg" />
-                            <Avatar isBordered radius="full" src="https://png.pngtree.com/png-vector/20190319/ourmid/pngtree-vector-web-icon-png-image_848026.jpg" />
+                        <div className="flex gap-4 items-center">
+                            {avatars.map((avatar, index) => (
+                                <Avatar key={index} isBordered radius="full" src={avatar} />
+                            ))}
                         </div>
-
-
                     </CardBody>
-
-                    <Divider/>
+                    <Divider />
                 </Card>
+
                 <Card className="min-w-[400px] flex-1 mt-4">
                     <CardHeader className="flex gap-3">
                         <p className="text-md font-bold">My CV</p>
                     </CardHeader>
-                    <Divider/>
+                    <Divider />
                     <CardBody>
-                        <div >
-                            <Carousel/>
+                        <div>
+                            <Carousel images={carousel}/>
                         </div>
                     </CardBody>
-                    <Divider/>
-
+                    <Divider />
                 </Card>
             </div>
         </div>
