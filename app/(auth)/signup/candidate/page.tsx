@@ -7,6 +7,8 @@ import {DatePicker} from "@nextui-org/date-picker";
 import {CalendarDate, DateInput} from "@nextui-org/react";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {Button} from "@nextui-org/button";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 const MAX_STEPS = 3;
 
@@ -19,6 +21,8 @@ const CandidateSignUp: React.FC = () => {
         watch,
         handleSubmit,
         formState: {errors, isValid},
+        setError,
+        clearErrors
     } = useForm({mode: "all"});
     const [formStep, setFormStep] = React.useState(0);
 
@@ -26,20 +30,62 @@ const CandidateSignUp: React.FC = () => {
         isValid && setFormStep(cur => cur + 1);
     };
 
-    const axios=useAxiosAuth();
+    const axios = useAxiosAuth();
 
-    const [axiosLoading,setAxiosLoading]=React.useState(false);
+    const [axiosLoading, setAxiosLoading] = React.useState(false);
 
+    const registeredFields = [
+        "email",
+        "password",
+        "firstName",
+        "lastName",
+        "address",
+        "mobileNumber",
+        "nic",
+        "dob"
+    ];
     const handleFormCompletion = async (values: FieldValues) => {
+        //show loading spinner
         setAxiosLoading(true);
-        await axios.post('/auth/register-candidate',JSON.stringify(values, null, 2)).then((res)=>{
-            console.log(res);
+
+        //clearing errors
+        for (const valuesKey in registeredFields) {
+            clearErrors(valuesKey)
+        }
+
+        await axios.post('/auth/register-candidate', JSON.stringify(values, null, 2)).then((res) => {
+            setFormStep(cur => cur + 1);
+            setAxiosLoading(false);
+
+
         })
+            .catch((error) => {
+                    console.log("error", error.response.data)
+                    let errorObj = error.response.data;
+                    let fieldErrors = error.response.data.errors;
+
+                    let isEmailError = false;
+                    // Iterate through each attribute in the JSON object
+                    for (const key in fieldErrors) {
+                        if (fieldErrors.hasOwnProperty(key)) {
+                            setError(key, {type: 'custom', message: fieldErrors[key]});
+                            if (key == 'email') {
+                                isEmailError = true;
+                            }
+                            // console.log(`${key}: ${fieldErrors[key]}`);
+                        }
+                    }
+                    if (isEmailError) {
+                        setFormStep(0);
+                    } else {
+                        setFormStep(1);
+                    }
+                    setAxiosLoading(false);
+
+                }
+            )
 
         // window.alert(JSON.stringify(values, null, 2));
-        setFormStep(cur => cur + 1);
-        setAxiosLoading(false);
-
     };
 
     return (
@@ -303,9 +349,9 @@ const CandidateSignUp: React.FC = () => {
                                            })}/>
 
 
-                                    {errors.nic && (
+                                    {errors.dob && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.nic?.message}
+                                            {errors.dob?.message}
                                         </p>
                                     )}
                                 </div>
@@ -354,16 +400,16 @@ const CandidateSignUp: React.FC = () => {
                         )}
                         {formStep < 3 && (
                             <Button isLoading={axiosLoading}
-                                disabled={!isValid}
-                                onClick={formStep === 2 ? undefined : handleStepCompletion}
-                                type={formStep === 2 ? "submit" : "button"}
-                                className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 w-full disabled:bg-gray-400"
+                                    disabled={!isValid}
+                                    onClick={formStep === 2 ? undefined : handleStepCompletion}
+                                    type={formStep === 2 ? "submit" : "button"}
+                                    className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 w-full disabled:bg-gray-400"
                             >
                                 {formStep === 2 ? "Register" : "Next"}
                             </Button>
                         )}
-                        {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
-                        {/*<pre>{formStep}</pre>*/}
+                        <pre>{JSON.stringify(watch(), null, 2)}</pre>
+                        <pre>{formStep}</pre>
                     </form>
                 </div>
             </div>
