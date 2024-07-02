@@ -29,6 +29,9 @@ module.exports = {
           fill: {
             1: "rgba(255, 255, 255, 0.10)",
           },
+          greybg: '#F9F9F9',
+          successbg: '#F6FEF9',
+          successborder: '#039855',
           recruitBlue: "#0179FE", //main blue
           whiteText:'#FFFFFF',
           primaryText: '#000000',
@@ -91,6 +94,9 @@ module.exports = {
           fill: {
             1: "rgba(255, 255, 255, 0.10)",
           },
+          greybg: '#1C1C1C',
+          successbg: '#054F31',
+          successborder: '#039855',
           recruitBlue: "#0179FE", //main blue
           whiteText:'#000000',
           primaryText: '#FFFFFF', // White for primary text
