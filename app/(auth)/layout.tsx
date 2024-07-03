@@ -10,9 +10,7 @@ export default function RootLayout({
     return (
         <>
             <Navbar />
-                <main className="flex h-screen w-full mt-4">
-                    {children}
-                </main>
+            {children}
         </>
     );
 }

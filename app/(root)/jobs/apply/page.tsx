@@ -3,7 +3,7 @@ import { Input, Divider, Textarea, Button, Card, CardHeader, CardBody, CardFoote
 import './apply.css';
 
 
-const Home = () => {
+const Apply = () => {
     return (
         <section className="home">
             <div className="home-content">
@@ -120,4 +120,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Apply;
