@@ -9,6 +9,8 @@ import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {Button} from "@nextui-org/button";
 import {Simulate} from "react-dom/test-utils";
 import error = Simulate.error;
+import {Bounce, toast} from "react-toastify";
+import {Link} from "@nextui-org/link";
 
 const MAX_STEPS = 3;
 
@@ -56,7 +58,17 @@ const CandidateSignUp: React.FC = () => {
         await axios.post('/auth/register-candidate', JSON.stringify(values, null, 2)).then((res) => {
             setFormStep(cur => cur + 1);
             setAxiosLoading(false);
-
+            toast.success('Registration Successful!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
 
         })
             .catch((error) => {
@@ -81,7 +93,17 @@ const CandidateSignUp: React.FC = () => {
                         setFormStep(1);
                     }
                     setAxiosLoading(false);
-
+                toast.error('Error occurred while registration! ', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
                 }
             )
 
@@ -209,6 +231,7 @@ const CandidateSignUp: React.FC = () => {
                                         </p>
                                     )}
                                 </div>
+
                             </section>
                         )}
                         {formStep >= 1 && (
@@ -396,6 +419,12 @@ const CandidateSignUp: React.FC = () => {
                             <section>
                                 <h2 className="font-semibold text-3xl mb-8">Thank you for signing up!</h2>
                                 <p>You can now log in with your new account</p>
+                                <Button href={"/signin"}
+                                        as={Link}
+                                        className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 w-full disabled:bg-gray-400"
+                                >
+                                   Log in
+                                </Button>
                             </section>
                         )}
                         {formStep < 3 && (
@@ -408,8 +437,14 @@ const CandidateSignUp: React.FC = () => {
                                 {formStep === 2 ? "Register" : "Next"}
                             </Button>
                         )}
-                        <pre>{JSON.stringify(watch(), null, 2)}</pre>
-                        <pre>{formStep}</pre>
+                        {
+                            formStep==0 && (
+                                <h3 className={"mt-4"}>Want to register as a recruiter? <Link href={"/signup/recruiter"}>Signup
+                                    as a Recruiter</Link></h3>
+                            )
+                        }
+                        {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
+                        {/*<pre>{formStep}</pre>*/}
                     </form>
                 </div>
             </div>
