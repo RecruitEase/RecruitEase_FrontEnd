@@ -27,7 +27,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
     };
 
     return (
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col lg:flex-row">
             <div className="aboutme">
                 <Card className="min-w-[400px] flex-1">
                     <CardHeader className="flex gap-3">
