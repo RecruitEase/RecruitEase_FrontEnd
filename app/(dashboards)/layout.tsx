@@ -7,10 +7,7 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const loggedIn={
-        firstName:'Chathura',
-        lastName:'Lakshan'
-    };
+
 
     return (
         <>
