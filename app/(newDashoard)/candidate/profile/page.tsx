@@ -39,13 +39,10 @@ const data = {
 
 const Profile = () => {
     return (
-        <div className="h-full px-15">
-            <div
-                className="m-[5rem] mt-[2rem]">
+        <>
                 <div className={"pb-4"}><ProfileImage profileData={profileData}/></div>
                 <div><PersonalDetails {...data}></PersonalDetails></div>
-            </div>
-        </div>
+            </>
 
 
     )
