@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Card, CardHeader, CardBody, CardFooter, Image, RadioGroup, Radio, Switch, Textarea } from "@nextui-org/react";
+import { Button, Card, CardHeader, CardBody, CardFooter, Image, RadioGroup, Radio, Switch, Textarea, Divider } from "@nextui-org/react";
 
 
-const Home = () => {
+const Screening = () => {
   return (
     <section className="home">
       <div className="home-content">
@@ -68,16 +68,6 @@ const Home = () => {
                   className="w-full"
                 />
               </div>
-
-
-
-
-
-
-
-
-
-
               <div className=' text-center'>
                 <p className=' text-center text-xs pt-4'>Please make sure to complete the 'questionnaire' at the next stage of application. We recommend the jobseekers to have two working phone numbers on the CV.</p>
 
@@ -102,11 +92,43 @@ const Home = () => {
             {/* right */}
             <div style={{ width: '30%' }} className='border-l-1 p-4'>
               <div>
-
-                <Card className="col-span-12 sm:col-span-4 h-[600px]">
+                <Card className="col-span-12 sm:col-span-4 h-[500px]">
                   <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-                    <p className="text-tiny  uppercase font-bold">What to watch</p>
-                    <h4 className="font-medium text-large">Stream the Acme event</h4>
+                    <div className='w-full h-[50px] items-center'>
+                      <Image
+                        src="/assets/BI.png"
+                        alt="Job Image"
+                        width={60}
+                        height={60}
+                      />
+                    </div>
+                    <span className=" font-medium pt-1">Sales & Marketing Assistant</span>
+                    <span className='text-xs'>Gloria Travels and Tours Pvt Ltd</span>
+                    <div className='text-xs'>
+                      <p className='p-1'>Colombo, Western, Province</p>
+                      <p className='p-1'>14 days left</p>
+                      <p className='p-1'>Contract Basis</p>
+                    </div>
+                    <Divider className="my-4" />
+                    <div className="flex h-20 space-x-4 text-xs">
+                      <div>
+                        <p className='p-1'>Education : Advanced Level</p>
+                        <p className='p-1'>Experience : No Experience</p>
+                        <p className='p-1'>Salary Range : Any</p>
+                      </div>
+                    </div>
+                    <Divider className="my-4" />
+                    <div className='pt-4 w-full'>
+                      <Button className=' bg-recruitBlue text-white w-full'>
+                        Apply For Job
+                      </Button>
+                    </div>
+
+                    <div className='pt-4 w-full'>
+                      <Button className='w-full' color="primary" variant="bordered">
+                        Save Job
+                      </Button>
+                    </div>
                   </CardHeader>
 
                 </Card>
@@ -121,4 +143,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Screening;
