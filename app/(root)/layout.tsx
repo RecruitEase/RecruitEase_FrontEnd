@@ -10,10 +10,8 @@ export default function RootLayout({
     return (
         <>
             <Navbar />
-            <main className="container  px-10 flex-grow">
                 <main className="flex h-screen w-full">
                     {children}
-                </main>
             </main>
 
         </>
