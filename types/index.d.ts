@@ -1,4 +1,7 @@
 /* eslint-disable no-unused-vars */
+import {UseFormRegister} from "react-hook-form/dist/types/form";
+import {FieldErrors} from "react-hook-form/dist/types/errors";
+
 declare interface HeaderBoxProps {
   type?: "title" | "greeting";
   title: string;
@@ -68,7 +71,18 @@ declare interface SideBarProps {
 
 
 
-
+declare interface CustomFormInputProps{
+  register:UseFormRegister<TFieldValues>,
+  name:string,
+  type?:string,
+  label:string,
+  required:boolean,
+  errors:FieldErrors<TFieldValues>,
+  validationSchema:object,
+  placeholder?:string,
+  variant?:string,
+  className?:string
+}
 
 
 
