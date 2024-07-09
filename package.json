@@ -9,6 +9,9 @@
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
+		"@blocknote/core": "^0.14.5",
+		"@blocknote/mantine": "^0.14.6",
+		"@blocknote/react": "^0.14.6",
 		"@headlessui/react": "^2.1.1",
 		"@heroicons/react": "^2.1.4",
 		"@nextui-org/button": "2.0.34",
@@ -53,6 +56,7 @@
 		"query-string": "^9.0.0",
 		"querystring-es3": "^0.2.1",
 		"react": "^18.3.1",
+		"react-apexcharts": "^1.4.1",
 		"react-chartjs-2": "^5.2.0",
 		"react-countup": "^6.5.3",
 		"react-dom": "^18.3.1",
