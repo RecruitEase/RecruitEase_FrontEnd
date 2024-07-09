@@ -12,9 +12,9 @@ import error = Simulate.error;
 import {Bounce, toast} from "react-toastify";
 import {Link} from "@nextui-org/link";
 
-const MAX_STEPS = 3;
+const MAX_STEPS = 4;
 
-const CandidateSignUp: React.FC = () => {
+const RecruiterSignup: React.FC = () => {
     const [isVisible, setIsVisible] = React.useState(false);
 
     const toggleVisibility = () => setIsVisible(!isVisible);
@@ -43,8 +43,9 @@ const CandidateSignUp: React.FC = () => {
         "lastName",
         "address",
         "mobileNumber",
-        "nic",
-        "dob"
+        "companyName",
+        "businessRegistrationNumber",
+        "website"
     ];
     const handleFormCompletion = async (values: FieldValues) => {
         //show loading spinner
@@ -55,7 +56,7 @@ const CandidateSignUp: React.FC = () => {
             clearErrors(valuesKey)
         }
 
-        await axios.post('/auth/register-candidate', JSON.stringify(values, null, 2)).then((res) => {
+        await axios.post('/auth/register-recruiter', JSON.stringify(values, null, 2)).then((res) => {
             setFormStep(cur => cur + 1);
             setAxiosLoading(false);
             toast.success('Registration Successful!', {
@@ -124,7 +125,7 @@ const CandidateSignUp: React.FC = () => {
                     Welcome to <span className="text-yellow-500">RecruitEase</span>
                 </h1>
                 <h2 className="text-white mt-2 text-lg ">
-                    Job Seeker Registration
+                    Recruiter Registration
                 </h2>
             </div>
             <div
@@ -236,7 +237,123 @@ const CandidateSignUp: React.FC = () => {
                         )}
                         {formStep >= 1 && (
                             <section className={formStep === 1 ? "block" : "hidden"}>
-                                <h2 className="font-semibold text-3xl mb-8">Personal Information</h2>
+                                <h2 className="font-semibold text-3xl mb-8">Company Information</h2>
+                                <div className={"m-1 p-2"}>
+                                    <label htmlFor="companyName">Company Name</label>
+                                    <Input
+                                        placeholder={"Enter the company name"}
+                                        type="text"
+                                        id="companyName"
+                                        variant="bordered"
+                                        {...register('companyName', {
+                                            required: {
+                                                value: true,
+                                                message: "Please enter the company name",
+                                            }
+                                        })}
+                                    />
+                                    {errors.companyName && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors.companyName?.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className={"m-1 p-2"}>
+                                    <label htmlFor="address">Address</label>
+                                    <Input
+                                        placeholder={"Enter the company location"}
+                                        type="text"
+                                        id="address"
+                                        variant="bordered"
+                                        {...register('address', {
+                                            required: {
+                                                value: true,
+                                                message: "Please enter the company location",
+                                            }
+                                        })}
+                                    />
+                                    {errors.address && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors.address?.message}
+                                        </p>
+                                    )}
+                                </div>
+
+
+
+                                <div className={"m-1 p-2"}>
+                                    <label htmlFor="website">Website</label>
+                                    <Input
+                                        placeholder={"Enter the company website"}
+                                        type="text"
+                                        id="website"
+                                        variant="bordered"
+                                        {...register('website', {
+                                            pattern: {
+                                                value: /^(https?:\/\/)?((([a-zA-Z0-9$.\-]+)\.([a-zA-Z]{2,6}))|(([0-9]{1,3}\.){3}[0-9]{1,3}))(:[0-9]{1,5})?(\/[a-zA-Z0-9$.\-\/]*)?(\?[a-zA-Z0-9&%=.\-]*)?(#[a-zA-Z0-9\-]*)?$/,
+                                                message: "Invalid web address"
+                                            }
+                                        })}
+                                    />
+                                    {errors.website && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors.website?.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className={"m-1 p-2"}>
+                                    <label htmlFor="businessRegistrationNumber">Business Registration Number</label>
+                                    <Input
+                                        placeholder={"Enter the company BR number"}
+                                        type="text"
+                                        id="businessRegistrationNumber"
+                                        variant="bordered"
+                                        {...register('businessRegistrationNumber', {
+                                            required: {
+                                                value: true,
+                                                message: "Please enter your BR number",
+                                            }
+                                        })}
+                                    />
+                                    {errors.businessRegistrationNumber && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors.businessRegistrationNumber?.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className={"m-1 p-2"}>
+                                    <label htmlFor="mobileNumber">Mobile Number (For OTP)</label>
+                                    <Input
+                                        placeholder={"Enter company mobile number"}
+                                        type="text"
+                                        id="mobileNumber"
+                                        variant="bordered"
+                                        {...register('mobileNumber', {
+                                            required: {
+                                                value: true,
+                                                message: "Please enter your mobile number",
+                                            },
+                                            pattern: {
+                                                value: /^(070|071|072|075|076|077|078|074)\d{7}$/,
+                                                message: "Invalid Sri Lankan mobile number"
+                                            }
+                                        })}
+                                    />
+                                    {errors.mobileNumber && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors.mobileNumber?.message}
+                                        </p>
+                                    )}
+                                </div>
+
+                            </section>
+                        )}
+                        {formStep >= 2 && (
+                            <section className={formStep === 2 ? "block" : "hidden"}>
+                                <h2 className="font-semibold text-3xl mb-8">Account Handler Information</h2>
                                 <div className={"m-1 p-2"}>
                                     <label htmlFor="firstName">First Name</label>
                                     <Input
@@ -287,101 +404,12 @@ const CandidateSignUp: React.FC = () => {
                                     )}
                                 </div>
 
-                                <div className={"m-1 p-2"}>
-                                    <label htmlFor="address">Address</label>
-                                    <Input
-                                        placeholder={"Enter your address"}
-                                        type="text"
-                                        id="address"
-                                        variant="bordered"
-                                        {...register('address', {
-                                            required: {
-                                                value: true,
-                                                message: "Please enter your address",
-                                            },
-                                        })}
-                                    />
-                                    {errors.address && (
-                                        <p className="text-danger text-sm mt-2">
-                                            {errors.address?.message}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className={"m-1 p-2"}>
-                                    <label htmlFor="mobileNumber">Mobile Number</label>
-                                    <Input
-                                        placeholder={"Enter your mobile number"}
-                                        type="text"
-                                        id="mobileNumber"
-                                        variant="bordered"
-                                        {...register('mobileNumber', {
-                                            required: {
-                                                value: true,
-                                                message: "Please enter your mobile number",
-                                            },
-                                            pattern: {
-                                                value: /^(070|071|072|075|076|077|078|074)\d{7}$/,
-                                                message: "Invalid Sri Lankan mobile number"
-                                            }
-                                        })}
-                                    />
-                                    {errors.mobileNumber && (
-                                        <p className="text-danger text-sm mt-2">
-                                            {errors.mobileNumber?.message}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className={"m-1 p-2"}>
-                                    <label htmlFor="nic">NIC no.</label>
-                                    <Input
-                                        placeholder={"Enter your NIC number"}
-                                        type="text"
-                                        id="nic"
-                                        variant="bordered"
-                                        {...register('nic', {
-                                            required: {
-                                                value: true,
-                                                message: "Please enter your NIC number",
-                                            },
-                                            pattern: {
-                                                value: /^(?:\d{9}[VvXx]|\d{12})$/,
-                                                message: "Invalid Sri Lankan NIC number"
-                                            }
-                                        })}
-                                    />
-                                    {errors.nic && (
-                                        <p className="text-danger text-sm mt-2">
-                                            {errors.nic?.message}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div className={"m-1 p-2"}>
-                                    <label htmlFor="dob">Date of Birth.</label>
-                                    <Input className="max-w"
-                                           label="Birth date" id="dob"
-                                           variant="bordered"
-                                           type={"date"}
-                                           {...register('dob', {
-                                               required: {
-                                                   value: true,
-                                                   message: "Please enter your date of birth",
-                                               },
-                                           })}/>
 
 
-                                    {errors.dob && (
-                                        <p className="text-danger text-sm mt-2">
-                                            {errors.dob?.message}
-                                        </p>
-                                    )}
-                                </div>
                             </section>
                         )}
-                        {formStep >= 2 && (
-                            <section className={formStep === 2 ? "block" : "hidden"}>
+                        {formStep >= 3 && (
+                            <section className={formStep === 3 ? "block" : "hidden"}>
                                 <h2 className="font-semibold text-3xl mb-8">Terms and Conditions</h2>
                                 <div className="block mt-6">
                                     <input
@@ -415,7 +443,7 @@ const CandidateSignUp: React.FC = () => {
                                 </div>
                             </section>
                         )}
-                        {formStep >= 3 && (
+                        {formStep >= 4 && (
                             <section>
                                 <h2 className="font-semibold text-3xl mb-8">Thank you for signing up!</h2>
                                 <p>You can now log in with your new account</p>
@@ -427,20 +455,20 @@ const CandidateSignUp: React.FC = () => {
                                 </Button>
                             </section>
                         )}
-                        {formStep < 3 && (
+                        {formStep < 4 && (
                             <Button isLoading={axiosLoading}
                                     disabled={!isValid}
-                                    onClick={formStep === 2 ? undefined : handleStepCompletion}
-                                    type={formStep === 2 ? "submit" : "button"}
+                                    onClick={formStep === 3 ? undefined : handleStepCompletion}
+                                    type={formStep === 3 ? "submit" : "button"}
                                     className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 w-full disabled:bg-gray-400"
                             >
-                                {formStep === 2 ? "Register" : "Next"}
+                                {formStep === 3 ? "Register" : "Next"}
                             </Button>
                         )}
                         {
                             formStep==0 && (
-                                <h3 className={"mt-4"}>Want to register as a recruiter? <Link href={"/signup/recruiter"}>Signup
-                                    as a Recruiter</Link></h3>
+                                <h3 className={"mt-4"}>Want to register as a Job Seeker? <Link href={"/signup/candidate"}>Signup
+                                    as a Job Seeker</Link></h3>
                             )
                         }
                         {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
@@ -452,4 +480,4 @@ const CandidateSignUp: React.FC = () => {
     );
 };
 
-export default CandidateSignUp;
+export default RecruiterSignup;

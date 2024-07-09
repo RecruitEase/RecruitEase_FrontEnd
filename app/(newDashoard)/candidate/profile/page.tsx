@@ -1,6 +1,14 @@
 import React from 'react';
 import ProfileImage from "@/components/candidateProfile/profileImage";
 import PersonalDetails from "@/components/candidateProfile/personalDetails";
+import {CardBalance1} from "@/components/admin/card-balance1";
+import {CardBalance2} from "@/components/admin/card-balance2";
+import {CardBalance3} from "@/components/admin/card-balance3";
+import {CardAgents} from "@/components/admin/card-agents";
+import {CardTransactions} from "@/components/admin/card-transactions";
+import {Link} from "@nextui-org/react";
+import NextLink from "next/link";
+import {TableWrapper} from "@/components/table/table";
 
 
 const profileData = {
@@ -31,11 +39,14 @@ const data = {
 
 const Profile = () => {
     return (
-        <div>
-            <div className={"pb-4"}><ProfileImage profileData={profileData}/></div>
-            <div><PersonalDetails {...data}></PersonalDetails></div>
-        </div>
-    );
+        <>
+                <div className={"pb-4"}><ProfileImage profileData={profileData}/></div>
+                <div><PersonalDetails {...data}></PersonalDetails></div>
+            </>
+
+
+    )
+        ;
 };
 
 export default Profile;
