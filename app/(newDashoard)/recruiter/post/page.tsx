@@ -6,7 +6,7 @@ import {useSession} from "next-auth/react";
 import {Input, Textarea} from "@nextui-org/input";
 import {useForm} from "react-hook-form";
 import CustomInput from "@/components/form_inputs/CustomInput";
-import {DatePicker, Select, SelectItem} from "@nextui-org/react";
+import {DatePicker, Select, SelectItem, Switch} from "@nextui-org/react";
 import {toTitleCase} from "@/utils/stringUtils";
 import CustomTextArea from "@/components/form_inputs/CustomTextArea";
 import "@blocknote/core/fonts/inter.css";
@@ -19,6 +19,13 @@ const JobPost = () => {
     const {theme, setTheme} = useTheme();
     // Creates a new editor instance.
     const editor = useCreateBlockNote();
+
+    const [isQuizCreationEnabled, setIsQuizCreationEnabled] = useState(false);
+
+    // @ts-ignore
+    const handleSwitchChange = (event) => {
+        setIsQuizCreationEnabled(!isQuizCreationEnabled);
+    };
 
     const locations = [
         {key: "work from home", label: "Work From Home"},
@@ -57,14 +64,20 @@ const JobPost = () => {
 
     ];
 
-    const experienceLevelTypes=[
+    const experienceLevelTypes = [
         {key: 1, label: "6 Months"},
         {key: 2, label: "1-2 Years"},
         {key: 3, label: "2-3 Years"},
         {key: 4, label: "3-5 Years"},
     ]
 
-    const educationLevelTypes=[
+    const questionTypes = [
+        {key: 1, label: "Single Choice"},
+        {key: 2, label: "Multiple Choice"},
+        {key: 3, label: "Open"},
+    ]
+
+    const educationLevelTypes = [
         {key: 1, label: "Ordinary Level"},
         {key: 2, label: "Advanced Level"},
         {key: 3, label: "Bachelor’s Degree"},
@@ -149,6 +162,25 @@ const JobPost = () => {
 
     const [values, setValues] = React.useState(new Set([]));
     const [fields, setFields] = React.useState(new Set([]));
+
+
+    const [qType, setQType] = useState(1);
+    const handleQuestionType = (event) => {
+        //check the question type selected and render accordingly
+        console.log(event.target.value)
+        setQType(event.target.value)
+    }
+
+    const handleSingleChoiceAnswer = () => {
+        //Todo
+    }
+    const handleMultipleChoiceAnswer = () => {
+        //Todo
+    }
+    const handleOpenAnswer = () => {
+        //Todo
+    }
+
     // @ts-ignore
     return (
         <div>
@@ -380,8 +412,110 @@ const JobPost = () => {
              </span>
                 </div>
 
-                <Button color={"primary"} >Create job vacancy</Button>
+
+                <Switch onChange={handleSwitchChange}>
+                    Pre-Screening Quiz
+                </Switch>
+
+
             </div>
+            <div
+                className={isQuizCreationEnabled ? 'flex flex-col lg:flex-row w-full flex-wrap m-1 border-1 rounded-md p-3' : 'hidden'}>
+                <div className={"mb-1 mx-2 lg:w-[45%] w-[90%]"}>
+                    <label htmlFor={"questionType"}>
+                        Question Type
+                        <span className={"text-danger"}> * </span>
+                    </label>
+                    <Select
+                        id={"questionType"}
+                        name={"questionType"}
+                        items={questionTypes}
+                        placeholder="Select the question type"
+                        variant={"bordered"}
+                        onChange={handleQuestionType}
+                        defaultSelectedKeys={[1]}
+                    >
+                        {(questionType) => <SelectItem>{questionType.label}</SelectItem>}
+                    </Select>
+
+
+                </div>
+
+                <div className={"mb-1 mx-2 lg:w-[45%] w-[90%]"}>
+                    <label htmlFor={"question"}>
+                        Question
+                        <span className={"text-danger"}> * </span>
+                    </label>
+                    <Input
+                        id={"question"}
+                        name={"question"}
+                        type={"text"}
+                        variant={"bordered"}
+                        placeholder={"Enter the question"}
+                    />
+                </div>
+
+
+                {qType == 1 && <div className={"w-full flex-col"}>
+                    <div>
+                        <label>
+                            Answers:
+                            <span className={"text-danger"}> * </span>
+                        </label>
+                        <div>
+
+                        </div>
+                    </div>
+                    <div className={"mb-1 mx-2 lg:w-[45%] w-[90%] flex gap-2  items-center"}>
+                        <label htmlFor={"answer"}>
+                            Answer
+                        </label>
+                        <Input
+                            id={"answer"}
+                            name={"answer"}
+                            type={"text"}
+                            variant={"bordered"}
+                            placeholder={"Enter the answer"}
+                        />
+                        <Button onClick={handleSingleChoiceAnswer} size={"sm"} color={"success"}>Add</Button>
+                    </div>
+
+                </div>}
+                {qType == 2 && <div className={"w-full flex-col"}>
+                    <div>
+                        <label>
+                            Answers:
+                            <span className={"text-danger"}> * </span>
+                        </label>
+                        <div>
+
+                        </div>
+                    </div>
+                    <div className={"mb-1 mx-2 lg:w-[45%] w-[90%] flex gap-2  items-center"}>
+                        <label htmlFor={"answer"}>
+                            Answer
+                        </label>
+                        <Input
+                            id={"answer"}
+                            name={"answer"}
+                            type={"text"}
+                            variant={"bordered"}
+                            placeholder={"Enter the answer"}
+                        />
+                        <Button onClick={handleMultipleChoiceAnswer} size={"sm"} color={"success"}>Add</Button>
+                    </div>
+
+                </div>}
+                {qType == 3 && <div className={"w-full flex-col"}>
+
+                    <div className={"mb-1 mx-2 lg:w-[45%] w-[90%] flex gap-2  items-center"}>
+                        <Button onClick={handleOpenAnswer} size={"sm"} color={"success"}>Add</Button>
+                    </div>
+
+                </div>}
+            </div>
+            <Button className={"mt-5"} size={"md"} color={"primary"}>Create job vacancy</Button>
+
             {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
 
         </div>
