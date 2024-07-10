@@ -1,6 +1,8 @@
 "use client"
 import React from 'react';
 import { Card, CardHeader, Image, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
+import CustomInputWithoutValidation from '@/components/form_inputs/CustomInputWithoutValidations';
+import Link from 'next/link';
 
 
 const Management = () => {
@@ -14,7 +16,7 @@ const Management = () => {
 
   ]
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <div>
@@ -26,8 +28,8 @@ const Management = () => {
           </Button>
 
           {/* upload CV button */}
-          <Button onPress={onOpen} className='bg-recruitBlue text-white'>Upload</Button>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <Button onClick={onOpen} className='bg-recruitBlue text-white'>Upload</Button>
+          <Modal isOpen={isOpen} onOpenChange={onClose}>
             <ModalContent>
               {(onClose) => (
                 <>
@@ -35,10 +37,14 @@ const Management = () => {
                   <ModalBody>
                     <div>
                       <div>
-
-
+                        <CustomInputWithoutValidation
+                          name='name'
+                          label='CV Name'
+                          required={true}
+                          placeholder='CV Name'
+                          className='mb-5' />
                       </div>
-                      <div className='border border-dashed border-gray-500 p-4 mb-4 w-1/2'>
+                      <div className='border border-dashed border-gray-500 p-4 mb-4 h-40'>
                         <div className='items-center justify-center font-extralight text-xs'>
                           Drag and drop
                           your CV here</div>
@@ -47,10 +53,10 @@ const Management = () => {
 
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
+                    <Button color="danger" variant="light" onClick={onClose}>
                       Close
                     </Button>
-                    <Button color="primary" onPress={onClose}>
+                    <Button color="primary" onClick={onClose}>
                       Action
                     </Button>
                   </ModalFooter>
@@ -62,16 +68,22 @@ const Management = () => {
         </div>
         <div className='flex flex-col sm:flex-row  w-full flex-wrap place-content-between'>
           {cvs && cvs.map((item) => (
-            <div id={"cv" + item.key}>
-              <Card className="col-span-12 sm:col-span-4 h-[350px] w-[200px] m-2 mt-2">
+            <div id={"cv" + item.key} className=' relative group'>
+              <Card className="col-span-12 sm:col-span-4 h-[350px] w-[200px] m-2 mt-2 transition duration-300 ease-in-out">
                 <CardHeader className="absolute z-10 top-1 flex-col !items-start">
                 </CardHeader>
                 <Image
                   removeWrapper
                   alt="Card background"
-                  className="z-0 w-full h-full object-fit"
+                  className="z-0 w-full h-full object-cover duration-300 ease-in-out group-hover:blur-sm"
                   src={item.image}
                 />
+                <CardHeader className="absolute z-10 top-0 left-0 right-0 bottom-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out">
+                  {/* Added hover effect for the button */}
+                  <Button className=' bg-recruitBlue' as={Link} href="/candidate/cv/view">
+                    View CV
+                  </Button>
+                </CardHeader>
               </Card>
               <div className=' text-center font-bold'> {item.name}</div>
             </div>
