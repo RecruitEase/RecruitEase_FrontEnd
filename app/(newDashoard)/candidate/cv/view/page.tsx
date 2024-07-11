@@ -12,7 +12,7 @@ function View() {
     cvName: 'CV1',
     file: '/assets/cv.pdf',
     modifiedDate: '2021-09-01',
-    type: 'template'
+    type: 'uploaded'
   }
   return (
     <div>
@@ -27,7 +27,7 @@ function View() {
         <p className='font-thin m-2'>Last modified Date: {cv.modifiedDate}</p>
       </div>
       <div className=' flex justify-end m-2 gap-2'>
-        <Button isDisabled={cv.type !== "template"} className='bg-recruitBlue text-white'>
+        <Button isDisabled={cv.type != "template"} className='bg-recruitBlue text-white'>
           Edit
         </Button>
         <Button className='bg-recruitBlue text-white'>
