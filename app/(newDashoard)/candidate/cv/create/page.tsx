@@ -1,5 +1,9 @@
+"use client"
 import HeaderBox from '@/components/dashboard/HeaderBox'
 import React from 'react'
+import { ChakraProvider } from "@chakra-ui/react";
+import ResumeState from "@/components/cvBuilder/Context/ResumeState";
+import Home from "@/components/cvBuilder/Pages/Home/Home";
 
 function Create() {
   return (
@@ -11,6 +15,8 @@ function Create() {
           subtext="Here are some jobs that we think you might be interested in."
         />
       </header>
+
+
 
     </div>
   )
