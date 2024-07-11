@@ -3,7 +3,7 @@ import {toTitleCase} from "@/utils/stringUtils";
 
 const HeaderBox = ({type="title",title,subtext,user="Guest"}:HeaderBoxProps) => {
     return (
-        <div className="header-box">
+        <div className="header-box mb-5">
             <h1 className="header-box-title">
                 {title}
                 {type==='greeting' && (

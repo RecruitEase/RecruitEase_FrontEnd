@@ -1,16 +1,30 @@
 import React from "react";
 import {Card, Chip, Image, Button} from "@nextui-org/react";
-import { VscCommentDiscussion } from "react-icons/vsc";
+import {BiEdit, BiMessageRounded,  } from "react-icons/bi";
+import { RiDeleteBin5Line } from "react-icons/ri";
+import {decl} from "postcss";
+import {RoleDetails} from "@/types";
 
-export const UserCard = () => {
+declare type ModeratorCard = {
+    name:string,
+    status:string,
+    imageUrl:string,
+    email:string,
+};
+
+declare interface UserCardProps {
+    user:ModeratorCard
+}
+
+export const UserCard = ({user}:UserCardProps) => {
     // @ts-ignore
     return (
         <div className="relative">
-            <Card className="max-w-[220px] p-2 relative">
+            <Card className="min-w-[198.5px] p-2 relative">
 
                 <div className="background h-28 bg-gray-300 rounded-t-xl p-2">
                     <div className="flex justify-end mb-4">
-                        <Chip size="sm" className="bg-success-100 text-success-700 ">Active</Chip>
+                        <Chip size="sm" className="bg-success-100 text-success-700 ">{user.status}</Chip>
                     </div>
                 </div>
 
@@ -19,30 +33,25 @@ export const UserCard = () => {
                         alt="nextui logo"
                         style={{width: 100, height: 'auto', aspectRatio: 1}}
                         radius="full"
-                        src={"https://th.bing.com/th/id/OIP.4Y0BXVoEPd7lBZms8uraGAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.3&pid=1.7"}/>
+                        src={user.imageUrl}/>
                 </div>
 
                 <div className="flex justify-center mt-10">
-                    <p className="font-bold text-lg">Sajith Bandara</p>
+                    <p className="font-bold text-lg">{user.name}</p>
                 </div>
                 <div className="flex justify-center">
-                    <p className="text-sm text-tertiaryText font-bold">sajithbandara@gmail.com</p>
+                    <p className="text-sm text-tertiaryText font-bold">{user.email}</p>
                 </div>
                 <div className="flex justify-center gap-2 mt-4 mb-4">
-                    {/*<Button className="h-8 bg-recruitBlue text-[#FFFFFF]">Message</Button>*/}
-                    {/*<Button className="h-8 bg-gray-600 text-[#FFFFFF]">Edit</Button>*/}
-                    {/*<Button className="h-8 bg-[#F31260] text-[#FFFFFF]">Delete</Button>*/}
 
                     <Button className="bg-recruitBlue" isIconOnly variant="faded" aria-label="massage">
-                        <VscCommentDiscussion color={"white"} size={25} />
+                        <BiMessageRounded color={"white"} size={25} />
                     </Button>
                     <Button className="bg-gray-600" isIconOnly  variant="faded" aria-label="edit">
-
+                        <BiEdit color={"white"} size={25}/>
                     </Button>
                     <Button className="bg-[#F31260]" isIconOnly  variant="faded" aria-label="delete">
-
-
-
+                        <RiDeleteBin5Line color={"white"} size={25}/>
                     </Button>
 
 
