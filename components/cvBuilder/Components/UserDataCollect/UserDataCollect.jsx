@@ -134,7 +134,7 @@ const UserDataCollect = () => {
     }, [ personalData, setThemeData, projectData, educationData, workData, awardData])
 
     return (
-        <>
+        <div className={"md:w-[45%] w-full "}>
             <div id="form-collect">
                 {/* Personal Details Area  */}
                 <div id="form-personal" className='mb-2'>
@@ -191,7 +191,8 @@ const UserDataCollect = () => {
                         Education
                     </Heading>
                     <hr />
-                    <Button onClick={handleEducationClick} className='my-3 w-100' colorScheme='teal' variant='solid'>Add Education</Button>
+                    <Button onClick={handleEducationClick} className='my-3 w-100' bg={'#0179FE'}
+                        _hover={{ bg: '#319795' }} colorScheme={'blue'} color={"white"} variant='solid'>Add Education</Button>
                     {
                         (educationCount > 0) ? educationArrTemplate.map((element, index) => <div key={index}>{element}</div>) : null
                     }
@@ -203,10 +204,11 @@ const UserDataCollect = () => {
                         <Heading as='h4' size='md' className='my-2'>
                             Projects
                         </Heading>
-                        <Switch defaultChecked={true} onChange={() => (setCheckProj(!checkProj))} colorScheme='teal' />
+                        <Switch defaultChecked={true} onChange={() => (setCheckProj(!checkProj))} colorScheme='blue' />
                     </div>
                     <hr />
-                    <Button disabled={checkProj} onClick={handleProjectClick} className='my-3 w-100' colorScheme='teal' variant='solid'>Add Projects</Button>
+                    <Button disabled={checkProj} onClick={handleProjectClick} className='my-3 w-100' bg={'#0179FE'}
+                        _hover={{ bg: '#319795' }} colorScheme={'blue'} color={"white"} variant='solid'>Add Projects</Button>
                     {
                         (projectCount > 0) ? projArrTemplate.map((element, index) => <div key={index}>{element}</div>) : null
                     }
@@ -218,10 +220,11 @@ const UserDataCollect = () => {
                         <Heading as='h4' size='md' className='my-2'>
                             Work Experience
                         </Heading>
-                        <Switch defaultChecked={true} onChange={() => (setCheckWork(!checkWork))} colorScheme='teal' />
+                        <Switch defaultChecked={true} onChange={() => (setCheckWork(!checkWork))} colorScheme='blue' />
                     </div>
                     <hr />
-                    <Button disabled={checkWork} onClick={handleWorkClick} className='my-3 w-100' colorScheme='teal' variant='solid'>Add Experience</Button>
+                    <Button disabled={checkWork} onClick={handleWorkClick} className='my-3 w-100' bg={'#0179FE'}
+                        _hover={{ bg: '#319795' }} colorScheme={'blue'} color={"white"} variant='solid'>Add Experience</Button>
                     {
                         (workCount > 0) ? workArrTemplate.map((element, index) => <div key={index}>{element}</div>) : null
                     }
@@ -233,7 +236,7 @@ const UserDataCollect = () => {
                         <Heading as='h4' size='md' className='my-2'>
                             Awards & Achievement
                         </Heading>
-                        <Switch defaultChecked={true} onChange={() => (setCheckAward(!checkAward))} colorScheme='teal' />
+                        <Switch defaultChecked={true} onChange={() => (setCheckAward(!checkAward))} colorScheme='blue' />
                     </div>
                     <hr />
                     <FormControl isRequired className='my-2'>
@@ -242,7 +245,7 @@ const UserDataCollect = () => {
                 </div>
 
             </div>
-        </>
+        </div>
     )
 }
 
