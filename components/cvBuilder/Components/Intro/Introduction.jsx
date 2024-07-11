@@ -54,13 +54,13 @@ export default function Introduction() {
                                 <Flex _dark={{ color: 'gray.50' }} textAlign={'start'} flexDirection={'column'} w={'full'}>
                                     <Box className='Bullet_Points'>
                                         <Button>1</Button>
-                                        <Text _dark={{ color: "gray.400" }} color={'gray.900'} fontSize={'xl'}>
+                                        <Text className={"light:text-black dark:text-white"} _dark={{ color: "gray.400" }} color={'gray.900'} fontSize={'xl'}>
                                             Select a template from our collection.
                                         </Text>
                                     </Box>
                                     <Box className='Bullet_Points'>
                                         <Button>2</Button>
-                                        <Text _dark={{ color: "gray.400" }} color={'gray.900'} fontSize={'xl'}>
+                                        <Text className={"light:text-black dark:text-white"} _dark={{ color: "gray.400" }} color={'gray.900'} fontSize={'xl'}>
                                             Build you resume using our easy to use resume builder.
                                         </Text>
                                     </Box>

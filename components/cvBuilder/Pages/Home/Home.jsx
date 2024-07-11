@@ -12,7 +12,7 @@ const Home = () => {
     const { currentTheme, showComponent, themeData, componentRef } = useContext(ResumeContext);
 
     return (
-        <>
+        <div className={"light:text-black dark:text-white"}>
             {
                 !showComponent && <Introduction />
             }
@@ -28,7 +28,7 @@ const Home = () => {
             {
                 (showComponent && currentTheme === 'Theme4') && <ErrorPage />
             }
-        </>
+        </div>
     )
 }
 
