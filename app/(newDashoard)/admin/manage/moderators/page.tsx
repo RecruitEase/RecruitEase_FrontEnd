@@ -1,9 +1,12 @@
 import type { NextPage } from "next";
-import { Content } from "@/components/admin/content";
+import {UserCard} from "@/components/admin/manageModarators/userCard";
 
 const ManageModerators: NextPage = () => {
   return <>
-    manage moderators
+    <div>
+      <h2>Moderators</h2>
+      <UserCard/>
+    </div>
     </>;
 };
 
