@@ -7,12 +7,10 @@ function Create() {
       <header className="home-header">
         <HeaderBox
           type="title"
-          title="Create CV"
-          subtext="Create your CV here."
+          title="Your Job Recommendations"
+          subtext="Here are some jobs that we think you might be interested in."
         />
       </header>
-
-
 
     </div>
   )
