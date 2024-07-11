@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
-import Profile from "@/app/(dashboards)/candidate/profile/page";
 
 // @ts-ignore
 const ProfileImage=({profileData})=> {
