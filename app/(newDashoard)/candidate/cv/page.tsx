@@ -23,7 +23,7 @@ const Management = () => {
 
       <div className=' w-full'>
         <div className=' w-full flex justify-end gap-2'>
-          <Button className='bg-recruitBlue text-white'>
+          <Button className='bg-recruitBlue text-white' as={Link} href={"/candidate/cv/create"}>
             Create
           </Button>
 
