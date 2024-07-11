@@ -86,6 +86,16 @@ declare interface CustomFormInputProps{
 
 
 
+declare interface CustomFormInputWithoutValidationProps{
+  name:string,
+  type?:string,
+  label:string,
+  required:boolean,
+  placeholder?:string,
+  variant?:string,
+  className?:string
+}
+
 
 
 
