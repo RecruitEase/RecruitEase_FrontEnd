@@ -9,9 +9,9 @@ export default function RootLayout({
 }>) {
     return (
         <>
-            <Navbar />
-                <main className="mx-[5rem] mx-auto">
-                    {children}
+            <Navbar/>
+            <main className="mx-[5rem]">
+                {children}
             </main>
 
         </>
