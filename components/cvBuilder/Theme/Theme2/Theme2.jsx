@@ -63,7 +63,7 @@ const Theme2 = (props) => {
                         </Box>
                     </section>
 
-                    <div style={{ height: '536px' }} className="border border-dark mx-4"></div>
+                    {/*<div style={{ height: '536px' }} className="border border-dark mx-4"></div>*/}
 
                     <section className='partition-2'>
 
