@@ -1,9 +1,18 @@
-import React from "react";
-import {Card, Chip, Image, Button} from "@nextui-org/react";
+import React, {useState} from "react";
+import {
+    Card,
+    Chip,
+    Image,
+    Button,
+    useDisclosure,
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    Switch, ModalFooter
+} from "@nextui-org/react";
 import {BiEdit, BiMessageRounded,  } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import {decl} from "postcss";
-import {RoleDetails} from "@/types";
 
 declare type ModeratorCard = {
     name:string,
@@ -16,12 +25,13 @@ declare interface UserCardProps {
     user:ModeratorCard
 }
 
-function emailLength(email){
+function emailLength(email: string){
     if (email.length <= 22) {
         return email;
     }
     return email.substring(0, 20) + '...';
 }
+
 
 export const UserCard = ({user}:UserCardProps) => {
     // @ts-ignore
@@ -31,7 +41,13 @@ export const UserCard = ({user}:UserCardProps) => {
 
                 <div className="background h-28 bg-gray-300 rounded-t-xl p-2">
                     <div className="flex justify-end mb-4">
-                        <Chip size="sm" className="bg-success-100 text-success-700 ">{user.status}</Chip>
+                        <Chip
+                            size="sm"
+                            className={`${
+                                user.status === 'Active' ? 'bg-success-100 text-success-700' : 'bg-warning-100 text-warning-700'
+                            }`}>
+                            {user.status}
+                        </Chip>
                     </div>
                 </div>
 
