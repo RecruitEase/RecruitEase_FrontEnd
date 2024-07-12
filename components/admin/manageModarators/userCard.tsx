@@ -16,6 +16,13 @@ declare interface UserCardProps {
     user:ModeratorCard
 }
 
+function emailLength(email){
+    if (email.length <= 22) {
+        return email;
+    }
+    return email.substring(0, 20) + '...';
+}
+
 export const UserCard = ({user}:UserCardProps) => {
     // @ts-ignore
     return (
@@ -40,7 +47,7 @@ export const UserCard = ({user}:UserCardProps) => {
                     <p className="font-bold text-lg">{user.name}</p>
                 </div>
                 <div className="flex justify-center">
-                    <p className="text-sm text-tertiaryText font-bold">{user.email}</p>
+                    <p className="text-sm text-tertiaryText font-bold">{emailLength(user.email)}</p>
                 </div>
                 <div className="flex justify-center gap-2 mt-4 mb-4">
 
