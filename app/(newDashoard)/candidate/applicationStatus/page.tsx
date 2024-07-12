@@ -1,5 +1,6 @@
 import React from 'react';
 import ApplicationStatusTable from "@/components/applicationStatus/applicationStatusTable";
+import HeaderBox from "@/components/dashboard/HeaderBox";
 
 type Status = "Submitted" | "Under Review" | "Interview Called" | "Selected" | "Rejected" | "Withdrawn";
 
@@ -66,8 +67,14 @@ const ApplicationStatus = () => {
 
     return (
         <div>
-            <h2>Application Status</h2>
-            <div><ApplicationStatusTable users={users} /></div>
+            <header className="home-header">
+                <HeaderBox
+                    type="title"
+                    title="Application Status"
+                    subtext="Manage you submitted applications from here"
+                />
+            </header>
+            <ApplicationStatusTable users={users}/>
         </div>
     );
 }
