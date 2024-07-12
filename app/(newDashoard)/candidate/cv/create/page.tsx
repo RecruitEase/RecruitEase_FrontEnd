@@ -15,7 +15,12 @@ function Create() {
           subtext="Here are some jobs that we think you might be interested in."
         />
       </header>
+      <ChakraProvider >
 
+        <ResumeState>
+          <Home />
+        </ResumeState>
+      </ChakraProvider>
 
 
     </div>
