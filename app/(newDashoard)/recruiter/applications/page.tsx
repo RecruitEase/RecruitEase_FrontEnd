@@ -10,7 +10,7 @@ const Applications = () => {
             <header className="home-header">
                 <HeaderBox
                     type="title"
-                    title="Applicantions"
+                    title="Applications"
                     subtext="Manage the applications received for the job from here"
                 />
             </header>
