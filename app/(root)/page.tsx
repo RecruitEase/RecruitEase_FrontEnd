@@ -6,7 +6,8 @@ import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const Home = () => {
+
+const Home2 = () => {
     const { data: session } = useSession();
     console.log({ session });
 
@@ -20,28 +21,10 @@ const Home = () => {
 
     const notify = () => toast("Wow so easy!");
     return (
-        <section className="home">
-            <div className="home-content">
-                <header className="home-header">
-                    Welcome, Chathura
-                    {session?.user ? (
-                        <>
-                            <p>{session.user.email}</p>
-                            <Button onClick={() => signOut()}>sign out</Button>
-                        </>
-                    ) : (
-                        <Button onClick={() => signIn()}>Signin</Button>
-
-                    )}
-
-                    <Button onClick={() => axiosTest()}>test</Button>
-                    <div>
-                        <button onClick={notify}>Notify!</button>
-                    </div>
-                </header>
-            </div>
-        </section>
+        <div>
+            HOme
+        </div>
     );
 };
 
-export default Home;
+export default Home2;

@@ -9,9 +9,9 @@ export default function RootLayout({
 }>) {
     return (
         <>
-            <Navbar />
-                <main className="flex h-screen w-full">
-                    {children}
+            <Navbar/>
+            <main className="mx-[5rem]">
+                {children}
             </main>
 
         </>
