@@ -1,6 +1,11 @@
 /* eslint-disable no-unused-vars */
 import {UseFormRegister} from "react-hook-form/dist/types/form";
 import {FieldErrors} from "react-hook-form/dist/types/errors";
+import {SVGProps} from "react";
+
+export type IconSvgProps = SVGProps<SVGSVGElement> & {
+  size?: number;
+};
 
 declare interface HeaderBoxProps {
   type?: "title" | "greeting";
