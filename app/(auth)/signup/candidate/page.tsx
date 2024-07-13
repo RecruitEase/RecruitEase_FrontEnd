@@ -3,12 +3,8 @@ import React from 'react';
 import {useForm, FieldValues} from "react-hook-form";
 import {Input} from "@nextui-org/input";
 import {EyeFilledIcon, EyeSlashFilledIcon} from "@/components/icons";
-import {DatePicker} from "@nextui-org/date-picker";
-import {CalendarDate, DateInput} from "@nextui-org/react";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {Button} from "@nextui-org/button";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {Bounce, toast} from "react-toastify";
 import {Link} from "@nextui-org/link";
 
@@ -190,9 +186,10 @@ const CandidateSignUp: React.FC = () => {
                                             }
                                         })}
                                     />
+
                                     {errors.email && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.email?.message}
+                                            {errors && errors.email ? errors.email?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>
@@ -227,7 +224,7 @@ const CandidateSignUp: React.FC = () => {
                                     />
                                     {errors.password && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.password?.message}
+                                            {errors && errors.password ? errors.password?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>
@@ -257,7 +254,7 @@ const CandidateSignUp: React.FC = () => {
                                     />
                                     {errors.firstName && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.firstName?.message}
+                                            {errors && errors.firstName ? errors.firstName?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>
@@ -282,7 +279,7 @@ const CandidateSignUp: React.FC = () => {
                                     />
                                     {errors.lastName && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.lastName?.message}
+                                            {errors && errors.lastName ? errors.lastName?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>
@@ -303,7 +300,7 @@ const CandidateSignUp: React.FC = () => {
                                     />
                                     {errors.address && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.address?.message}
+                                            {errors && errors.address ? errors.address?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>
@@ -328,7 +325,7 @@ const CandidateSignUp: React.FC = () => {
                                     />
                                     {errors.mobileNumber && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.mobileNumber?.message}
+                                            {errors && errors.mobileNumber ? errors.mobileNumber?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>
@@ -353,7 +350,7 @@ const CandidateSignUp: React.FC = () => {
                                     />
                                     {errors.nic && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.nic?.message}
+                                            {errors && errors.nic ? errors.nic?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>
@@ -374,7 +371,7 @@ const CandidateSignUp: React.FC = () => {
 
                                     {errors.dob && (
                                         <p className="text-danger text-sm mt-2">
-                                            {errors.dob?.message}
+                                            {errors && errors.dob ? errors.dob?.message?.toString() : '\u00A0'}
                                         </p>
                                     )}
                                 </div>

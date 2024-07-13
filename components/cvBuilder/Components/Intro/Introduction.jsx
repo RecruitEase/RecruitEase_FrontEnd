@@ -103,6 +103,7 @@ export default function Introduction() {
                             <Box maxW={{ base: '100%', md: '61%' }} className="templatesList">
                                 {
                                     ThemeTemplateData.map((item, index) => {
+                                        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                                         return <div key={index} className="template cursor-pointer hover:shadow-lg transform hover:scale-105 transition duration-300 ease-in-out" onClick={showTheme}>
                                             <img id={item.id} src={item.imageSrc} alt={item.imageAlt} />
                                         </div>
