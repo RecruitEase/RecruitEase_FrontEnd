@@ -28,8 +28,17 @@ export const UserCard = ({ user, onEdit, onDelete }: UserCardProps) => {
     return (
         <div className="relative">
             <Card className="min-w-[198.5px] p-2 relative">
-                <div className="background h-28 bg-gray-300 rounded-t-xl p-2">
-                    <div className="flex justify-end mb-4">
+                <div
+                    className=" background h-28 bg-gray-300 rounded-t-xl p-2 "
+                    style={{
+                        backgroundImage: `url(${user.imageUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        filter: 'blur(8px)', // Apply blur effect here
+                        WebkitFilter: 'blur(8px)', // For Safari
+                }}>
+
+                    <div className=" flex justify-end mb-4">
                         <Chip
                             size="sm"
                             className={`${
