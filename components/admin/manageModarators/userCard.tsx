@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Chip, Image, Button } from "@nextui-org/react";
 import { BiEdit, BiMessageRounded } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { RiEdit2Line } from "react-icons/ri";
 
 declare type ModeratorCard = {
     name: string;
@@ -13,6 +14,7 @@ declare type ModeratorCard = {
 declare interface UserCardProps {
     user: ModeratorCard;
     onEdit: () => void;
+    onDelete: () => void;
 }
 
 function emailLength(email: string) {
@@ -22,7 +24,7 @@ function emailLength(email: string) {
     return email.substring(0, 20) + '...';
 }
 
-export const UserCard = ({ user, onEdit }: UserCardProps) => {
+export const UserCard = ({ user, onEdit, onDelete }: UserCardProps) => {
     return (
         <div className="relative">
             <Card className="min-w-[198.5px] p-2 relative">
@@ -59,9 +61,9 @@ export const UserCard = ({ user, onEdit }: UserCardProps) => {
                         <BiMessageRounded color={"white"} size={25} />
                     </Button>
                     <Button className="bg-gray-600" isIconOnly variant="faded" aria-label="edit" onPress={onEdit}>
-                        <BiEdit color={"white"} size={25} />
-                    </Button>
-                    <Button className="bg-[#F31260]" isIconOnly variant="faded" aria-label="delete">
+                        {/*<BiEdit color={"white"} size={25} />*/}
+                        <RiEdit2Line color={"white"} size={25}/>                    </Button>
+                    <Button className="bg-[#F31260]" isIconOnly variant="faded" aria-label="delete" onPress={onDelete}>
                         <RiDeleteBin5Line color={"white"} size={25} />
                     </Button>
                 </div>

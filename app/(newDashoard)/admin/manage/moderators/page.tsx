@@ -18,6 +18,8 @@ import { useForm } from "react-hook-form";
 import { Input } from "@nextui-org/input";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
+import Swal from 'sweetalert2';
+import {Bounce, toast} from "react-toastify";
 
 const data = [
   {
@@ -87,6 +89,8 @@ const ManageModerators: NextPage = () => {
     onOpen();
   };
 
+
+// editModerator------------------------------------------------------------
   const editModerator = (user) => {
     setSelectedUser(user);
     setValue("fname", user.name.split(" ")[0]);
@@ -97,6 +101,61 @@ const ManageModerators: NextPage = () => {
     setIsEnabled(user.status === "Active");
     onOpen();
   };
+
+  // delete moderator------------------------------------------------------
+  const deleteModerator = (user) => {
+    Swal.fire({
+      title: "Do you want to delete the moderator?",
+      icon:"warning",
+      customClass: {
+        confirmButton: 'bg-[#f31260]', // Custom class for confirm button
+        cancelButton: 'bg-[#a1a1aa]'   // Custom class for cancel button
+      },
+
+      // showDenyButton: true,
+      showCancelButton: true,
+      // denyButtonText: `Don't save`,
+      confirmButtonText: "Delete",
+
+    }).then(() => {
+
+      const result = {
+        status: 200
+      }
+      if (result?.status == 200) {
+        toast.success('Delete successfully!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+        // router.push('/');
+        // setIsLoading(false);
+      } else {
+        //not logged in
+        //handle error here
+        toast.error('Delete failed!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+        // setErrorText(result?.error ? result?.error:"Something went wrong");
+        // setIsLoading(false);
+
+      }
+    });
+  }
 
   const onSubmit = (data) => {
     data.status = isEnabled ? "Active" : "Disabled";
@@ -298,7 +357,7 @@ const ManageModerators: NextPage = () => {
 
         <div className={"flex sm:flex-row flex-col gap-4 flex-wrap"}>
           {data && data.map((item, index) => (
-              <UserCard key={index} user={item} onEdit={() => editModerator(item)} />
+              <UserCard key={index} user={item} onEdit={() => editModerator(item)} onDelete={() => deleteModerator(item)} />
           ))}
         </div>
       </div>
