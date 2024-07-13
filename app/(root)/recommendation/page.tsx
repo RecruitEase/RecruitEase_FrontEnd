@@ -1,8 +1,10 @@
-
+"use client"
 import React from 'react'
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
+import { Card, CardHeader, Image, Autocomplete, AutocompleteItem, Checkbox } from "@nextui-org/react";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdAccessTime } from "react-icons/md";
+import { CiFilter } from "react-icons/ci";
+
 
 const recom = [
   { key: 1, role: 'Assistant Operations Manager', type: 'On site', image: '/assets/BI.png', numSkills: '3', company: 'Brian Industies', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '4 days left' },
@@ -11,9 +13,59 @@ const recom = [
   { key: 4, role: 'Assistant Operations Manager', type: 'On site', image: '/assets/BI.png', numSkills: '3', company: 'Brian Industies', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '4 days left' },
 ]
 
-function recommendation() {
+const industries = [
+  { label: "Agriculture, Forestry & Fishing", value: "agriculture" },
+  { label: "Mining & Quarrying", value: "mining" },
+  { label: "Utilities", value: "utilities" },
+  { label: "Construction", value: "construction" },
+  { label: "Manufacturing", value: "manufacturing" },
+  { label: "Wholesale & Retail Trade", value: "wholesale_retail" },
+  { label: "Transportation & Warehousing", value: "transportation" },
+  { label: "Accommodation & Food Service", value: "accommodation_food" },
+  { label: "Information & Communication", value: "information_communication" },
+  { label: "Finance & Insurance", value: "finance_insurance" },
+  { label: "Real Estate", value: "real_estate" },
+  { label: "Professional, Scientific & Technical Activities", value: "professional_scientific" },
+  { label: "Administrative & Support Services", value: "administrative_support" },
+  { label: "Education", value: "education" },
+  { label: "Healthcare & Social Assistance", value: "healthcare_social" },
+  { label: "Arts, Entertainment & Recreation", value: "arts_entertainment" },
+  { label: "Other Services", value: "other_services" },
+];
+
+const jobTypes = [
+  { label: "Full time", value: "full_time" },
+  { label: "Part time", value: "part_time" },
+  { label: "Contract", value: "contract" },
+  { label: "Temporary", value: "temporary" },
+  { label: "Internship", value: "internship" },
+];
+
+const jobLevels = [
+  { label: "Entry Level", value: "entry_level" },
+  { label: "Mid Level", value: "mid_level" },
+  { label: "Senior Level", value: "senior_level" },
+  { label: "Executive", value: "executive" },
+];
+
+const postedTimes = [
+  { label: "Last 24 hours", value: "last_24_hours" },
+  { label: "Last 7 days", value: "last_7_days" },
+  { label: "Last 30 days", value: "last_30_days" },
+];
+
+const sort = [
+  { label: "Recent", value: "recent" },
+  { label: "Popular", value: "popular" },
+  { label: "Most Applied", value: "most_applied" },
+];
+
+
+
+
+function Recommendation() {
   return (
-    <div>
+    <div >
 
       <header className="home-header">
         <p className="mx-auto max-w-2xl text-xl font-bold tracking-tight text-primaryText sm:text-4xl mt-4">
@@ -42,45 +94,149 @@ function recommendation() {
         </label>
       </form>
 
-      {recom && recom.map((item) => (
-        <div className='mb-4'>
-          <Card className="cursor-pointer" isHoverable>
-            <CardHeader className="grid grid-cols-12 gap-2 items-center justify-center">
-              <div className='relative md:col-span-1 col-span-3'>
+      <div className='mb-4'>
+        <Card className="cursor-pointer" isHoverable>
+          <div className='flex '>
 
-                <Image
-                  alt="nextui logo"
-                  height={90}
-                  radius="sm"
-                  src={item.image}
-                  width={80}
-                />
+            <div className='m-2'>
+              <p className='font-semibold'>5 Recommendations Found</p>
+            </div>
+            <div className='ml-auto'>
+              <div className='flex items-center gap-1'>
+                <CiFilter />
+                <Autocomplete
+                  defaultItems={sort}
+                  labelPlacement="inside"
+                  label=""
+                  placeholder='Recent'
+                  className="max-w-36"
+                >
+                  {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+                </Autocomplete>
               </div>
-              <div className='relative md:col-span-6 col-span-9'>
-                <p className="text-md font-bold">{item.role} | {item.type}</p>
-                <p className="text-small text-default-500 font-   semibold">{item.company}</p>
-                <div className='inline-flex items-center mt-2 gap-2'>
-                  <IoLocationOutline className='icon' />
-                  <p className='font-mono '>{item.location}</p>
-                </div>
-              </div>
-              <div className="relative md:col-span-2 col-span-12 md:col-end-13 md:col-start-11">
-                <div className='flex items-center gap-2'>
-                  <MdAccessTime />
-                  <p>{item.daysLeft}</p>
-                </div>
-                <p className=''>{item.jobType}</p>
-                <div className='bg-recruitBlue text-white rounded-md w-fit  pl-1 pr-1'>{item.numSkills} skills matched </div>
-              </div>
-            </CardHeader>
+            </div>
+          </div>
+          {/* <div >
+            <div className='flex items-center gap-1'>
+              <div><p>Post Per Page</p></div>
+              <Autocomplete
+                defaultItems={sort}
+                labelPlacement=""
+                label=""
+                placeholder='25'
+                className="max-w-20"
+              >
+                {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+              </Autocomplete>
+            </div>
+          </div> */}
+
+        </Card>
+      </div>
+
+
+
+      <div className='grid grid-col-1 md:grid-cols-4 gap-2'>
+        <div className=' flex justify-center md:grid col-span-1 md:col-span-1'>
+          <Card className="col-span-12 sm:col-span-4 h-[300px] w-52">
+            <Autocomplete
+              label="Industry"
+              placeholder="Select industry"
+              defaultSelectedKey="Construction"
+              defaultItems={industries}
+              className="max-w-xs mb-1 pl-1 pr-1 pt-1"
+              scrollShadowProps={{
+                isEnabled: false
+              }}
+            >
+              {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+            </Autocomplete>
+
+            <Autocomplete
+              label="Job Type"
+              placeholder="Select job type"
+              defaultSelectedKey="Full time"
+              defaultItems={jobTypes}
+              className="max-w-xs mb-1 pl-1 pr-1"
+              scrollShadowProps={{
+                isEnabled: false
+              }}
+            >
+              {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+            </Autocomplete>
+
+            <Autocomplete
+              label="Job Level"
+              placeholder="Select job level"
+              defaultSelectedKey="Entry Level"
+              defaultItems={jobLevels}
+              className="max-w-xs mb-1 pl-1 pr-1"
+              scrollShadowProps={{
+                isEnabled: false
+              }}
+            >
+              {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+            </Autocomplete>
+
+            <Autocomplete
+              label="Posted"
+              placeholder="Select posted time"
+              defaultSelectedKey="Resently posted"
+              defaultItems={postedTimes}
+              className="max-w-xs mb-2 pl-1 pr-1"
+              scrollShadowProps={{
+                isEnabled: false
+              }}
+            >
+              {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
+            </Autocomplete>
+
+            <div className='pl-1'>
+              <Checkbox >Remote/Work from home</Checkbox>
+            </div>
+
           </Card>
         </div>
-      ))}
-
-
+        {/* job recommendations */}
+        <div className='col-span-1 md:col-span-3'>
+          {recom && recom.map((item) => (
+            <div className='mb-4'>
+              <Card className="cursor-pointer" isHoverable>
+                <CardHeader className="grid grid-cols-12 gap-2 items-center justify-center">
+                  <div className='relative md:col-span-1 col-span-3'>
+                    <Image
+                      alt="BI logo"
+                      height={90}
+                      radius="sm"
+                      src={item.image}
+                      width={80}
+                    />
+                  </div>
+                  <div className='relative md:col-span-6 col-span-9'>
+                    <p className="text-md font-bold">{item.role} | {item.type}</p>
+                    <p className="text-small text-default-500 font-   semibold">{item.company}</p>
+                    <div className='inline-flex items-center mt-2 gap-2'>
+                      <IoLocationOutline className='icon' />
+                      <p className='font-mono '>{item.location}</p>
+                    </div>
+                  </div>
+                  <div className="relative md:col-span-2 col-span-12 md:col-end-13 md:col-start-11">
+                    <div className='flex items-center gap-2'>
+                      <MdAccessTime />
+                      <p>{item.daysLeft}</p>
+                    </div>
+                    <p className=''>{item.jobType}</p>
+                    <div className='bg-recruitBlue text-white rounded-md w-fit  pl-1 pr-1'>{item.numSkills} skills matched </div>
+                  </div>
+                </CardHeader>
+              </Card>
+            </div>
+          ))}
+        </div>
+      </div>
 
     </div>
   )
 }
 
-export default recommendation
+export default Recommendation
