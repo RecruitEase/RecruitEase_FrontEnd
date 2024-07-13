@@ -1,10 +1,18 @@
-"use client"
+"use client";
 import type { NextPage } from "next";
 import { UserCard } from "@/components/admin/manageModarators/userCard";
 import HeaderBox from "@/components/dashboard/HeaderBox";
 import React, { useState } from "react";
 import { Button } from "@nextui-org/button";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Switch, useDisclosure } from "@nextui-org/react";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Switch,
+  useDisclosure
+} from "@nextui-org/react";
 import CustomInput from "@/components/form_inputs/CustomInput";
 import { useForm } from "react-hook-form";
 import { Input } from "@nextui-org/input";
@@ -14,32 +22,86 @@ import { cn } from "@/lib/utils";
 const data = [
   {
     name: "Sajith Bandara",
+    email: "nishanthasajithbandara@gmail.com",
+    imageUrl: "https://th.bing.com/th/id/OIP.4Y0BXVoEPd7lBZms8uraGAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+    status: "Active",
+    address:"pallebedda Ratnapura",
+    pnumber:"0716676968"
+
+  },
+  {
+    name: "Chathura Lakshan",
+    email: "Chathura@gmail.com",
+    imageUrl: "https://th.bing.com/th/id/OIP.NqY3rNMnx2NXYo3KJfg43gAAAA?w=200&h=200&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+    status: "Disable",
+    address:"colombo 07",
+    pnumber:"0712256987"
+  },
+  {
+    name: "Randunu Kumari",
+    email: "randunu@gmail.com",
+    imageUrl: "https://th.bing.com/th/id/OIP.jryuUgIHWL-1FVD2ww8oWgHaHa?w=200&h=200&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+    status: "Disable",
+    address:"pallebedda Ratnapura",
+    pnumber:"0716676968"
+  },
+  {
+    name: "Akila Demote",
+    email: "akila@gmail.com",
+    imageUrl: "https://th.bing.com/th/id/OIP.XSZAFm-5JI7nriDLwZqRQQAAAA?w=294&h=195&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+    status: "Active",
+    address:"pallebedda Ratnapura",
+    pnumber:"0716676968"
+  },
+  {
+    name: "Sajith Bandara",
+    email: "sajithbanadara@gmail.com",
+    imageUrl: "https://th.bing.com/th/id/OIP.4Y0BXVoEPd7lBZms8uraGAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+    status: "Active",
+    address:"pallebedda Ratnapura",
+    pnumber:"0716676968"
+  },
+  {
+    name: "Sajith Bandara",
     email: "sajithbandara@gmail.com",
     imageUrl: "https://th.bing.com/th/id/OIP.4Y0BXVoEPd7lBZms8uraGAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-    status: "Active"
-  },
-  // ... other items
+    status: "Active",
+    address:"pallebedda Ratnapura",
+    pnumber:"0716676968"
+  }
 ];
 
 const ManageModerators: NextPage = () => {
-  const toggleVisibility = () => setIsVisible(!isVisible);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ mode: "all" });
-
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm({ mode: "all" });
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isVisible, setIsVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  function createModerator() {
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const createModerator = () => {
+    reset();
+    setSelectedUser(null);
+    setIsEnabled(false);
     onOpen();
-  }
+  };
 
-  const onSubmit = (data: any) => {
-    data.status = isEnabled ? "Enabled" : "Disabled";
+  const editModerator = (user) => {
+    setSelectedUser(user);
+    setValue("fname", user.name.split(" ")[0]);
+    setValue("lname", user.name.split(" ")[1]);
+    setValue("email", user.email);
+    setValue("pnumber", user.pnumber);
+    setValue("address", user.address); // Add address if available in user data
+    setIsEnabled(user.status === "Active");
+    onOpen();
+  };
+
+  const onSubmit = (data) => {
+    data.status = isEnabled ? "Active" : "Disabled";
     console.log(data);
+    onClose(); // Close the modal after submitting the form
   };
 
   const handleSwitchChange = () => {
@@ -51,7 +113,9 @@ const ManageModerators: NextPage = () => {
         <ModalContent>
           {(onClose) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">Add Moderator</ModalHeader>
+                <ModalHeader className="flex flex-col gap-1">
+                  {selectedUser ? "Edit Moderator" : "Add Moderator"}
+                </ModalHeader>
                 <ModalBody className={"gap-0"}>
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={"flex justify-end mb-4 "}>
@@ -172,32 +236,34 @@ const ManageModerators: NextPage = () => {
                           }}
                       />
 
-                      <div className={"w-full ml-[8px] mr-[8px] mb-[4px] "}>
-                        <label htmlFor="password">Password</label>
-                        <Input
-                            {...register("password", {
-                              required: {
-                                value: true,
-                                message: "Please enter a password"
-                              }
-                            })}
-                            id={"password"}
-                            variant="bordered"
-                            placeholder="Enter your password"
-                            endContent={
-                              <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
-                                {isVisible ? (
-                                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                                ) : (
-                                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                                )}
-                              </button>
-                            }
-                            type={isVisible ? "text" : "password"}
-                            className="max-w"
-                        />
-                        {errors.password && <p className="text-danger text-sm mt-2">{errors.password?.message}</p>}
-                      </div>
+                      {!selectedUser && (
+                          <div className={"w-full ml-[8px] mr-[8px] mb-[4px] "}>
+                            <label htmlFor="password">Password</label>
+                            <Input
+                                {...register("password", {
+                                  required: {
+                                    value: true,
+                                    message: "Please enter a password"
+                                  }
+                                })}
+                                id={"password"}
+                                variant="bordered"
+                                placeholder="Enter your password"
+                                endContent={
+                                  <button className="focus:outline-none" type="button" onClick={toggleVisibility}>
+                                    {isVisible ? (
+                                        <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                    ) : (
+                                        <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                                    )}
+                                  </button>
+                                }
+                                type={isVisible ? "text" : "password"}
+                                className="max-w"
+                            />
+                            {errors.password && <p className="text-danger text-sm mt-2">{errors.password?.message}</p>}
+                          </div>
+                      )}
                     </div>
 
                     <ModalFooter>
@@ -205,7 +271,7 @@ const ManageModerators: NextPage = () => {
                         Close
                       </Button>
                       <Button color="primary" type="submit">
-                        Add
+                        {selectedUser ? "Update" : "Add"}
                       </Button>
                     </ModalFooter>
                   </form>
@@ -232,7 +298,7 @@ const ManageModerators: NextPage = () => {
 
         <div className={"flex sm:flex-row flex-col gap-4 flex-wrap"}>
           {data && data.map((item, index) => (
-              <UserCard key={index} user={item} />
+              <UserCard key={index} user={item} onEdit={() => editModerator(item)} />
           ))}
         </div>
       </div>
