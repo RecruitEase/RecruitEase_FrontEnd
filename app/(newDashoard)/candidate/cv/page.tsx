@@ -68,7 +68,7 @@ const Management = () => {
         </div>
         <div className='flex flex-col sm:flex-row  w-full flex-wrap place-content-between'>
           {cvs && cvs.map((item) => (
-            <div id={"cv" + item.key} className=' relative group'>
+            <div key={"cv" + item.key} id={"cv" + item.key} className=' relative group'>
               <Card className="col-span-12 sm:col-span-4 h-[350px] w-[200px] m-2 mt-2 transition duration-300 ease-in-out">
                 <CardHeader className="absolute z-10 top-1 flex-col !items-start">
                 </CardHeader>

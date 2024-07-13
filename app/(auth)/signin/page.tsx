@@ -90,16 +90,17 @@ const SignIn = () => {
                     <form>
                         <div className="mb-8">
                             <h3 className="text-primaryText text-3xl font-extrabold">Sign in</h3>
-                            <p className="text-sm mt-4 text-secondaryText">Don't have an account <a
+                            <p className="text-sm mt-4 text-secondaryText">Don&apos;t have an account <a
                                 href="/signup"
                                 className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register
                                 here</a></p>
                         </div>
 <p className={"text-danger"}>{errorText}</p>
                         <div>
-                            <label className="text-inputLabel text-[15px] mb-2 block">Email</label>
+                            <label htmlFor={"email"} className="text-inputLabel text-[15px] mb-2 block">Email</label>
                             <div className="relative flex items-center">
                                 <Input
+                                    id={"email"}
                                     required={true}
 
                                     value={value}
@@ -154,9 +155,10 @@ const SignIn = () => {
                         </div>
 
                         <div className="mt-4">
-                            <label className="text-inputLabel text-[15px] mb-2 block">Password</label>
+                            <label htmlFor={"password"} className="text-inputLabel text-[15px] mb-2 block">Password</label>
                             <div className="relative flex items-center">
                                 <Input
+                                    id={"password"}
                                     onChange={(e)=>(password.current=e.target.value)}
                                     required={true}
                                     label="Password"
