@@ -23,6 +23,7 @@ export const SidebarItem = ({ icon, title, isActive, href = "" }: Props) => {
       href={href}
       className="text-default-900 active:bg-none max-w-full"
     >
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
         className={clsx(
           isActive

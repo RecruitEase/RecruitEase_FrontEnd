@@ -458,7 +458,7 @@ const JobPost = () => {
 
                 {qType == 1 && <div className={"w-full flex-col"}>
                     <div>
-                        <label>
+                        <label htmlFor={"answers"}>
                             Answers:
                             <span className={"text-danger"}> * </span>
                         </label>
@@ -483,7 +483,7 @@ const JobPost = () => {
                 </div>}
                 {qType == 2 && <div className={"w-full flex-col"}>
                     <div>
-                        <label>
+                        <label htmlFor={"answers"}>
                             Answers:
                             <span className={"text-danger"}> * </span>
                         </label>
