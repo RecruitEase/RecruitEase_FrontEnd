@@ -3,12 +3,8 @@ import React from 'react';
 import {useForm, FieldValues} from "react-hook-form";
 import {Input} from "@nextui-org/input";
 import {EyeFilledIcon, EyeSlashFilledIcon} from "@/components/icons";
-import {DatePicker} from "@nextui-org/date-picker";
-import {CalendarDate, DateInput} from "@nextui-org/react";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {Button} from "@nextui-org/button";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {Bounce, toast} from "react-toastify";
 import {Link} from "@nextui-org/link";
 
