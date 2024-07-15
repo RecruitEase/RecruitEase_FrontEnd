@@ -61,8 +61,6 @@ const sort = [
 ];
 
 
-
-
 function Recommendation() {
   return (
     <div >
@@ -74,7 +72,7 @@ function Recommendation() {
       </header>
 
       <form action="" className='mb-4'>
-        <label className="mx-auto mt-4 relative bg-white min-w-sm max-w-2xl flex flex-col md:flex-row items-center justify-center border py-1 px-1 rounded-2xl gap-1 shadow-xl focus-within:border-gray-300">
+        <label className="mx-auto mt-4 relative bg-white min-w-sm max-w-2xl flex flex-col md:flex-row items-center justify-center border py-1 px-1 rounded-2xl gap-1 shadow-md focus-within:border-gray-300">
           <input
             id="search-bar"
             placeholder="I'm looking for...   (Eg : Job title, Position, Company)"
@@ -94,51 +92,36 @@ function Recommendation() {
         </label>
       </form>
 
-      <div className='mb-4'>
+      <div className='mb-4 w-auto ml'>
         <Card className="cursor-pointer" isHoverable>
-          <div className='flex '>
-
-            <div className='m-2'>
+          <div className='flex md:flex-row flex-col p-4'>
+            <div className='md:m-2 mx-auto'>
               <p className='font-semibold'>5 Recommendations Found</p>
             </div>
-            <div className='ml-auto'>
-              <div className='flex items-center gap-1'>
+            <div className='md:mr-2 mt-1 mx-auto'>
+              <div className='flex items-center gap-1 '>
                 <CiFilter />
                 <Autocomplete
                   defaultItems={sort}
                   labelPlacement="inside"
                   label=""
                   placeholder='Recent'
-                  className="max-w-36"
+                  className="max-w-36 shadow-none"
                 >
                   {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
                 </Autocomplete>
               </div>
             </div>
+
           </div>
-          {/* <div >
-            <div className='flex items-center gap-1'>
-              <div><p>Post Per Page</p></div>
-              <Autocomplete
-                defaultItems={sort}
-                labelPlacement=""
-                label=""
-                placeholder='25'
-                className="max-w-20"
-              >
-                {(item) => <AutocompleteItem key={item.value}>{item.label}</AutocompleteItem>}
-              </Autocomplete>
-            </div>
-          </div> */}
+
 
         </Card>
       </div>
-
-
-
+      {/* Filter */}
       <div className='grid grid-col-1 md:grid-cols-4 gap-2'>
-        <div className=' flex justify-center md:grid col-span-1 md:col-span-1'>
-          <Card className="col-span-12 sm:col-span-4 h-[300px] w-52">
+        <div className='w-fit mx-auto md:grid col-span-1 md:col-span-1'>
+          <Card className="p-3 flex flex-col gap-2 col-span-12 sm:col-span-4 h-[400px]">
             <Autocomplete
               label="Industry"
               placeholder="Select industry"
