@@ -11,7 +11,7 @@ const Apply = () => {
                         {/* left */}
                         <div style={{ width: '70%' }} className='p-4'>
                             <h1 className='font-bold'>Apply For this Job </h1>
-                            <p className='pt-4'>Please fill in your details below, then click 'Apply' button to submit your application. Your application will be treated with absolute confidentiality.</p>
+                            <p className='pt-4'>Please fill in your details below, then click &apos;Apply&apos; button to submit your application. Your application will be treated with absolute confidentiality.</p>
 
                             <div className="flex w-full flex-wrap md:flex-nowrap gap-4 pt-4 pb-4">
                                 <Input type="text" label="Full Name" placeholder="Enter your full name" isRequired />
@@ -39,7 +39,7 @@ const Apply = () => {
                             />
 
                             <div className=' text-center'>
-                                <p className=' text-center text-xs pt-4'>Please make sure to complete the 'questionnaire' at the next stage of application. We recommend the jobseekers to have two working phone numbers on the CV.</p>
+                                <p className=' text-center text-xs pt-4'>Please make sure to complete the &apos;questionnaire&apos; at the next stage of application. We recommend the jobseekers to have two working phone numbers on the CV.</p>
 
 
                                 <div className='pt-4 flex justify-center gap-4'>

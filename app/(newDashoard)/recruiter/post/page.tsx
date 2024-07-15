@@ -3,10 +3,10 @@ import React, {useState} from 'react';
 import HeaderBox from "@/components/dashboard/HeaderBox";
 import {useTheme} from "next-themes";
 import {useSession} from "next-auth/react";
-import {Input, Textarea} from "@nextui-org/input";
+import {Input} from "@nextui-org/input";
 import {useForm} from "react-hook-form";
 import CustomInput from "@/components/form_inputs/CustomInput";
-import {DatePicker, Select, SelectItem, Switch} from "@nextui-org/react";
+import { Select, SelectItem, Switch} from "@nextui-org/react";
 import {toTitleCase} from "@/utils/stringUtils";
 import CustomTextArea from "@/components/form_inputs/CustomTextArea";
 import "@blocknote/core/fonts/inter.css";
@@ -458,7 +458,7 @@ const JobPost = () => {
 
                 {qType == 1 && <div className={"w-full flex-col"}>
                     <div>
-                        <label>
+                        <label htmlFor={"answers"}>
                             Answers:
                             <span className={"text-danger"}> * </span>
                         </label>
@@ -483,7 +483,7 @@ const JobPost = () => {
                 </div>}
                 {qType == 2 && <div className={"w-full flex-col"}>
                     <div>
-                        <label>
+                        <label htmlFor={"answers"}>
                             Answers:
                             <span className={"text-danger"}> * </span>
                         </label>

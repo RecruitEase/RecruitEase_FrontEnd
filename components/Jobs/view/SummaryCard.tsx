@@ -7,6 +7,7 @@ const SummaryCard = () => {
       <div className="w-full h-full py-20 flex flex-wrap justify-center items-center gap-2">
         <div className="w-[20rem] mx-auto flex flex-col gap-2 px-4 border border-gray-300 border-gray-300 rounded-lg bg-greybg">
           <div className="w-full flex justify-center items-center">
+            {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
             <img
               className="w-[8rem] h-[8rem] rounded-lg outline outline-offset-2 outline-1 outline-blue-400 shadow-lg relative -top-[2rem]"
               src="https://image-service-cdn.seek.com.au/903000dee27013187498cbc7d98ca876a58951ff/f3c5292cec0e05e4272d9bf9146f390d366481d0"
@@ -42,7 +43,7 @@ const SummaryCard = () => {
             </p>
             <div className="mt-2 text-secondaryText">
               <p>
-                <strong>Education:</strong> Bachelor's Degree
+                <strong>Education:</strong> Bachelor&apos;s Degree
               </p>
               <p>
                 <strong>Experience:</strong> 2-3 years
