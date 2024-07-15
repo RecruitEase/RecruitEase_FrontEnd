@@ -69,7 +69,7 @@ const Screening = () => {
                 />
               </div>
               <div className=' text-center'>
-                <p className=' text-center text-xs pt-4'>Please make sure to complete the 'questionnaire' at the next stage of application. We recommend the jobseekers to have two working phone numbers on the CV.</p>
+                <p className=' text-center text-xs pt-4'>Please make sure to complete the &apos;questionnaire&apos; at the next stage of application. We recommend the jobseekers to have two working phone numbers on the CV.</p>
 
 
                 <div className='pt-4 flex justify-center gap-4'>
