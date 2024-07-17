@@ -46,7 +46,8 @@ export const InterviewsOffersCard = ({ card, popup }: InterviewOfferCardProps) =
                 </div>
                 <div className="col-span-6 sm:col-span-2 flex flex-col justify-center pl-4 h-full">
                     <p className="text-md text-blue-900">{card.remainingDays}</p>
-                    <Button className={"hover:text-default-500 flex justify-end"} onClick={popup}>more...</Button>
+                    <div className={"w-full flex justify-center"}><Button className={" justify-end bg-primary w-1/2 rounded text-[#FFFFFF]"} onClick={popup}>more...</Button></div>
+
                 </div>
 
             </Card>

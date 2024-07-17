@@ -92,7 +92,7 @@ const InterviewsOffers = () => {
             confirmButtonText: "Yes",
 
         }).then(() => {
-
+            console.log(text)
             const result = {
                 status: 200
             }
@@ -124,6 +124,8 @@ const InterviewsOffers = () => {
                     transition: Bounce,
                 });
             }
+
+            setText("")
         });
     }
 
