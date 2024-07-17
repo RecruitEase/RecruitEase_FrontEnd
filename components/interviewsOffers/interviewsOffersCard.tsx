@@ -8,8 +8,10 @@ type InterviewOfferCard = {
     imageUrl: string;
     type: string;
     location: string;
+    link:string
     date: string;
     time: string;
+    dressCode:string
     remainingDays: string;
     description: string;
 };
@@ -22,9 +24,9 @@ interface InterviewOfferCardProps {
 export const InterviewsOffersCard = ({ card, popup }: InterviewOfferCardProps) => {
     return (
         <div>
-            <Card className="main w-full grid grid-cols-12 gap-4 p-2 hover:bg-gray-200 cursor-pointer mb-4 h-24" onClick={popup}>
-                <div className="col-span-12 sm:col-span-8">
-                    <CardHeader className="flex gap-3">
+            <Card className="main w-full grid grid-cols-12 gap-4 p-2 hover:bg-gray-200 cursor-pointer mb-4 h-24" isPressable onPress={popup} >
+                <div className="col-span-12 sm:col-span-8 flex flex-col justify-center h-full">
+                    <CardHeader className="flex gap-3 h-full pt-0 pb-0">
                         <Image
                             alt="company logo"
                             height={32}
@@ -33,18 +35,22 @@ export const InterviewsOffersCard = ({ card, popup }: InterviewOfferCardProps) =
                             width={64}
                         />
                         <div className="flex flex-col">
-                            <p className="text-md">{card.companyName} - {card.position}</p>
-                            <p className="text-small text-default-500">{card.type}</p>
+                            <p className="text-md flex justify-start">{card.companyName} - {card.position}</p>
+                            <p className="text-small text-default-500 flex justify-start">{card.type}</p>
                         </div>
                     </CardHeader>
                 </div>
-                <div className="col-span-6 sm:col-span-2 flex flex-col justify-center pl-4">
+                <div className="col-span-6 sm:col-span-2 flex flex-col justify-center pl-4 h-full">
                     <p className="text-md">{card.date}</p>
                     <p className="text-small text-default-500">{card.time}</p>
                 </div>
-                <div className="col-span-6 sm:col-span-2 flex flex-col justify-center pl-4">
-                    <p className="text-md text-blue-900">{card.remainingDays} days left</p>
-                    <Button className={"hover:text-default-500 flex justify-end"} onClick={popup}>more...</Button>
+                <div className="col-span-6 sm:col-span-2 flex flex-col justify-center pl-4 h-full">
+                    <p className="text-md text-blue-900">{card.remainingDays}</p>
+                    <div className={"w-full flex justify-center"}><Button
+                        className={" justify-end bg-primary w-1/2 rounded text-[#FFFFFF]"}
+                        onClick={popup}>more...</Button>
+                    </div>
+
                 </div>
 
             </Card>
