@@ -123,7 +123,7 @@ const ManageModerators: NextPage = () => {
         status: 200
       }
       if (result?.status == 200) {
-        toast.success('Deleted successfully!', {
+        toast.success('Delete successfully!', {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -190,7 +190,7 @@ const ManageModerators: NextPage = () => {
                             )
                           }}
                       >
-                        {isEnabled?'Enabled':'Disabled'}
+                        Enable
                       </Switch>
                     </div>
 
