@@ -24,6 +24,7 @@ export const NavbarWrapper = ({ children }: Props) => {
           wrapper: "w-full max-w-full",
         }}
       >
+          <NavbarContent ><ThemeSwitch/></NavbarContent>
         {/*todo navbar*/}
         {/*<NavbarContent className="md:hidden">*/}
         {/*  <BurguerButton />*/}
