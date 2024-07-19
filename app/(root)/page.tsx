@@ -10,7 +10,8 @@ import Apps from "@/components/home/Apps";
 import Comparison from "@/components/home/Comparison";
 import Stats from "@/components/home/Stats";
 import People from "@/components/home/People";
-import Footer from "@/components/home/Footer";
+import {Card, CardHeader, CardBody, CardFooter, Image} from "@nextui-org/react";
+
 
 const Home2 = () => {
     const {data: session} = useSession();
@@ -27,20 +28,24 @@ const Home2 = () => {
     const notify = () => toast("Wow so easy!");
     return (
         <div className={"relative"}>
-            <div className={"max-w-screen-xl mx-auto overflow-hidden"}>
-                <Hero/>
+            <div className={"max-w-screen-xl mx-auto overflow-hidden shadow-none "}>
+                <Card className="w-full h-fit">
+                    {/*<CardHeader className="absolute z-10 top-1 flex-col items-start">*/}
+                    {/*    <p className="text-tiny text-white/60 uppercase font-bold">RecruitEase</p>*/}
+                    {/*    <h4 className="text-white/90 font-medium text-xl">Making Recruitment and Job Finding Easy</h4>*/}
+                    {/*</CardHeader>*/}
+                    <CardBody>
+                        <Hero/>
+
+                    </CardBody>
+
+
+                </Card>
                 <Apps/>
                 <Comparison/>
                 <Stats/>
                 <People/>
             </div>
-            <Footer/>
-            <svg className='absolute top-0 left-0 bottom-0 right-0 opacity-20 ' width="100%" height="100%">
-                <pattern id="smallGrid" width="25" height="25" patternUnits="userSpaceOnUse">
-                    <circle cx="10" cy="10" r="1" fill="#fff"/>
-                </pattern>
-                <rect width="100%" height="100%" fill="url(#smallGrid)"/>
-            </svg>
         </div>
     );
 };

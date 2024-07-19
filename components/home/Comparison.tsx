@@ -162,12 +162,12 @@ function Comparison({}: Props) {
         <div className='relative z-20'>
             <div className='w-full max-w-screen-xl mx-auto px-4 sm:px-8 lg:px-16 pt-24'>
                 <motion.h1 initial={{translateX:200, opacity:0}} whileInView={{translateX:0, opacity:1}}  transition={{duration:0.3}} viewport={{once:true}} className='mb-6 text-2xl sm:text-3xl lg:text-4xl  text-center font-semibold overflow-hidden'>
-                    Make the hard things easy
+                    Make Recruitment Easy
                 </motion.h1>
                 <motion.p initial={{translateX:200, opacity:0}} whileInView={{translateX:0, opacity:1}}  transition={{duration:0.3}} viewport={{once:true}} className='mb-16 text-center max-w-xl mx-auto font-light text-gray-900'>
-                    As your application grows, Effect scales with it - keeping your code simple and maintainable.
+                    As your hiring needs grow, RecruitEase scales with you - keeping the recruitment process simple and efficient.
                 </motion.p>
-                <div className='grid grid-cols-1 lg:grid-cols-2 gap-y-12 gap-x-10 items-end'>
+                <div className='grid grid-cols-1 lg:grid-cols-2 gap-y-12 gap-x-10 items-end text-primaryText'>
                     <div className='relative text-sm max-w-lg'>
                         <svg viewBox="0 0 577 211" className="w-full" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <motion.rect variants={draw} initial='hidden' whileInView='visible' viewport={{once:true}} x="0.5" y="187" width="576" height="1" fill="url(#paint0_linear_280_1304)"></motion.rect>
@@ -175,24 +175,24 @@ function Comparison({}: Props) {
                             <motion.path variants={draw} initial='hidden' whileInView='visible' viewport={{once:true}} d="M1.5 177C149.455 159.787 424 116 502.5 1" stroke="url(#paint2_linear_280_1304)" pathLength="1" strokeDashoffset="0px" strokeDasharray="0.6975px 1px"></motion.path>
                             <defs><linearGradient id="paint0_linear_280_1304" x1="0.499992" y1="187.954" x2="576.5" y2="187.81" gradientUnits="userSpaceOnUse"><stop stopColor="#18181B"></stop><stop offset="0.177083" stopColor="#71717A"></stop><stop offset="1" stopColor="#09090B"></stop></linearGradient><linearGradient id="paint1_linear_280_1304" x1="1" y1="169" x2="503" y2="126" gradientUnits="userSpaceOnUse"><stop stopColor="#3178C6" stopOpacity="0.25"></stop><stop offset="0.515625" stopColor="#3178C6"></stop><stop offset="1" stopColor="#3178C6"></stop></linearGradient><linearGradient id="paint2_linear_280_1304" x1="502.5" y1="0.9998" x2="2.49996" y2="187" gradientUnits="userSpaceOnUse"><stop stopColor="#F97583"></stop><stop offset="0.489583" stopColor="#F97583"></stop><stop offset="1" stopColor="#F97583" stopOpacity="0.25"></stop></linearGradient></defs></svg>
                         <motion.div initial={{opacity:0}} whileInView={{opacity:1}} viewport={{once:true}} transition={{delay:0.3, duration:0.5}} className='absolute left-0 top-0 text-black'>
-                      <span className='flex items-center gap-1 '>
-                          <span>Complexity</span>
+                      <span className='flex items-center gap-1 text-primaryText'>
+                          <span>Time and cost to hire</span>
                           <span>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 14" className="fill-current h-3"><path d="M9.31328 2.625H9.75078V3.0625V9.1875V9.625H8.87578V9.1875V4.11797L1.96602 11.0277L1.65703 11.3367L1.03906 10.7187L1.34805 10.4098L8.25781 3.5H3.18828H2.75078V2.625H3.18828H9.31328Z"></path></svg>
                           </span>
                       </span>
-                            <span>(Lower is better)</span>
-                            <span className='flex gap-1.5 items-center mt-2'>
+                            <span className={"text-primaryText"}>(Lower is better)</span>
+                            <span className='flex gap-1.5 items-center mt-2 ' >
                         <span className='text-red-400'>
                           -
                         </span>
-                        <span>Without Techy</span>
+                        <span className={"text-primaryText"}>Without RecruitEase</span>
                       </span>
                             <span className='flex gap-1.5 items-center mt-2'>
                         <span className='text-green-400'>
                           -
                         </span>
-                        <span>With Techy</span>
+                        <span className={"text-primaryText"}>With RecruitEase</span>
                       </span>
                         </motion.div>
                     </div>
@@ -208,8 +208,8 @@ function Comparison({}: Props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className='font-light text-gray-900'>Error Handling</div>
-                                        <div className='text-xs text-gray-600'>Keep track of possible errors and treat them as values.</div>
+                                        <div className='font-light text-gray-900'>Effortless Recruitment Management</div>
+                                        <div className='text-xs text-gray-600'>Simplify your hiring with intelligent management and reliable features.</div>
                                     </div>
                                 </button>
                             </motion.li>
@@ -224,8 +224,8 @@ function Comparison({}: Props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className='font-light text-gray-900'>Retry</div>
-                                        <div className='text-xs text-gray-600'>If something fails, retry with an exponential backoff up to 3 times.</div>
+                                        <div className='font-light text-gray-900'>Recommendations</div>
+                                        <div className='text-xs text-gray-600'>Receive personalized candidate suggestions to match the right people with the right skills.</div>
                                     </div>
                                 </button>
                             </motion.li>
@@ -240,8 +240,8 @@ function Comparison({}: Props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className='font-light text-gray-900'>Interruption</div>
-                                        <div className='text-xs text-gray-600'>Abort the request after 1 second, cleaning up resources.</div>
+                                        <div className='font-light text-gray-900'>Smart Shortlisting</div>
+                                        <div className='text-xs text-gray-600'>Quickly identify the best candidates with advanced filtering and sorting options.</div>
                                     </div>
                                 </button>
                             </motion.li>
@@ -256,8 +256,8 @@ function Comparison({}: Props) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className='font-light text-gray-900'>Observability</div>
-                                        <div className='text-xs text-gray-600'>Trace your requests and keep track of their status</div>
+                                        <div className='font-light text-gray-900'>Seamless Interview Management</div>
+                                        <div className='text-xs text-gray-600'>Efficiently schedule and conduct interviews, whether physical or online, to streamline your hiring process.</div>
                                     </div>
                                 </button>
                             </motion.li>
@@ -268,30 +268,30 @@ function Comparison({}: Props) {
                     <motion.div initial={{opacity:0, scale:0.7}} whileInView={{opacity:1, scale:1}} viewport={{once:true}} transition={{delay:0.5, duration:0.5}} className='w-full lg:h-[500px] h-[300px] rounded-xl shadow-sm relative border-[0.5px] border-neutral-700'>
                         <motion.div initial={{opacity:0, translateX:100}} whileInView={{opacity:1, translateX:0}} viewport={{once:true}} transition={{delay:1, duration:0.5}} className='absolute left-4 top-4'>
                             <div className='text-sm text-black'>
-                                <h3 className='text-lg font-semibold'>Chart Analysis</h3>
-                                <p className='text-gray-600'>This chart visualizes the comparison between scenarios with and without the specified effect.</p>
+                                <h2 className='text-lg font-semibold text-primaryText'>Accelerate Your Company&apos;s Growth with Our Support</h2>
+                                <h4 className='text-gray-600'>Empowering Careers, Powering Companies</h4>
                                 <div className='mt-2'>
-                            <span className='flex items-center gap-1'>
-                              <span className='font-medium'>Complexity Indicator</span>
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 14" className="fill-current h-4"><path d="M9.31328 2.625H9.75078V3.0625V9.1875V9.625H8.87578V9.1875V4.11797L1.96602 11.0277L1.65703 11.3367L1.03906 10.7187L1.34805 10.4098L8.25781 3.5H3.18828H2.75078V2.625H3.18828H9.31328Z"></path></svg>
-                            </span>
-                                    <span className='text-gray-500'>(Lower values indicate better performance)</span>
+                            {/*<span className='flex items-center gap-1'>*/}
+                            {/*  <span className='font-medium'>Complexity Indicator</span>*/}
+                            {/*  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 11 14" className="fill-current h-4"><path d="M9.31328 2.625H9.75078V3.0625V9.1875V9.625H8.87578V9.1875V4.11797L1.96602 11.0277L1.65703 11.3367L1.03906 10.7187L1.34805 10.4098L8.25781 3.5H3.18828H2.75078V2.625H3.18828H9.31328Z"></path></svg>*/}
+                            {/*</span>*/}
+                            {/*        <span className='text-gray-500'>(Lower values indicate better performance)</span>*/}
                                 </div>
-                                <div className="flex gap-2 items-center mt-3">
-                                    <span className="bg-red-400 w-3 h-3 inline-block"></span><span className="text-xs">Baseline (No Effect)</span>
-                                </div>
-                                <div className="flex gap-2 items-center mt-1">
-                                    <span className="bg-blue-400 w-3 h-3 inline-block"></span><span className="text-xs">Adjusted (With Effect)</span>
-                                </div>
+                                {/*<div className="flex gap-2 items-center mt-3">*/}
+                                {/*    <span className="bg-red-400 w-3 h-3 inline-block"></span><span className="text-xs">Baseline (No Effect)</span>*/}
+                                {/*</div>*/}
+                                {/*<div className="flex gap-2 items-center mt-1">*/}
+                                {/*    <span className="bg-blue-400 w-3 h-3 inline-block"></span><span className="text-xs">Adjusted (With Effect)</span>*/}
+                                {/*</div>*/}
                             </div>
                         </motion.div>
                         <ResponsiveContainer width='100%' height='100%' style={{padding:6, top:100}}>
                             <BarChart width={150} height={40} data={data}>
                                 <defs>
                                     <linearGradient id='colorUv' x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor={randomColor} stopOpacity={0.6} />
-                                        <stop offset="90%" stopColor="#111" stopOpacity={0.1} />
-                                        <stop offset="100%" stopColor="#111" stopOpacity={0} />
+                                        <stop offset="%" stopColor="#0179FE" stopOpacity={0.6} />
+                                        <stop offset="90%" stopColor="#0179FE" stopOpacity={0.1} />
+                                        <stop offset="100%" stopColor="#0179FE" stopOpacity={0} />
                                     </linearGradient>
                                     <filter id="glow">
                                         <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
