@@ -146,7 +146,7 @@ const InterviewsOffers = () => {
                             <div>
                                 <Image
                                     alt="company logo"
-                                    height={15}
+                                    height={30}
                                     radius="sm"
                                     src={selectedCard?.imageUrl}
                                     width={30}
