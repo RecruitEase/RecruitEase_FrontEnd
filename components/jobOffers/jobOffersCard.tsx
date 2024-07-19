@@ -30,7 +30,7 @@ export const InterviewsOffersCard = ({ card, popup }: InterviewOfferCardProps) =
                     <CardHeader className="flex gap-3">
                         <Image
                             alt="company logo"
-                            height={32}
+                            height={64}
                             radius="sm"
                             src={card.imageUrl}
                             width={64}
@@ -46,7 +46,7 @@ export const InterviewsOffersCard = ({ card, popup }: InterviewOfferCardProps) =
                 </div>
                 <div className="col-span-6 sm:col-span-2 flex flex-col justify-center pl-4 h-full">
                     <p className="text-md text-blue-900">{card.remainingDays}</p>
-                    <div className={"w-full flex justify-center"}><Button className={" justify-end bg-primary w-1/2 rounded text-[#FFFFFF]"} onClick={popup}>more...</Button></div>
+                    {/*<div className={"w-full flex justify-center"}><Button className={" justify-end bg-primary w-1/2 rounded text-[#FFFFFF]"} onClick={popup}>more...</Button></div>*/}
 
                 </div>
 
