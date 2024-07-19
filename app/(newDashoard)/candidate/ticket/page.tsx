@@ -49,7 +49,6 @@ function Ticket() {
       console.log(value);
       setType(value);
     }
-
   };
 
   return (
@@ -63,6 +62,8 @@ function Ticket() {
       </header>
       <Card className='w-full'>
         <div className='font-bold text-xl'>Create New Ticket</div>
+
+        {/* select ticket types */}
         <Autocomplete
           label="Type"
           placeholder="Select ticket type"
