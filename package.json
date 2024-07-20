@@ -42,6 +42,7 @@
 		"axios": "^1.7.2",
 		"chart.js": "^4.4.3",
 		"clsx": "2.1.1",
+		"embla-carousel-autoplay": "^8.1.7",
 		"embla-carousel-react": "^8.1.7",
 		"eslint": "^8.56.0",
 		"eslint-config-next": "^14.2.4",

@@ -12,20 +12,84 @@ import People from "@/components/home/People";
 import {Card, CardHeader, CardBody, CardFooter, Image} from "@nextui-org/react";
 import React, { useCallback } from 'react'
 import { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel'
-import {
-    PrevButton,
-    NextButton,
-    usePrevNextButtons
-} from './EmblaCarouselArrowButtons'
-import Autoplay from 'embla-carousel-autoplay'
-import useEmblaCarousel from 'embla-carousel-react'
+import EmblaCarousel from './EmblaCarousel'
+import {JobProps} from "@/types";
+
+
+
+const jobs:JobProps[] = [
+    {
+        key: 1,
+        logo: '/assets/landing/1.jpg',
+        title: 'Officer - Customer Verification',
+        company: 'Dialog Finance PLC',
+        location: 'Colombo, Western Province',
+        type: 'Full-Time',
+        daysLeft: '7',
+    },
+    {
+        key: 2,
+        logo: '/assets/landing/2.gif',
+        title: 'Field Audit Assistant',
+        company: 'Lanka Canneries (Pvt) Ltd',
+        location: 'Colombo, Western Province',
+        type: 'Full-Time',
+        daysLeft: '14',
+    },
+    // {
+    //     key: 3,
+    //     logo: '/assets/landing/3.jpg',
+    //     title: 'Recovery Officers / Trainees',
+    //     company: 'Asia Asset Finance PLC',
+    //     location: 'Colombo, Western Province',
+    //     type: 'Full-Time',
+    //     daysLeft: '14',
+    // },
+    // {
+    //     key: 4,
+    //     logo: '/assets/landing/4.jpg',
+    //     title: 'Finance & Admin Executive',
+    //     company: 'Kelly Felder',
+    //     location: 'Colombo, Western Province',
+    //     type: 'Full-Time',
+    //     daysLeft: '4',
+    // },
+    // {
+    //     key: 5,
+    //     logo: '/assets/landing/5.jpg',
+    //     title: 'Executive - Maintenance',
+    //     company: 'PizzaHut Sri Lanka',
+    //     location: 'Colombo, Western Province',
+    //     type: 'Full-Time',
+    //     daysLeft: '10',
+    // },
+    // {
+    //     key: 6,
+    //     logo: '/assets/landing/6.jpg',
+    //     title: 'Shift Manager',
+    //     company: 'Fab',
+    //     location: 'Kandy, Central Province',
+    //     type: 'Full-Time',
+    //     daysLeft: '4',
+    // },
+    // {
+    //     key: 7,
+    //     logo: '/assets/landing/7.jpg',
+    //     title: 'Senior Manager',
+    //     company: 'LOLC Holdings',
+    //     location: 'Colombo, Western Province',
+    //     type: 'Full-Time',
+    //     daysLeft: '4',
+    // },
+];
+
 
 const HomeNew = () => {
 
     //carousel
     const OPTIONS: EmblaOptionsType = { dragFree: true, loop: true }
-    const SLIDE_COUNT = 5
-    const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
+    const SLIDE_COUNT = 10
+    const SLIDES = jobs
 
     const {data: session} = useSession();
     console.log({session});
@@ -41,8 +105,8 @@ const HomeNew = () => {
     const notify = () => toast("Wow so easy!");
     return (
         <div className={"relative"}>
-            <div className={"max-w-screen-xl mx-auto overflow-hidden shadow-none "}>
-                <Card className="w-full h-fit">
+            <div className={"max-w-screen-2xl mx-auto overflow-hidden shadow-none "}>
+                <Card className="w-full h-fit mt-3 shadow-none">
                     {/*<CardHeader className="absolute z-10 top-1 flex-col items-start">*/}
                     {/*    <p className="text-tiny text-white/60 uppercase font-bold">RecruitEase</p>*/}
                     {/*    <h4 className="text-white/90 font-medium text-xl">Making Recruitment and Job Finding Easy</h4>*/}
@@ -54,6 +118,7 @@ const HomeNew = () => {
 
 
                 </Card>
+                <EmblaCarousel slides={SLIDES} options={OPTIONS} />
                 <Apps/>
                 <Comparison/>
                 <Stats/>
