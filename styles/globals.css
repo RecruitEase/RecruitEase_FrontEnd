@@ -115,7 +115,7 @@
             @apply w-full mx-auto;
             --slide-height: 17rem;
             --slide-spacing: 0.3rem;
-            --slide-size: 47%;
+            --slide-size: 50%;
         }
     }
 
@@ -147,7 +147,7 @@
         box-shadow: inset 0 0 0 0.2rem  rgb(234,234,234);
     }
     .embla__slide__number__new {
-        @apply text-4xl font-semibold rounded-[0.8rem];
+        @apply  font-semibold rounded-[0.8rem];
         height: var(--slide-height);
         box-shadow: inset 0 0 0 0.2rem  rgb(234,234,234);
     }

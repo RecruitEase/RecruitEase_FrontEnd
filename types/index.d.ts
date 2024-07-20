@@ -103,6 +103,7 @@ declare interface CustomFormInputWithoutValidationProps{
 
 declare interface JobProps {
   key: number;
+  id:string,
   logo: string;
   title: string;
   company: string;
