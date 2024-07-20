@@ -4,7 +4,8 @@ import PersonalDetails from "@/components/candidateProfileView/details";
 
 const profileData = {
     name: "Sajith Bandara",
-    thumbnail: "I'm c Product Designer based in Dallas.",
+    email: "sajithbandara@gamil.com",
+    location:"Pallebedda, Ratnapura",
     imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSpaY0tF99xM90L3_GHqKLapOUSu70Nu3iozdE20Qdvo7aHF5P65_nb2n2Ww&s"
 }
 

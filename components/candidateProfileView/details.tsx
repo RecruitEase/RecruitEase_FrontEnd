@@ -6,7 +6,7 @@ import { Avatar } from "@nextui-org/react";
 import { Chip } from "@nextui-org/react";
 import Carousel from "@/components/carousel";
 import { ScrollShadow } from "@nextui-org/react";
-import carousel from "@/components/carousel";
+
 
 interface PersonalDetailsProps {
     aboutMe: string;
@@ -42,26 +42,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
 
                 <Card className="min-w-[400px] flex-1 mt-4">
                     <CardHeader>
-                        <p className="text-md font-bold">Skills</p>
-                    </CardHeader>
-                    <Divider />
-                    <CardBody>
-                        <ScrollShadow className="w-full h-[90px] pl-4">
-                            <div className="flex flex-row flex-wrap gap-2">
-                                {skills.map((skill, index) => (
-                                    <Chip key={index} size="lg" className="w-2">{skill}</Chip>
-                                ))}
-                            </div>
-                        </ScrollShadow>
-                    </CardBody>
-                    <Divider />
-
-                    <CardHeader>
                         <p className="text-md font-bold">Experience</p>
                     </CardHeader>
                     <Divider />
                     <CardBody>
-                        <ScrollShadow className="w-full h-[138px] pl-4">
+                        <ScrollShadow className="w-full h-[116px] pl-4">
                             {experience.map((item, index) => (
                                 <p key={index}>{item}</p>
                             ))}
@@ -74,7 +59,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     </CardHeader>
                     <Divider />
                     <CardBody>
-                        <ScrollShadow className="w-full h-[100px] pl-4">
+                        <ScrollShadow className="w-full h-[80px] pl-4">
                             {education.map((item, index) => (
                                 <p key={index}>{item}</p>
                             ))}
@@ -114,15 +99,30 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     <Divider />
                 </Card>
 
-                <Card className="min-w-[400px] flex-1 mt-4">
-                    <CardHeader className="flex gap-3">
-                        <p className="text-md font-bold">My CV</p>
+                <Card className=" flex-1 mt-4">
+                    {/*<CardHeader className="flex gap-3">*/}
+                    {/*    <p className="text-md font-bold">My CV</p>*/}
+                    {/*</CardHeader>*/}
+                    {/*<Divider />*/}
+                    {/*<CardBody>*/}
+                    {/*    <div>*/}
+                    {/*        <Carousel images={carousel}/>*/}
+                    {/*    </div>*/}
+                    {/*</CardBody>*/}
+                    {/*<Divider />*/}
+
+                    <CardHeader>
+                        <p className="text-md font-bold">Skills</p>
                     </CardHeader>
                     <Divider />
                     <CardBody>
-                        <div>
-                            <Carousel images={carousel}/>
-                        </div>
+                        <ScrollShadow className="w-full h-[180px] pl-4">
+                            <div className="flex flex-col flex-wrap gap-2">
+                                {skills.map((skill, index) => (
+                                    <Chip key={index} size="lg" className="w-2">{skill}</Chip>
+                                ))}
+                            </div>
+                        </ScrollShadow>
                     </CardBody>
                     <Divider />
                 </Card>
