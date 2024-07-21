@@ -5,6 +5,8 @@ import { Input, DatePicker, TimeInput, Button, Textarea } from "@nextui-org/reac
 import { Time } from "@internationalized/date";
 import { ClockCircleLinearIcon } from "@nextui-org/shared-icons";
 import { DateValue } from "@internationalized/date";
+import Swal from "sweetalert2";
+import {Bounce, toast} from "react-toastify";
 
 const position = "Software Engineer";
 
@@ -65,6 +67,55 @@ const JobOfferForm = () => {
         console.log(jobDetails)
     };
 
+    const conformationPop = () =>{
+
+        Swal.fire({
+            title: "Are you sure about sending job?",
+            icon:"info",
+            customClass: {
+                confirmButton: 'bg-primary', // Custom class for confirm button
+                cancelButton: 'bg-[#a1a1aa]'   // Custom class for cancel button
+            },
+
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+
+        }).then(() => {
+            sendDetails()
+            const result = {
+                status: 200
+            }
+            if (result?.status == 200) {
+                toast.success('Deleted successfully!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+
+            } else {
+                //not logged in
+                //handle error here
+                toast.error('Delete failed!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+            }
+        });
+    }
+
     return (
         <div className={"flex flex-col gap-4 "}>
             <div>
@@ -83,7 +134,7 @@ const JobOfferForm = () => {
                         type="text"
                         label="Location"
                         placeholder="Enter location"
-                        onChange={(element) => descriptionSet(element.target.value)}
+                        onChange={(element) => locationSet(element.target.value)}
                     />
                 </div>
                 <div className={"col-span-12 sm:col-span-3 w-full"}>
@@ -137,7 +188,7 @@ const JobOfferForm = () => {
                 />
             </div>
             <div className={"w-full flex justify-end"}>
-                <Button color="primary" onPress={sendDetails}>
+                <Button color="primary" onPress={conformationPop}>
                     Send
                 </Button>
             </div>
