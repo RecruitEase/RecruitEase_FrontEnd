@@ -11,8 +11,8 @@ function Create() {
       <header className="home-header">
         <HeaderBox
           type="title"
-          title="Your Job Recommendations"
-          subtext="Here are some jobs that we think you might be interested in."
+          title="Create CV"
+          subtext="Create your own CV here"
         />
       </header>
       <ChakraProvider >
