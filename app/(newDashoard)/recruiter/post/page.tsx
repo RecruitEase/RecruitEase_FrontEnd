@@ -141,7 +141,6 @@ const JobPost = () => {
         {key: 52, label: "Telecommunications"},
         {key: 53, label: "Training and Development"},
         {key: 54, label: "Travel/Ticketing/Airline/Shipping"},
-        {key: 55, label: "Volunteer / Unpaid"},
     ];
 
 

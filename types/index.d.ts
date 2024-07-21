@@ -112,7 +112,13 @@ declare interface JobProps {
   daysLeft: string;
 }
 
-
+declare interface FieldProps {
+  key: number;
+  id:string,
+  label: string;
+  nJobs: number;
+ 
+}
 
 
 

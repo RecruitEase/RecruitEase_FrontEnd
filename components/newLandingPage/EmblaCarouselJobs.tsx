@@ -17,7 +17,7 @@ type PropType = {
 };
 
 
-const EmblaCarousel: React.FC<PropType> = (props) => {
+const EmblaCarouselJobs: React.FC<PropType> = (props) => {
   const { slides, options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
 
@@ -56,7 +56,7 @@ const handleClick = (id: string) => () => {
             <div className="embla__slide " key={item.key} >
               <div
                 key={item.key}
-                className="bg-gray-200 hover:bg-gray-50 cursor-pointer w-full embla__slide__number__new p-5 grid grid-cols-12 grid-rows-9 gap-1 text-gray-800"
+                className="bg-gray-200 dark:bg-gray-50 dark:hover:bg-gray-400 hover:bg-gray-50 cursor-pointer w-full embla__slide__number__new p-5 grid grid-cols-12 grid-rows-9 gap-1 text-gray-800"
                 role="button"
                 tabIndex={item.key}
                 onKeyDown={(e) => {
@@ -147,4 +147,4 @@ const handleClick = (id: string) => () => {
   );
 };
 
-export default EmblaCarousel;
+export default EmblaCarouselJobs;

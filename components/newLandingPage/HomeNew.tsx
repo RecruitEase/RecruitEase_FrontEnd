@@ -12,8 +12,9 @@ import People from "@/components/home/People";
 import {Card, CardHeader, CardBody, CardFooter, Image} from "@nextui-org/react";
 import React, { useCallback } from 'react'
 import { EmblaOptionsType, EmblaCarouselType } from 'embla-carousel'
-import EmblaCarousel from './EmblaCarousel'
-import {JobProps} from "@/types";
+import EmblaCarouselJobs from './EmblaCarouselJobs'
+import EmblaCarouselCategories from './EmblaCarouselCategories'
+import {JobProps,FieldProps} from "@/types";
 
 
 
@@ -89,14 +90,68 @@ const jobs:JobProps[] = [
         daysLeft: '4',
     },
 ];
-
-
+const fieldValues: FieldProps[] = [
+    {key: 1, label: "Account & Finance", id: "1", nJobs: 144},
+    {key: 2, label: "Administration / Secretarial", id: "2", nJobs: 25},
+    {key: 3, label: "Agriculture", id: "3", nJobs: 154},
+    {key: 4, label: "Apparel", id: "4", nJobs: 159},
+    {key: 5, label: "Architecture", id: "5", nJobs: 35},
+    {key: 6, label: "Automobile", id: "6", nJobs: 149},
+    {key: 7, label: "Banking and Financial Services", id: "7", nJobs: 80},
+    {key: 8, label: "Beauty & Hairdressing", id: "8", nJobs: 68},
+    {key: 9, label: "BPO/ KPO", id: "9", nJobs: 69},
+    {key: 10, label: "Building & Construction", id: "10", nJobs: 132},
+    {key: 11, label: "Business Management", id: "11", nJobs: 31},
+    {key: 12, label: "Call Center", id: "12", nJobs: 51},
+    {key: 13, label: "Charity / NGO", id: "13", nJobs: 139},
+    {key: 14, label: "Customer Service", id: "14", nJobs: 24},
+    {key: 15, label: "Delivery / Driving / Transport", id: "15", nJobs: 48},
+    {key: 16, label: "Digital Marketing", id: "16", nJobs: 168},
+    {key: 17, label: "Education / Higher Education", id: "17", nJobs: 2},
+    {key: 18, label: "Electronics / Electrical", id: "18", nJobs: 93},
+    {key: 19, label: "Engineering / Manufacturing", id: "19", nJobs: 80},
+    {key: 20, label: "Environment/ Health & Safety", id: "20", nJobs: 43},
+    {key: 21, label: "FMCG/ Food Industry", id: "21", nJobs: 60},
+    {key: 23, label: "Government/ Public Sector", id: "23", nJobs: 182},
+    {key: 24, label: "Hospital/ Nursing/ Healthcare", id: "24", nJobs: 124},
+    {key: 25, label: "Hotel/ Hospitality/ Leisure", id: "25", nJobs: 17},
+    {key: 26, label: "Human Resources / Recruitment", id: "26", nJobs: 175},
+    {key: 27, label: "Insurance", id: "27", nJobs: 146},
+    {key: 28, label: "Interior Design", id: "28", nJobs: 122},
+    {key: 29, label: "Internship / Undergraduate", id: "29", nJobs: 13},
+    {key: 30, label: "IT-HWare/ Networks/ Systems", id: "30", nJobs: 19},
+    {key: 31, label: "IT-SWare / Internet", id: "31", nJobs: 127},
+    {key: 32, label: "Legal / Law", id: "32", nJobs: 130},
+    {key: 33, label: "Media/ Advertising/ Communication/ Design", id: "33", nJobs: 173},
+    {key: 34, label: "Oil, Gas and Nuclear", id: "34", nJobs: 151},
+    {key: 35, label: "Other", id: "35", nJobs: 84},
+    {key: 36, label: "Pharmaceutical", id: "36", nJobs: 139},
+    {key: 37, label: "Production & Operations", id: "37", nJobs: 72},
+    {key: 38, label: "Project Management / Programme Management", id: "38", nJobs: 166},
+    {key: 39, label: "Quality Assurance", id: "39", nJobs: 12},
+    {key: 40, label: "Real Estate", id: "40", nJobs: 60},
+    {key: 41, label: "Recoveries", id: "41", nJobs: 145},
+    {key: 42, label: "Retail / Fashion", id: "42", nJobs: 14},
+    {key: 43, label: "Sales / Marketing / New Business Development", id: "43", nJobs: 41},
+    {key: 44, label: "School Leavers", id: "44", nJobs: 189},
+    {key: 45, label: "Science / Research", id: "45", nJobs: 140},
+    {key: 46, label: "Security/ Military", id: "46", nJobs: 13},
+    {key: 47, label: "Senior Management / Directors", id: "47", nJobs: 20},
+    {key: 48, label: "Sports/Fitness/Recreation", id: "48", nJobs: 186},
+    {key: 49, label: "Startup/ Tech-startup", id: "49", nJobs: 10},
+    {key: 50, label: "Supply Chain / Logistics / Procurement", id: "50", nJobs: 141},
+    {key: 51, label: "Technical/ Mechanical", id: "51", nJobs: 23},
+    {key: 52, label: "Telecommunications", id: "52", nJobs: 125},
+    {key: 53, label: "Training and Development", id: "53", nJobs: 90},
+    {key: 54, label: "Travel/Ticketing/Airline/Shipping", id: "54", nJobs: 28},
+];
 const HomeNew = () => {
 
     //carousel
     const OPTIONS: EmblaOptionsType = { dragFree: true, loop: true }
     const SLIDE_COUNT = 10
     const SLIDES = jobs
+    const SLIDES_CATEGORIES = fieldValues
 
     const {data: session} = useSession();
     console.log({session});
@@ -125,7 +180,14 @@ const HomeNew = () => {
 
 
                 </Card>
-                <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+                <h1 className="header-box-title">
+                Recent Jobs
+                </h1>
+                <EmblaCarouselJobs slides={SLIDES} options={OPTIONS} />
+                <h1 className="mt-6 header-box-title">
+                Job Fields
+                </h1>
+                <EmblaCarouselCategories slides={SLIDES_CATEGORIES} options={OPTIONS} />
                 <Apps/>
                 <Comparison/>
                 <Stats/>

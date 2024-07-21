@@ -151,6 +151,10 @@
         height: var(--slide-height);
         box-shadow: inset 0 0 0 0.2rem  rgb(234,234,234);
     }
+    .embla__slide__number__new__category {
+        @apply  font-semibold rounded-[0.8rem];
+        box-shadow: inset 0 0 0 0.2rem  rgb(234,234,234);
+    }
     .embla__controls {
         @apply grid grid-cols-[auto_1fr] justify-between gap-[1.2rem] mt-[1.8rem];
     }
