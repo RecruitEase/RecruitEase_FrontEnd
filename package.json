@@ -71,6 +71,7 @@
 		"react-helmet": "^6.1.0",
 		"react-hook-form": "^7.52.0",
 		"react-icons": "^5.2.1",
+		"react-quill": "^2.0.0",
 		"react-responsive": "^10.0.0",
 		"react-spinners": "^0.13.7",
 		"react-to-print": "^2.14.10",

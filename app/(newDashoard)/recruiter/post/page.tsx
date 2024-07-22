@@ -9,16 +9,33 @@ import CustomInput from "@/components/form_inputs/CustomInput";
 import { Select, SelectItem, Switch} from "@nextui-org/react";
 import {toTitleCase} from "@/utils/stringUtils";
 import CustomTextArea from "@/components/form_inputs/CustomTextArea";
-import "@blocknote/core/fonts/inter.css";
-import {useCreateBlockNote} from "@blocknote/react";
-import {BlockNoteView} from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
 import {Button} from "@nextui-org/button";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const JobPost = () => {
+    //react-quill
+    const [value, setValue] = useState('');
+
+    const modules = {
+        toolbar: [
+          [{ 'header': [1, 2, false] }],
+          ['bold', 'italic', 'underline','strike', 'blockquote'],
+          [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+          ['link', 'image'],
+          ['clean']
+        ],
+      };
+    
+      const formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image'
+      ];
+
+
     const {theme, setTheme} = useTheme();
-    // Creates a new editor instance.
-    const editor = useCreateBlockNote();
 
     const [isQuizCreationEnabled, setIsQuizCreationEnabled] = useState(false);
 
@@ -357,22 +374,18 @@ const JobPost = () => {
                             }
                         }
                     }/>
-
                 <div className={"mb-1 mx-2 w-full"}>
                     <label htmlFor={"description"}>
                         Description <small>( Format options are available)</small>
                         <span className={"text-danger"}> * </span>
                     </label>
-                    <div className={"w-full h-96 border border-gray-300 rounded-lg overflow-auto "}>
-                        <BlockNoteView
-                            theme={theme}
-                            editor={editor}/>
-                    </div>
+                        <ReactQuill modules={modules} formats={formats} theme="snow" value={value} onChange={setValue} className='h-96' />
+                        
                     <span className="mt-3 text-danger text-sm">
         {'\u00A0'}
              </span>
                 </div>
-
+                
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
                     <label htmlFor={"deadline"}>
                         Deadline
