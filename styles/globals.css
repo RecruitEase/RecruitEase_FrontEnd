@@ -8,6 +8,10 @@
     box-sizing: border-box;
 }
 
+.ql-container {
+    height: calc(100% - 42px) !important; 
+  }
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
     display: none;
