@@ -93,7 +93,7 @@ export default function interviewSchedule(){
     const conformationPop = () =>{
 
         Swal.fire({
-            title: "Are you sure about sending job?",
+            title: "Are scheduling details correct?",
             icon:"info",
             customClass: {
                 confirmButton: 'bg-primary', // Custom class for confirm button
