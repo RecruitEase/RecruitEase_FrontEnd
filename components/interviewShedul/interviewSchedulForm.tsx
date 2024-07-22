@@ -1,23 +1,44 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, {Key, useState} from 'react';
 import { Input, DatePicker, TimeInput, Button, Textarea } from "@nextui-org/react";
 import { Time } from "@internationalized/date";
 import { ClockCircleLinearIcon } from "@nextui-org/shared-icons";
 import { DateValue } from "@internationalized/date";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
+import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 
 const position = "Software Engineer";
+const types = [
+    {key:"Online", label:"Online"},
+    {key:"Onsite", label:"Onsite"}
+]
 
-const interviewSchedule = () => {
+export default function interviewSchedule(){
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [location, setLocation] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [date, setDate] = useState<DateValue | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState<Time | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [description, setDescription] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffDate, setCutoffDate] = useState<DateValue | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffTime, setCutoffTime] = useState<Time | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [type,setType] = useState<Key | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [dressCode, setDressCode] = useState("");
 
+    const typeSet = (type:Key) => {
+        setType(type);
+    };
+    const dressCodeSet = (dressCodeSet: string) => {
+        setDressCode(dressCodeSet);
+    };
     const locationSet = (location: string) => {
         setLocation(location);
     };
@@ -54,17 +75,19 @@ const interviewSchedule = () => {
     };
 
     const sendDetails = () => {
-        const jobDetails = {
+        const scheduleDetails = {
+            type:type,
             location:location,
             date:date,
             time:time,
             description:description,
             cutoffDate:cutoffDate,
             cutoffTime:cutoffTime,
+            dressCode:dressCode
 
         }
 
-        console.log(jobDetails)
+        console.log(scheduleDetails)
     };
 
     const conformationPop = () =>{
@@ -119,42 +142,69 @@ const interviewSchedule = () => {
     return (
         <div className={"flex flex-col gap-4 "}>
             <div>
-                <Input
-                    isDisabled
-                    type="text"
-                    label="Position"
-                    defaultValue={position}
+                <Autocomplete
+                    items={types}
+                    label="Interview type"
+                    placeholder="Select a type of interview"
                     className="max-w-xs"
-                    // onChange={(element) => locationSet(element.target.value)}
-                />
+                    onSelectionChange={(key: React.Key) => typeSet(key)}
+                >
+                    {(types) => <AutocompleteItem key={types.key}>{types.label}</AutocompleteItem>}
+                </Autocomplete>
             </div>
+
+
             <div className={"grid grid-cols-12 w-full gap-4"}>
-                <div className={"col-span-12 sm:col-span-7 w-full"}>
+                <div className={"col-span-12 sm:col-span-6 w-full"}>
                     <Input
                         type="text"
                         label="Location"
                         placeholder="Enter location"
                         onChange={(element) => locationSet(element.target.value)}
+                        isDisabled={type === "Online" ? true : false}
                     />
                 </div>
                 <div className={"col-span-12 sm:col-span-3 w-full"}>
                     <DatePicker
                         label="Date"
-                        className="max-w-[284px] w-full"
+                        className="max-w-md w-full"
                         isRequired
                         fullWidth
                         onChange={dateSet}
                     />
                 </div>
-                <div className={"col-span-12 sm:col-span-2 w-full"}>
+                <div className={"col-span-12 sm:col-span-3 w-full"}>
                     <TimeInput
                         label="Event Time"
-                        defaultValue={new Time(11, 59)}
+                        // defaultValue={new Time(0o0, 0o0)}
                         endContent={(
-                            <ClockCircleLinearIcon />
+                            <ClockCircleLinearIcon/>
                         )}
                         fullWidth
                         onChange={timeSet}
+                    />
+                </div>
+            </div>
+
+            <div className={"grid grid-cols-2 w-full gap-4 "}>
+                <div>
+                    <Input
+                        type="text"
+                        label="Dress Code"
+                        placeholder="Enter dress code"
+                        onChange={(element) => dressCodeSet(element.target.value)}
+                        className="w-full"
+                    />
+                </div>
+
+                <div>
+                    <Input
+                        isDisabled
+                        type="text"
+                        label="Position"
+                        defaultValue={position}
+                        className="w-full"
+                        // onChange={(element) => locationSet(element.target.value)}
                     />
                 </div>
             </div>
@@ -167,6 +217,8 @@ const interviewSchedule = () => {
                     onChange={(element) => descriptionSet(element.target.value)}
                 />
             </div>
+
+
             <div className={"w-full"}>
                 <DatePicker
                     label="Cutoff Date"
@@ -179,9 +231,9 @@ const interviewSchedule = () => {
             <div className={"w-full"}>
                 <TimeInput
                     label="CutOff Time"
-                    defaultValue={new Time(11, 59)}
+                    // defaultValue={new Time(0o0, 0o0)}
                     endContent={(
-                        <ClockCircleLinearIcon />
+                        <ClockCircleLinearIcon/>
                     )}
                     className={"max-w-xs"}
                     onChange={cutoffTimeSet}
@@ -196,4 +248,4 @@ const interviewSchedule = () => {
     );
 };
 
-export default interviewSchedule;
+// export default interviewSchedule;
