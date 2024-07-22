@@ -76,6 +76,7 @@ declare interface SideBarProps {
 
 
 
+
 declare interface CustomFormInputProps{
   register:UseFormRegister<TFieldValues>,
   name:string,
