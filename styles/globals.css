@@ -8,6 +8,7 @@
     box-sizing: border-box;
 }
 
+/* react quill text editor height custom */
 .ql-container {
     height: calc(100% - 42px) !important; 
   }

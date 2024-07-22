@@ -7,6 +7,20 @@ import { Chip } from "@nextui-org/react";
 import Carousel from "@/components/carousel";
 import { ScrollShadow } from "@nextui-org/react";
 import carousel from "@/components/carousel";
+import Calender from "./calender";
+
+type UpcomingEvent = {
+    id: string;
+    type: "Job offer" | "Interview offer";
+    imageUrl: string;
+    companyName: string;
+    position: string;
+    date: string;
+    time: string;
+    remainingDays: string;
+};
+
+
 
 interface PersonalDetailsProps {
     aboutMe: string;
@@ -17,9 +31,10 @@ interface PersonalDetailsProps {
     email: string;
     avatars: string[];
     carousel:string[];
+    upcomingEvents:UpcomingEvent[];
 }
 
-const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email, avatars,carousel }) => {
+const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email, avatars,carousel,upcomingEvents }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpand = () => {
@@ -85,26 +100,26 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
             </div>
 
             <div className="details">
-                <Card className="min-w-[400px] flex-1">
-                    <CardHeader className="flex gap-3">
-                        <p className="text-md font-bold">Location</p>
-                    </CardHeader>
-                    <Divider />
-                    <CardBody>
-                        <p>{location}</p>
-                    </CardBody>
-                    <Divider />
+                <Card className="min-w-[300px] flex-1">
+                {/*    <CardHeader className="flex gap-3">*/}
+                {/*        <p className="text-md font-bold">Location</p>*/}
+                {/*    </CardHeader>*/}
+                {/*    <Divider />*/}
+                {/*    <CardBody>*/}
+                {/*        <p>{location}</p>*/}
+                {/*    </CardBody>*/}
+                {/*    <Divider />*/}
 
-                    <CardHeader className="flex gap-3">
-                        <p className="text-md font-bold">Email</p>
-                    </CardHeader>
-                    <Divider />
-                    <CardBody>
-                        <p>{email}</p>
-                    </CardBody>
-                    <Divider />
+                {/*    <CardHeader className="flex gap-3">*/}
+                {/*        <p className="text-md font-bold">Email</p>*/}
+                {/*    </CardHeader>*/}
+                {/*    <Divider />*/}
+                {/*    <CardBody>*/}
+                {/*        <p>{email}</p>*/}
+                {/*    </CardBody>*/}
+                {/*    <Divider />*/}
 
-                    <CardBody>
+                    <CardBody >
                         <div className="flex gap-4 items-center">
                             {avatars.map((avatar, index) => (
                                 <Avatar key={index} isBordered radius="full" src={avatar} />
@@ -112,20 +127,27 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                         </div>
                     </CardBody>
                     <Divider />
-                </Card>
-
-                <Card className="min-w-[400px] flex-1 mt-4">
-                    <CardHeader className="flex gap-3">
-                        <p className="text-md font-bold">My CV</p>
-                    </CardHeader>
-                    <Divider />
-                    <CardBody>
-                        <div>
-                            <Carousel images={carousel}/>
+                    <CardBody >
+                        <div className={"w-full flex justify-center"}>
+                            <Calender upcomingEvents={upcomingEvents}></Calender>
                         </div>
                     </CardBody>
-                    <Divider />
+
                 </Card>
+
+                {/*<Card className="min-w-[400px] flex-1 mt-4">*/}
+                {/*    <CardHeader className="flex gap-3">*/}
+                {/*        <p className="text-md font-bold">My CV</p>*/}
+                {/*    </CardHeader>*/}
+                {/*    <Divider />*/}
+                {/*    <CardBody>*/}
+                {/*        <div>*/}
+                {/*            <Carousel images={carousel}/>*/}
+                {/*        </div>*/}
+                {/*    </CardBody>*/}
+                {/*    <Divider />*/}
+                {/*</Card>*/}
+
             </div>
         </div>
     );
