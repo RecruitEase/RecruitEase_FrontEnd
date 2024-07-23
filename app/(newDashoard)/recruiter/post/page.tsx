@@ -10,10 +10,12 @@ import { Select, SelectItem, Switch} from "@nextui-org/react";
 import {toTitleCase} from "@/utils/stringUtils";
 import CustomTextArea from "@/components/form_inputs/CustomTextArea";
 import {Button} from "@nextui-org/button";
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import dynamic from 'next/dynamic'
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const JobPost = () => {
+
     //react-quill
     const [value, setValue] = useState('');
 

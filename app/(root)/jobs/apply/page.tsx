@@ -1,9 +1,10 @@
 "use client";
 import React,{useState }from 'react';
 import { Input, Divider, Textarea, Button, Card, CardHeader, CardBody, CardFooter, Image } from "@nextui-org/react";
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import HeaderBox from "@/components/dashboard/HeaderBox";
+import dynamic from 'next/dynamic'
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 
 const Apply = () => {
