@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TiTick } from "react-icons/ti";
 import { MdCancel } from "react-icons/md";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
+
 interface JobApplicationHistoryProps {
   applied: any;
   preScreening: any;
@@ -44,7 +45,7 @@ const JobApplicationHistory = ({
     { name: "Rejected", data: rejected },
   ];
 
-  const myPopUp = (
+  const renderPopup = () => (
     <Modal
       size={"2xl"}
       isOpen={showOfferPopup}
@@ -53,58 +54,52 @@ const JobApplicationHistory = ({
       isKeyboardDismissDisabled={true}
     >
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className="flex flex-row gap-2">
-              <div className={"flex flex-col justify-center"}>
-                {selectedOffer?.companyName} - {selectedOffer?.position}
-              </div>
-            </ModalHeader>
-            <ModalBody className={"gap-0"}>
-              <div className={"flex gap-4"}>
-                <div
-                  className={
-                    "flex flex-col mb-4 text-sm font-bold text-gray-600"
-                  }
-                >
-                  <div>
-                    <p>Date:</p>
-                  </div>
-                  <div>
-                    <p>Time:</p>
-                  </div>
-                  <div>
-                    <p>Dress Code:</p>
-                  </div>
-                  <div>
-                    <p>Location:</p>
-                  </div>
+        <>
+          <ModalHeader className="flex flex-row gap-2">
+            <div className={"flex flex-col justify-center"}>
+              {selectedOffer?.companyName} - {selectedOffer?.position}
+            </div>
+          </ModalHeader>
+          <ModalBody className={"gap-0"}>
+            <div className={"flex gap-4"}>
+              <div
+                className={"flex flex-col mb-4 text-sm font-bold text-gray-600"}
+              >
+                <div>
+                  <p>Date:</p>
                 </div>
-                <div
-                  className={
-                    "flex flex-col mb-4 text-sm font-bold text-gray-600"
-                  }
-                >
-                  <div>
-                    <p>{selectedOffer?.date}</p>
-                  </div>
-                  <div>
-                    <p>{selectedOffer?.time}</p>
-                  </div>
-                  <div>
-                    <p>{selectedOffer?.dressCode}</p>
-                  </div>
-                  <div>
-                    <p>{selectedOffer?.location}</p>
-                  </div>
+                <div>
+                  <p>Time:</p>
+                </div>
+                <div>
+                  <p>Dress Code:</p>
+                </div>
+                <div>
+                  <p>Location:</p>
                 </div>
               </div>
-              <div className={"mb-4"}>
-                <p>{selectedOffer?.description}</p>
+              <div
+                className={"flex flex-col mb-4 text-sm font-bold text-gray-600"}
+              >
+                <div>
+                  <p>{selectedOffer?.date}</p>
+                </div>
+                <div>
+                  <p>{selectedOffer?.time}</p>
+                </div>
+                <div>
+                  <p>{selectedOffer?.dressCode}</p>
+                </div>
+                <div>
+                  <p>{selectedOffer?.location}</p>
+                </div>
               </div>
-            </ModalBody>
-          </>
-        )}
+            </div>
+            <div className={"mb-4"}>
+              <p>{selectedOffer?.description}</p>
+            </div>
+          </ModalBody>
+        </>
       </ModalContent>
     </Modal>
   );
@@ -130,7 +125,14 @@ const JobApplicationHistory = ({
                 </button>
               )}
               {stage.data?.status && (
-                <button className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3">
+                <button
+                  className={`text-white text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ms-3 ${
+                    stage.data.status === "Accepted" ||
+                    stage.data.status === "Selected"
+                      ? "bg-success"
+                      : "bg-danger"
+                  }`}
+                >
                   {stage.data.status}
                 </button>
               )}
@@ -162,7 +164,7 @@ const JobApplicationHistory = ({
         ))}
       </ol>
 
-      {showOfferPopup && myPopUp}
+      {showOfferPopup && renderPopup()}
     </div>
   );
 };
