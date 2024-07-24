@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { TiTick } from "react-icons/ti";
 import { MdCancel } from "react-icons/md";
-import { InterviewsOffersCard } from "@/components/interviewsOffers/interviewsOffersCard";
-
+import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
 interface JobApplicationHistoryProps {
   applied: any;
   preScreening: any;
@@ -23,6 +22,17 @@ const JobApplicationHistory = ({
   rejected,
 }: JobApplicationHistoryProps) => {
   const [showOfferPopup, setShowOfferPopup] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState(null);
+
+  const handleViewOfferNote = (offer) => {
+    setSelectedOffer(offer);
+    setShowOfferPopup(true);
+  };
+
+  const closeOfferPopup = () => {
+    setShowOfferPopup(false);
+    setSelectedOffer(null);
+  };
 
   const stages = [
     { name: "Applied", data: applied },
@@ -34,13 +44,70 @@ const JobApplicationHistory = ({
     { name: "Rejected", data: rejected },
   ];
 
-  const handleViewOfferNote = () => {
-    setShowOfferPopup(true);
-  };
-
-  const closeOfferPopup = () => {
-    setShowOfferPopup(false);
-  };
+  const myPopUp = (
+    <Modal
+      size={"2xl"}
+      isOpen={showOfferPopup}
+      onClose={closeOfferPopup}
+      isDismissable={false}
+      isKeyboardDismissDisabled={true}
+    >
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-row gap-2">
+              <div className={"flex flex-col justify-center"}>
+                {selectedOffer?.companyName} - {selectedOffer?.position}
+              </div>
+            </ModalHeader>
+            <ModalBody className={"gap-0"}>
+              <div className={"flex gap-4"}>
+                <div
+                  className={
+                    "flex flex-col mb-4 text-sm font-bold text-gray-600"
+                  }
+                >
+                  <div>
+                    <p>Date:</p>
+                  </div>
+                  <div>
+                    <p>Time:</p>
+                  </div>
+                  <div>
+                    <p>Dress Code:</p>
+                  </div>
+                  <div>
+                    <p>Location:</p>
+                  </div>
+                </div>
+                <div
+                  className={
+                    "flex flex-col mb-4 text-sm font-bold text-gray-600"
+                  }
+                >
+                  <div>
+                    <p>{selectedOffer?.date}</p>
+                  </div>
+                  <div>
+                    <p>{selectedOffer?.time}</p>
+                  </div>
+                  <div>
+                    <p>{selectedOffer?.dressCode}</p>
+                  </div>
+                  <div>
+                    <p>{selectedOffer?.location}</p>
+                  </div>
+                </div>
+              </div>
+              <div className={"mb-4"}>
+                <p>{selectedOffer?.description}</p>
+              </div>
+            </ModalBody>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
+  );
 
   return (
     <div>
@@ -51,11 +118,7 @@ const JobApplicationHistory = ({
             key={index}
           >
             <span
-              className={`absolute flex items-center justify-center w-6 h-6 ${
-                stage.data ? "bg-blue-100" : "bg-red-100"
-              } rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 ${
-                stage.data ? "dark:bg-blue-900" : "dark:bg-red-900"
-              }`}
+              className={`absolute flex items-center justify-center w-6 h-6 ${stage.data ? "bg-blue-100" : "bg-red-100"} rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 ${stage.data ? "dark:bg-blue-900" : "dark:bg-red-900"}`}
             >
               {stage.data ? <TiTick /> : <MdCancel />}
             </span>
@@ -80,7 +143,7 @@ const JobApplicationHistory = ({
             {stage.data?.link && stage.name === "Offered" ? (
               <a
                 href="#"
-                onClick={handleViewOfferNote}
+                onClick={() => handleViewOfferNote(stage.data)}
                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
               >
                 {stage.data.linkText}
@@ -99,19 +162,7 @@ const JobApplicationHistory = ({
         ))}
       </ol>
 
-      {showOfferPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded shadow-lg">
-            <button
-              className="absolute top-2 right-2 text-gray-600"
-              onClick={closeOfferPopup}
-            >
-              Close
-            </button>
-            <InterviewsOffersCard card={offered} popup={closeOfferPopup} />
-          </div>
-        </div>
-      )}
+      {showOfferPopup && myPopUp}
     </div>
   );
 };

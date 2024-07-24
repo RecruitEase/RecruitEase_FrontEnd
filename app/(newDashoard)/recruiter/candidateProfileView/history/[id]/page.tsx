@@ -2,6 +2,7 @@
 import React from "react";
 import HeaderBox from "@/components/dashboard/HeaderBox";
 import JobApplicationHistory from "@/components/recruiter/JobApplicationHistory";
+import { Button } from "@nextui-org/react";
 
 const CandidateApplicationHistory = () => {
   const applicationStages = {
@@ -50,6 +51,7 @@ const CandidateApplicationHistory = () => {
           title="Application Summary"
           subtext="Application summary of Ravishan Jayathilake for the position of Senior Frontend Developer"
         />
+
         <div className="container mx-auto">
           <JobApplicationHistory {...applicationStages} />
         </div>
