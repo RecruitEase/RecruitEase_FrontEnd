@@ -25,10 +25,19 @@ const CandidateApplicationHistory = () => {
       linkText: "View Notes",
     },
     offered: {
-      date: "January 13th, 2022",
-      status: "Accepted",
+      companyName: "Company XYZ",
+      position: "Senior Frontend Developer",
+      imageUrl: "/path/to/logo.png",
+      type: "Full-time",
+      location: "Remote",
       link: "#",
+      date: "January 20th, 2022",
       linkText: "View Offer Note",
+      time: "10:00 AM",
+      dressCode: "Business Casual",
+      remainingDays: "5 days",
+      description:
+        "Congratulations! You have been offered a position at Company XYZ.",
     },
     rejected: { date: "January 13th, 2022", link: "#", linkText: "View Notes" },
   };
