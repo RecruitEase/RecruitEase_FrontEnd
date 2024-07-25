@@ -8,15 +8,37 @@ import {FaTag} from "react-icons/fa";
 import {MdOutlineMail, MdOutlineLocationOn} from "react-icons/md";
 import {Button} from "@nextui-org/button";
 import ApplicationTable from "@/components/recruiter/ApplicationTable";
-
+import ViewCvPopup from "./ViewCvPopup";
+import {CVProps,ApplicationProps} from "@/types/index";
 
 export default function ApplicationComponent() {
-    const applicant = {
+    const applicant:ApplicationProps = {
         name: "Mary Jane",
         city: "Colombo",
         email: "maryjane@gmail.com",
         status: "underReview",
         appliedDate: "2024-10-10",
+        cv:{
+            cvId: "1",
+            cvName: 'CV1',
+            file: '/assets/cv.pdf',
+            modifiedDate: '2021-09-01',
+            type: 'uploaded'
+          }
+    }
+
+
+
+    //cv popup
+    const [isOpenCV, setIsOpenCV] = React.useState(false);
+    const [selectedCv, setSelectedCv] = React.useState<ApplicationProps | null>(null);
+    const handleOpenChange = (open) => {
+        setIsOpenCV(open);
+    };
+
+    const handleViewCvClick=(applicant:ApplicationProps)=>{
+        setSelectedCv(applicant);
+        setIsOpenCV(true);
     }
 
     const [isVertical, setIsVertical] = React.useState(true);
@@ -30,7 +52,7 @@ export default function ApplicationComponent() {
         } else {
             setIsVertical(true);
         }
-    }, [isMiddleSize])
+    }, [isMiddleSize,selectedCv])
 
     const tabList = [
         {key: 'allApplicants', title: 'All Applicants', color: '#1E3A8A'}, // Light Blue
@@ -47,8 +69,12 @@ export default function ApplicationComponent() {
     ];
 
 
+
+  
+
     return (
         <div className="flex flex-col px-4 mb-[100px]">
+            <ViewCvPopup isOpen={isOpenCV}  onOpenChange={handleOpenChange} applicant={selectedCv}/>
             <div className="flex w-full flex-col">
                 <Tabs className={"mb-5"} color={"primary"} aria-label="Options" isVertical={isVertical}>
 
@@ -115,7 +141,7 @@ export default function ApplicationComponent() {
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-2 px-2">
-                                                    <button
+                                                    <button onClick={() => handleViewCvClick(applicant)}
                                                         className="flex-1 rounded-full bg-blue-600 dark:bg-blue-800 text-white dark:text-white antialiased font-bold hover:bg-blue-800 dark:hover:bg-blue-900 px-4 py-2">
                                                         View CV
                                                     </button>

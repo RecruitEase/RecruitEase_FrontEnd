@@ -122,7 +122,22 @@ declare interface FieldProps {
 }
 
 
+declare interface CVProps{
+  cvId: string,
+  cvName: string,
+  file: string,
+  modifiedDate: string,
+  type: string
+}
 
+declare interface ApplicationProps{
+  name: string;
+  city: string;
+  email: string;
+  status: string;
+  appliedDate: string;
+  cv: CVProps;
+}
 
 
 
