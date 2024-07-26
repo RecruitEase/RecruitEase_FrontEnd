@@ -1,7 +1,15 @@
 import React from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+  Link,
+  Image,
+} from "@nextui-org/react";
 
-interface FinanceSummaryCardProps {
+interface GraphSummary {
   imageUrl: string;
   title: string;
   subtitle: string;
@@ -9,7 +17,13 @@ interface FinanceSummaryCardProps {
   detailsLink: string;
 }
 
-const FinanceSummaryCard: React.FC<FinanceSummaryCardProps> = ({ imageUrl, title, subtitle, description, detailsLink }) => {
+const FinanceSummaryCard: React.FC<GraphSummary> = ({
+  imageUrl,
+  title,
+  subtitle,
+  description,
+  detailsLink,
+}) => {
   return (
     <Card className="max-w-[400px]">
       <CardHeader className="flex gap-3">
@@ -25,11 +39,11 @@ const FinanceSummaryCard: React.FC<FinanceSummaryCardProps> = ({ imageUrl, title
           <p className="text-small text-default-500">{subtitle}</p>
         </div>
       </CardHeader>
-      <Divider/>
+      <Divider />
       <CardBody>
         <p>{description}</p>
       </CardBody>
-      <Divider/>
+      <Divider />
       <CardFooter>
         <Link isExternal showAnchorIcon href={detailsLink}>
           View Details
