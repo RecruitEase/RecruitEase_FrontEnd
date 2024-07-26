@@ -19,26 +19,24 @@ const Chart = dynamic(
 );
 
 export const Content = () => (
-  <div className="h-full lg:px-6">
-    <div className="flex justify-center gap-4 xl:gap-6  px-4 lg:px-0  flex-wrap xl:flex-nowrap sm:pt-10 max-w-[90rem] mx-auto w-full">
-      <div className="gap-6 flex flex-col w-full">
+  <div className="h-full">
+    <div className="flex flex-wrap xl:flex-nowrap justify-center gap-6 px-4 lg:px-0 sm:pt-10 max-w-[90rem] mx-auto w-full">
+      {/* Main Section */}
+      <div className="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col gap-6 w-full xl:max-w-4xl">
         {/* Card Section Top */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <h3 className="text-xl font-semibold">Jobs And Applications</h3>
-          <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-3 gap-5  justify-center w-full">
+          <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-3 gap-5 w-full">
             <SummaryNumber
               analyticName="Total Jobs"
               amount={5679}
               percentageChange={10}
-              Icon={BsFileEarmarkPostFill}
             />
             <SummaryNumber
               analyticName="Active Jobs"
               amount={2342}
               percentageChange={2.5}
-              Icon={BsFileEarmarkPostFill}
             />
-
             <GraphSummary
               imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
               title="Top Vacancies"
@@ -73,7 +71,6 @@ export const Content = () => (
                 ]}
               />
             </GraphSummary>
-
             <GraphSummary
               imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
               title="Trending Jobs"
@@ -96,23 +93,20 @@ export const Content = () => (
               analyticName="Applications per vacancy"
               amount={52}
               percentageChange={2.5}
-              Icon={BsFileEarmarkPostFill}
+            />
+            <SummaryNumber
+              analyticName="Average time to hire"
+              amount={52}
+              percentageChange={-2.5}
             />
           </div>
         </div>
-
-        {/* <div className="h-full flex flex-col gap-2">
-          <h3 className="text-xl font-semibold">Statistics</h3>
-          <div className="w-full bg-default-50 shadow-lg rounded-2xl p-6 ">
-            <Chart />
-          </div>
-        </div> */}
       </div>
 
       {/* Left Section */}
-      <div className="mt-4 gap-2 flex flex-col xl:max-w-md w-full">
+      <div className="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col gap-6 w-full xl:max-w-md">
         <h3 className="text-xl font-semibold">Finance</h3>
-        <div className="flex flex-col justify-center gap-4 flex-wrap md:flex-nowrap md:flex-col">
+        <div className="flex flex-col gap-6">
           <GraphSummary
             imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
             title="Total Revenue"
@@ -131,13 +125,16 @@ export const Content = () => (
               analyticName="Total Revenue"
               amount={100}
               percentageChange={10}
-              Icon={BsFileEarmarkPostFill}
             />
             <SummaryNumber
               analyticName="Total Revenue"
               amount={100}
               percentageChange={10}
-              Icon={BsFileEarmarkPostFill}
+            />
+            <SummaryNumber
+              analyticName="Total Revenue"
+              amount={100}
+              percentageChange={10}
             />
           </GraphSummary>
         </div>
@@ -145,45 +142,127 @@ export const Content = () => (
     </div>
 
     {/* Table Latest Users */}
-    <div className="flex flex-col justify-center w-full py-5 px-4 lg:px-0  max-w-[90rem] mx-auto gap-3">
-      <div className="flex  flex-wrap justify-between">
-        <h3 className="text-center text-xl font-semibold">Users</h3>
+    <div className="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col gap-6 w-full max-w-[90rem] mx-auto mt-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Users</h3>
         <Link
           href="/accounts"
           as={NextLink}
           color="primary"
           className="cursor-pointer"
         >
-          View All
+          View More
         </Link>
       </div>
-      <GraphSummary
-        imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-        title="User Analytics"
-        subtitle="Active Users"
-        detailsLink="/"
-      >
-        <TableCard
-          columns={[
-            { key: "role", label: "Role" },
-            { key: "count", label: "Count" },
-          ]}
-          rows={[
-            { key: "1", role: "Recruiters", count: 100 },
-            { key: "2", role: "Candidates", count: 100 },
-            { key: "3", role: "Moderators", count: 100 },
-            { key: "4", role: "Admins", count: 100 },
-          ]}
-        />
-      </GraphSummary>
-      <GraphSummary
-        imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-        title="New Registrations"
-        subtitle="Monthly"
-        detailsLink="/"
-      >
-        <BarChartCard />
-      </GraphSummary>
+      <div className="grid md:grid-cols-3 grid-cols-1 gap-6">
+        <GraphSummary
+          imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+          title="User Analytics"
+          subtitle="Active Users"
+          detailsLink="/"
+        >
+          <TableCard
+            columns={[
+              { key: "role", label: "Role" },
+              { key: "count", label: "Count" },
+            ]}
+            rows={[
+              { key: "1", role: "Recruiters", count: 100 },
+              { key: "2", role: "Candidates", count: 100 },
+              { key: "3", role: "Moderators", count: 100 },
+              { key: "4", role: "Admins", count: 100 },
+            ]}
+          />
+        </GraphSummary>
+        <GraphSummary
+          imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+          title="New Registrations"
+          subtitle="Monthly"
+          detailsLink="/"
+        >
+          <BarChartCard />
+        </GraphSummary>
+        <GraphSummary
+          imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+          title="User Engagement"
+          subtitle="Monthly"
+          detailsLink="/"
+        >
+          <TableCard
+            columns={[
+              { key: "criteria", label: "Criteria" },
+              { key: "Value", label: "Value" },
+            ]}
+            rows={[
+              { key: "1", criteria: "Active Users", Value: 100 },
+              { key: "2", criteria: "Inactive Users", Value: 100 },
+              { key: "3", criteria: "Users Online", Value: 100 },
+              { key: "4", criteria: "Average Session Time", Value: 100 },
+            ]}
+          />
+        </GraphSummary>
+      </div>
+
+      <div className="block w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          Candidates
+        </h5>
+        <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+          <GraphSummary
+            imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+            title="Top Skills"
+            subtitle="All time"
+            detailsLink="/"
+          >
+            <TableCard
+              columns={[
+                { key: "skill", label: "Skill" },
+                { key: "percentage", label: "Percentage" },
+              ]}
+              rows={[
+                { key: "1", skill: "React", percentage: 100 },
+                { key: "2", skill: "React", percentage: 100 },
+                { key: "3", skill: "React", percentage: 100 },
+              ]}
+            />
+          </GraphSummary>
+          <div className="flex flex-col gap-6">
+            <SummaryNumber
+              analyticName="Profile Completion"
+              amount={100}
+              percentageChange={10}
+            />
+            <SummaryNumber
+              analyticName="Profile Completion"
+              amount={100}
+              percentageChange={10}
+            />
+            <SummaryNumber
+              analyticName="Profile Completion"
+              amount={100}
+              percentageChange={10}
+            />
+          </div>
+          <GraphSummary
+            imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+            title="Demographics"
+            subtitle="Location"
+            detailsLink="/"
+          >
+            <RevenueChart />
+          </GraphSummary>
+          <GraphSummary
+            imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+            title="Demographics"
+            subtitle="Industry"
+            detailsLink="/"
+          >
+            <RevenueChart />
+          </GraphSummary>
+        </div>
+      </div>
     </div>
   </div>
 );
+
+export default Content;

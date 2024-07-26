@@ -25,7 +25,7 @@ const FinanceSummaryCard: React.FC<GraphSummary> = ({
   children,
 }) => {
   return (
-    <Card className="max-w-[400px]">
+    <Card className="w-full">
       <CardHeader className="flex gap-3">
         <Image
           alt="nextui logo"
