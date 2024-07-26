@@ -1,9 +1,6 @@
 "use client";
-import type { NextPage } from "next";
-import { Content } from "@/components/admin/content";
+import Content from "@/components/admin/content";
 
-const Admin: NextPage = () => {
+export default function Dashboard() {
   return <Content />;
-};
-
-export default Admin;
+}
