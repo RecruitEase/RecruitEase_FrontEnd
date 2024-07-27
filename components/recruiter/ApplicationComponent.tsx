@@ -9,6 +9,7 @@ import {MdOutlineMail, MdOutlineLocationOn} from "react-icons/md";
 import {Button} from "@nextui-org/button";
 import ApplicationTable from "@/components/recruiter/ApplicationTable";
 import ViewCvPopup from "./ViewCvPopup";
+import ViewAnswersPopup from "./ViewAnswersPopup";
 import {CVProps,ApplicationProps} from "@/types/index";
 
 export default function ApplicationComponent() {
@@ -31,14 +32,24 @@ export default function ApplicationComponent() {
 
     //cv popup
     const [isOpenCV, setIsOpenCV] = React.useState(false);
-    const [selectedCv, setSelectedCv] = React.useState<ApplicationProps | null>(null);
-    const handleOpenChange = (open) => {
+    const [isOpenAnswers, setIsOpenAnswers] = React.useState(false);
+    const [selectedApplicant, setSelectedApplicant] = React.useState<ApplicationProps | null>(null);
+    const handleOpenChangeCV = (open) => {
         setIsOpenCV(open);
     };
 
+    const handleOpenChangeAnswers = (open) => {
+        setIsOpenAnswers(open);
+    };
+
     const handleViewCvClick=(applicant:ApplicationProps)=>{
-        setSelectedCv(applicant);
+        setSelectedApplicant(applicant);
         setIsOpenCV(true);
+    }
+
+    const handleViewAnswersClick=(applicant:ApplicationProps)=>{
+        setSelectedApplicant(applicant);
+        setIsOpenAnswers(true);
     }
 
     const [isVertical, setIsVertical] = React.useState(true);
@@ -52,7 +63,7 @@ export default function ApplicationComponent() {
         } else {
             setIsVertical(true);
         }
-    }, [isMiddleSize,selectedCv])
+    }, [isMiddleSize,selectedApplicant])
 
     const tabList = [
         {key: 'allApplicants', title: 'All Applicants', color: '#1E3A8A'}, // Light Blue
@@ -74,7 +85,8 @@ export default function ApplicationComponent() {
 
     return (
         <div className="flex flex-col px-4 mb-[100px]">
-            <ViewCvPopup isOpen={isOpenCV}  onOpenChange={handleOpenChange} applicant={selectedCv}/>
+            <ViewCvPopup isOpen={isOpenCV}  onOpenChange={handleOpenChangeCV} applicant={selectedApplicant}/>
+            <ViewAnswersPopup isOpen={isOpenAnswers}  onOpenChange={handleOpenChangeAnswers} applicant={selectedApplicant}/>
             <div className="flex w-full flex-col">
                 <Tabs className={"mb-5"} color={"primary"} aria-label="Options" isVertical={isVertical}>
 
@@ -155,7 +167,7 @@ export default function ApplicationComponent() {
                                                 <div
                                                     className="flex gap-2 items-center text-gray-800 dark:text-gray-300 mb-4">
                                                     <div className={"w-1/2 flex flex-col justify-center items-center gap-2"}>
-                                                        <Button size={"sm"} className={"w-full bg-purple-500 text-white"}>
+                                                        <Button onClick={() => handleViewAnswersClick(applicant)} size={"sm"} className={"w-full bg-purple-500 text-white"}>
                                                             View Answers
                                                         </Button>
 
