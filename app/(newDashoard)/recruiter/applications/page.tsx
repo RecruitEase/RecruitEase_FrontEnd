@@ -14,6 +14,7 @@ const Applications = () => {
                     subtext="Manage the applications received for the job from here"
                 />
             </header>
+            
             <ApplicationComponent/>
 
         </div>

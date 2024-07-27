@@ -11,7 +11,7 @@ const Screening = () => {
             {/* left */}
             <div style={{ width: '70%' }} className='p-4'>
               <h1 className='font-bold'>Screening Stage</h1>
-              <p className='pt-4'>Please answer the below questions accurately to increase your chances of being selected (shortlisted) for an interview. Applicants providing false answers may be disqualified from applying through XpressJobs.</p>
+              <p className='pt-4'>Please answer the below questions accurately to increase your chances of being selected (shortlisted) for an interview. Applicants providing false answers may be disqualified from applying through RecruitEase.</p>
 
               <div className="border border-gray-300 p-4 rounded-lg shadow-sm flex items-center m-3">
                 <p className=' text-primaryText'  > 1.Are you between the age of 25-45 years?</p>

@@ -8,15 +8,51 @@ import {FaTag} from "react-icons/fa";
 import {MdOutlineMail, MdOutlineLocationOn} from "react-icons/md";
 import {Button} from "@nextui-org/button";
 import ApplicationTable from "@/components/recruiter/ApplicationTable";
-
+import ViewCvPopup from "./ViewCvPopup";
+import ViewAnswersPopup from "./ViewAnswersPopup";
+import {CVProps,ApplicationProps} from "@/types/index";
+import { MdOutlineQuiz } from "react-icons/md";
+import { FaPeopleArrows } from "react-icons/fa6";
+import { FaHistory } from "react-icons/fa";
 
 export default function ApplicationComponent() {
-    const applicant = {
+    const applicant:ApplicationProps = {
         name: "Mary Jane",
         city: "Colombo",
         email: "maryjane@gmail.com",
         status: "underReview",
         appliedDate: "2024-10-10",
+        cv:{
+            cvId: "1",
+            cvName: 'CV1',
+            file: '/assets/cv.pdf',
+            modifiedDate: '2021-09-01',
+            type: 'uploaded'
+          }
+    }
+
+
+
+    //cv popup
+    const [isOpenCV, setIsOpenCV] = React.useState(false);
+    const [isOpenAnswers, setIsOpenAnswers] = React.useState(false);
+    const [selectedApplicant, setSelectedApplicant] = React.useState<ApplicationProps | null>(null);
+    const handleOpenChangeCV = (open) => {
+        setIsOpenCV(open);
+    };
+
+    const handleOpenChangeAnswers = (open) => {
+        setIsOpenAnswers(open);
+    };
+
+    const handleViewCvClick=(applicant:ApplicationProps)=>{
+        setSelectedApplicant(applicant);
+        setIsOpenCV(true);
+    }
+
+    const handleViewAnswersClick=(applicant:ApplicationProps)=>{
+        setSelectedApplicant(applicant);
+        setIsOpenAnswers(true);
     }
 
     const [isVertical, setIsVertical] = React.useState(true);
@@ -30,7 +66,7 @@ export default function ApplicationComponent() {
         } else {
             setIsVertical(true);
         }
-    }, [isMiddleSize])
+    }, [isMiddleSize,selectedApplicant])
 
     const tabList = [
         {key: 'allApplicants', title: 'All Applicants', color: '#1E3A8A'}, // Light Blue
@@ -47,8 +83,13 @@ export default function ApplicationComponent() {
     ];
 
 
+
+  
+
     return (
         <div className="flex flex-col px-4 mb-[100px]">
+            <ViewCvPopup isOpen={isOpenCV}  onOpenChange={handleOpenChangeCV} applicant={selectedApplicant}/>
+            <ViewAnswersPopup isOpen={isOpenAnswers}  onOpenChange={handleOpenChangeAnswers} applicant={selectedApplicant}/>
             <div className="flex w-full flex-col">
                 <Tabs className={"mb-5"} color={"primary"} aria-label="Options" isVertical={isVertical}>
 
@@ -115,7 +156,7 @@ export default function ApplicationComponent() {
                                                     </div>
                                                 </div>
                                                 <div className="flex gap-2 px-2">
-                                                    <button
+                                                    <button onClick={() => handleViewCvClick(applicant)}
                                                         className="flex-1 rounded-full bg-blue-600 dark:bg-blue-800 text-white dark:text-white antialiased font-bold hover:bg-blue-800 dark:hover:bg-blue-900 px-4 py-2">
                                                         View CV
                                                     </button>
@@ -129,18 +170,20 @@ export default function ApplicationComponent() {
                                                 <div
                                                     className="flex gap-2 items-center text-gray-800 dark:text-gray-300 mb-4">
                                                     <div className={"w-1/2 flex flex-col justify-center items-center gap-2"}>
-                                                        <Button size={"sm"} className={"w-full bg-purple-500 text-white"}>
-                                                            View Answers
+                                                        <Button onClick={() => handleViewAnswersClick(applicant)}  className={"w-full bg-gray-900 text-whiteText"}>
+                                                            View Answers <MdOutlineQuiz />
                                                         </Button>
 
-                                                        <Button size={"sm"} color={"secondary"}
-                                                                className={" w-full bg-purple-500 text-white"}>
-                                                            Schedule Interview
+                                                        <Button color={"secondary"}
+                                                                className={" w-full bg-gray-900 text-whiteText"}>
+                                                            Schedule Interview <FaPeopleArrows />
+
                                                         </Button>
 
-                                                        <Button size={"sm"} color={"secondary"}
-                                                                className={"w-full bg-purple-500 text-white"}>
-                                                            More Actions
+                                                        <Button  color={"secondary"}
+                                                                className={"w-full bg-gray-900 text-whiteText"}>
+                                                            Applicant History <FaHistory />
+
                                                         </Button>
                                                     </div>
                                                     <div className="flex items-center flex-col justify-center">
