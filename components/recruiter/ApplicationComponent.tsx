@@ -11,6 +11,9 @@ import ApplicationTable from "@/components/recruiter/ApplicationTable";
 import ViewCvPopup from "./ViewCvPopup";
 import ViewAnswersPopup from "./ViewAnswersPopup";
 import {CVProps,ApplicationProps} from "@/types/index";
+import { MdOutlineQuiz } from "react-icons/md";
+import { FaPeopleArrows } from "react-icons/fa6";
+import { FaHistory } from "react-icons/fa";
 
 export default function ApplicationComponent() {
     const applicant:ApplicationProps = {
@@ -167,18 +170,20 @@ export default function ApplicationComponent() {
                                                 <div
                                                     className="flex gap-2 items-center text-gray-800 dark:text-gray-300 mb-4">
                                                     <div className={"w-1/2 flex flex-col justify-center items-center gap-2"}>
-                                                        <Button onClick={() => handleViewAnswersClick(applicant)} size={"sm"} className={"w-full bg-purple-500 text-white"}>
-                                                            View Answers
+                                                        <Button onClick={() => handleViewAnswersClick(applicant)}  className={"w-full bg-gray-900 text-whiteText"}>
+                                                            View Answers <MdOutlineQuiz />
                                                         </Button>
 
-                                                        <Button size={"sm"} color={"secondary"}
-                                                                className={" w-full bg-purple-500 text-white"}>
-                                                            Schedule Interview
+                                                        <Button color={"secondary"}
+                                                                className={" w-full bg-gray-900 text-whiteText"}>
+                                                            Schedule Interview <FaPeopleArrows />
+
                                                         </Button>
 
-                                                        <Button size={"sm"} color={"secondary"}
-                                                                className={"w-full bg-purple-500 text-white"}>
-                                                            More Actions
+                                                        <Button  color={"secondary"}
+                                                                className={"w-full bg-gray-900 text-whiteText"}>
+                                                            Applicant History <FaHistory />
+
                                                         </Button>
                                                     </div>
                                                     <div className="flex items-center flex-col justify-center">
