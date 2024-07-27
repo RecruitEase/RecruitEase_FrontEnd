@@ -221,5 +221,91 @@ const jobStats = [
         { key: 54, label: "Travel/Ticketing/Airline/Shipping" },
       ];
 
+      const vacancyColumns = [
+        { name: "Job ID", uid: "id", sortable: true },
+        { name: "Vacancy Title", uid: "title" },
+        { name: "Applications", uid: "applications" },
+        { name: "Created Date", uid: "createdDate", sortable: true },
+        { name: "Last Updated", uid: "lastUpdated", sortable: true },
+        { name: "Status", uid: "status" },
+        { name: "Actions", uid: "actions" },
+        ];
 
-export {columns, statusOptions, jobStats, modules, formats, locations, jobTypes, experienceLevelTypes, educationLevelTypes, fieldValues};
+        const vacancyStatusOptions = [
+            { key: "all", label: "All" },
+            { key: "live", label: "Live" },
+            { key: "archived", label: "Archived" },
+            { key: "confirmationPending", label: "Confirmation Pending" },
+
+        ];
+
+        const vacancies = [
+            {
+                id: 1,
+                title: "Software Engineer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "Live",
+            },
+            {
+                id: 2,
+                title: "Frontend Developer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "archived",
+            },
+            {
+                id: 3,
+                title: "Backend Developer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "Live",
+            },
+            {
+                id: 4,
+                title: "DevOps Engineer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "Confirmation Pending",
+            },
+            {
+                id: 5,
+                title: "Software Engineer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "Live",
+            },
+            {
+                id: 6,
+                title: "Frontend Developer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "Live",
+            },
+            {
+                id: 7,
+                title: "Backend Developer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "Live",
+            },
+            {
+                id: 8,
+                title: "DevOps Engineer",
+                applications: 100,
+                createdDate: "2021-10-01",
+                lastUpdated: "2021-10-01",
+                status: "Live",
+            },
+        ];
+      
+
+
+export {columns, statusOptions, jobStats, modules, formats, locations, jobTypes, experienceLevelTypes, educationLevelTypes, fieldValues, vacancyColumns, vacancyStatusOptions, vacancies};
