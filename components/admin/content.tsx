@@ -1,14 +1,13 @@
 "use client";
 import React from "react";
-import dynamic from "next/dynamic";
 import { SummaryNumber } from "./SummaryNumber";
-import { Link } from "@nextui-org/react";
+import { Link, Tab } from "@nextui-org/react";
 import NextLink from "next/link";
 import GraphSummary from "@/components/admin/GraphSummary";
-import { BsFileEarmarkPostFill } from "react-icons/bs";
 import RevenueChart from "./RevenueChart";
 import TableCard from "./Table";
 import BarChartCard from "./BarChart";
+import Table2 from "./Table2";
 
 export default function content() {
   return (
@@ -216,42 +215,81 @@ export default function content() {
                   { key: "1", skill: "React", percentage: 100 },
                   { key: "2", skill: "React", percentage: 100 },
                   { key: "3", skill: "React", percentage: 100 },
+                  { key: "4", skill: "React", percentage: 100 },
+                  { key: "5", skill: "React", percentage: 100 },
+                  { key: "6", skill: "React", percentage: 100 },
+                  { key: "7", skill: "React", percentage: 100 },
+                  { key: "8", skill: "React", percentage: 100 },
                 ]}
               />
             </GraphSummary>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Total Profiles"
                 amount={100}
                 percentageChange={10}
               />
+
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Tickets Open"
                 amount={100}
                 percentageChange={10}
               />
-              <SummaryNumber
-                analyticName="Profile Completion"
-                amount={100}
-                percentageChange={10}
-              />
+              <GraphSummary
+                imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                title="Top Profiles"
+                subtitle=""
+                detailsLink="/"
+              >
+                <TableCard
+                  columns={[
+                    { key: "rank", label: "Rank" },
+                    { key: "name", label: "Name" },
+                  ]}
+                  rows={[
+                    { key: "1", rank: "1", name: "John Doe" },
+                    { key: "2", rank: "2", name: "John Doe" },
+                    { key: "3", rank: "3", name: "John Doe" },
+                  ]}
+                />
+              </GraphSummary>
             </div>
-            <GraphSummary
-              imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Demographics"
-              subtitle="Location"
-              detailsLink="/"
-            >
-              <RevenueChart />
-            </GraphSummary>
-            <GraphSummary
-              imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Demographics"
-              subtitle="Industry"
-              detailsLink="/"
-            >
-              <RevenueChart />
-            </GraphSummary>
+            <div className="flex flex-col gap-6">
+              <GraphSummary
+                imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                title="Demographics"
+                subtitle="Location"
+                detailsLink="/"
+              >
+                <RevenueChart />
+              </GraphSummary>
+              <GraphSummary
+                imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                title="Demographics"
+                subtitle="Industry"
+                detailsLink="/"
+              >
+                <RevenueChart />
+              </GraphSummary>
+            </div>
+            <div className="flex flex-col gap-6">
+              <GraphSummary
+                imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                title="Profiles"
+                subtitle="Profile Status"
+                detailsLink="/"
+              >
+                <RevenueChart />
+              </GraphSummary>
+              <GraphSummary
+                imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                title="Demographics"
+                subtitle="Industry"
+                detailsLink="/"
+              >
+                <RevenueChart />
+              </GraphSummary>
+            </div>
           </div>
         </div>
 
@@ -260,57 +298,63 @@ export default function content() {
             Recruiters
           </h5>
           <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+            <div className="col-span-2">
+              <Table2
+                Title="Top Recruiters"
+                Rows={[
+                  {
+                    id: 1,
+                    name: "99x",
+                    email: "99x@gmail.com",
+                    value: "100 Vacancies",
+                    image:
+                      "https://avatars.githubusercontent.com/u/86160567?s=200&v=4",
+                  },
+                  {
+                    id: 2,
+                    name: "Virtusa",
+                    email: "virtusa@gmail.com",
+                    value: "100 Vacancies",
+                    image:
+                      "https://avatars.githubusercontent.com/u/86160567?s=200&v=4",
+                  },
+                  {
+                    id: 3,
+                    name: "CodeLabs",
+                    email: "codelabs@gmail.com",
+                    value: "100 Vacancies",
+                    image:
+                      "https://avatars.githubusercontent.com/u/86160567?s=200&v=4",
+                  },
+                ]}
+              />
+            </div>
+
             <GraphSummary
               imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Top Skills"
-              subtitle="All time"
+              title="Subscriptions"
+              subtitle="Count per Package"
               detailsLink="/"
             >
-              <TableCard
-                columns={[
-                  { key: "skill", label: "Skill" },
-                  { key: "percentage", label: "Percentage" },
-                ]}
-                rows={[
-                  { key: "1", skill: "React", percentage: 100 },
-                  { key: "2", skill: "React", percentage: 100 },
-                  { key: "3", skill: "React", percentage: 100 },
-                ]}
-              />
+              <RevenueChart />
             </GraphSummary>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Total Interviews"
                 amount={100}
                 percentageChange={10}
               />
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Shortlisted"
                 amount={100}
                 percentageChange={10}
               />
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Tickets Open"
                 amount={100}
                 percentageChange={10}
               />
             </div>
-            <GraphSummary
-              imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Demographics"
-              subtitle="Location"
-              detailsLink="/"
-            >
-              <RevenueChart />
-            </GraphSummary>
-            <GraphSummary
-              imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Demographics"
-              subtitle="Industry"
-              detailsLink="/"
-            >
-              <RevenueChart />
-            </GraphSummary>
           </div>
         </div>
 
@@ -318,54 +362,48 @@ export default function content() {
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Moderators
           </h5>
-          <div className="grid md:grid-cols-4 grid-cols-1 gap-6">
+          <div className="grid md:grid-cols-3 grid-cols-1 gap-6">
             <GraphSummary
               imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Top Skills"
+              title="Top Contributers"
               subtitle="All time"
               detailsLink="/"
             >
               <TableCard
                 columns={[
-                  { key: "skill", label: "Skill" },
-                  { key: "percentage", label: "Percentage" },
+                  { key: "name", label: "Name" },
+                  { key: "completedtickets", label: "Completed Tickets" },
                 ]}
                 rows={[
-                  { key: "1", skill: "React", percentage: 100 },
-                  { key: "2", skill: "React", percentage: 100 },
-                  { key: "3", skill: "React", percentage: 100 },
+                  { key: "1", name: "John Doe", completedtickets: 100 },
+                  { key: "2", name: "John Doe", completedtickets: 100 },
+                  { key: "3", name: "John Doe", completedtickets: 100 },
+                  { key: "4", name: "John Doe", completedtickets: 100 },
                 ]}
               />
             </GraphSummary>
             <div className="flex flex-col gap-6">
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Open Tickets"
                 amount={100}
                 percentageChange={10}
               />
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Completed Tickets"
                 amount={100}
                 percentageChange={10}
               />
               <SummaryNumber
-                analyticName="Profile Completion"
+                analyticName="Complaints"
                 amount={100}
                 percentageChange={10}
               />
             </div>
+
             <GraphSummary
               imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Demographics"
-              subtitle="Location"
-              detailsLink="/"
-            >
-              <RevenueChart />
-            </GraphSummary>
-            <GraphSummary
-              imageUrl="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              title="Demographics"
-              subtitle="Industry"
+              title="Support tickets"
+              subtitle=""
               detailsLink="/"
             >
               <RevenueChart />

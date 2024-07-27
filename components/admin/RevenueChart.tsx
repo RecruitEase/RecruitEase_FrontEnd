@@ -13,7 +13,7 @@ class RevenueChartClass extends PureComponent {
 
   render() {
     return (
-      <ResponsiveContainer width="100%" height={150}>
+      <ResponsiveContainer width="100%" height={130}>
         <PieChart>
           <Pie
             dataKey="value"
@@ -21,7 +21,7 @@ class RevenueChartClass extends PureComponent {
             data={data01}
             cx="50%"
             cy="50%"
-            outerRadius={40}
+            outerRadius={25}
             fill="#8884d8"
             label
           />
