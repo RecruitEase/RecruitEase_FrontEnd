@@ -140,6 +140,41 @@ declare interface ApplicationProps{
 }
 
 
+//for chat.......................
+
+
+
+interface LastMessage {
+  content: string;
+  timestamp: string;
+}
+
+interface SenderProp {
+  img: string;
+  name: string;
+  lastMsg: LastMessage;
+  unreadCount: number;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
