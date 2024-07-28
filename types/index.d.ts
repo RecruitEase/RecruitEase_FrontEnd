@@ -167,6 +167,8 @@ interface MsgProp {
 interface ChatMsgProp {
   sender:SenderProp;
   msg:MsgProp;
+
+  isSenderLoggedUser?:boolean;
 }
 
 

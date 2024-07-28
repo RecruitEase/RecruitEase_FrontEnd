@@ -1,10 +1,10 @@
 import { ChatMsgProp } from '@/types'
 import React from 'react'
 import { Avatar } from '@nextui-org/react'
-function ChatMsg({sender,msg}:ChatMsgProp) {
+function ChatMsg({sender,msg,isSenderLoggedUser=false}:ChatMsgProp) {
   return (
-    <div className="flex gap-3">
-            <div className="relative flex-none">
+    <div className={`flex gap-3 ${isSenderLoggedUser ? 'flex-row-reverse' : ''}`} >
+            <div  className="relative flex-none">
             <Avatar src={sender.img} size="sm" />
                 
                     </div>
@@ -20,7 +20,12 @@ function ChatMsg({sender,msg}:ChatMsgProp) {
                                         </div>
                                         <div className="mt-2 text-small text-default-900">
                                             {msg.content}
-                                            
+                                            {msg.img &&(
+                                              <div>
+                                                <img src={msg.img} className="w-full h-auto object-cover mt-2" />
+                                              </div>
+
+                                            )}
                                             </div>
                                             </div>
                                             </div>
