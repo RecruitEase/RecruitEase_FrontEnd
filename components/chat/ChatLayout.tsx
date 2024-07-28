@@ -186,7 +186,22 @@ function ChatLayout() {
                   </CardBody>
                 </Card>
               </Tab>
-              <Tab key="unread" title="Unread"></Tab>
+              <Tab key="unread" title="Unread">
+              <Card className="h-[615px] shadow-none border-none ">
+                  <CardBody className="flex flex-col gap-3">
+                    {senders.map((sender, index) => {
+                      if(sender.unreadCount > 0){
+                      return(
+                      <ChatUser
+                        handleClick={handleUserClick}
+                        key={index}
+                        sender={sender}
+                      />
+                    )}})}
+                  </CardBody>
+                </Card>
+
+              </Tab>
             </Tabs>
           </div>
         </div>
@@ -215,6 +230,11 @@ function ChatLayout() {
                     Offline
                   </div>
                 )}
+              </div>
+              <div className="col-start-9 col-end-13 row-span-2 flex items-center justify-center">
+<Button className="bg-recruitBlue text-whiteText">
+  Check Profile
+</Button>
               </div>
             </div>
             <div className="flex flex-col gap-3 h-[640px] p-5 overflow-y-scroll">
