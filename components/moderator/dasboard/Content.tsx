@@ -7,6 +7,7 @@ import { DataCard2 } from "./DataCard2";
 import DataCard from "./DataCard";
 import PieChartCard from "./PieChart";
 import TableCard from "./TableCard";
+import MTicketsTable from "./LatestRequests";
 
 const requestsFromUsers = [
   {
@@ -21,15 +22,15 @@ const requestsFromUsers = [
 
 const tickets = [
   {
-    name: "opened",
+    name: "Underreview",
     value: 1000,
   },
   {
-    name: "in-progress",
+    name: "Resolved",
     value: 1000,
   },
   {
-    name: "resolved",
+    name: "Rejected",
     value: 1000,
   },
 ];
@@ -56,19 +57,19 @@ export default function Content() {
                 <div className="grid grid-cols-1 gap-3">
                   <div className="flex flex-row gap-3">
                     <DataCard2
-                      analyticName="Opened"
+                      analyticName="Under Review"
                       amount={1000}
                       percentageChange={10}
                     />
                     <DataCard2
-                      analyticName="In-Progress"
+                      analyticName="Rejected"
                       amount={1000}
                       percentageChange={10}
                     />
                   </div>
                   <div className="flex flex-row gap-3">
                     <DataCard2
-                      analyticName="Resolved"
+                      analyticName="Rejected"
                       amount={1000}
                       percentageChange={10}
                     />
@@ -105,7 +106,7 @@ export default function Content() {
 
       <div className="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col gap-6 w-full max-w-[90rem] mx-auto mt-6">
         <div className="flex justify-between items-center">
-          <h3 className="text-xl font-semibold">Support Requests</h3>
+          <h3 className="text-xl font-semibold">Latest Support Requests</h3>
           <Link
             href="/accounts"
             as={NextLink}
@@ -115,10 +116,7 @@ export default function Content() {
             View All
           </Link>
         </div>
-        <div className="grid md:grid-cols-3 grid-cols-1 gap-6">
-          {/* User cards */}
-          content
-        </div>
+        <MTicketsTable />
       </div>
 
       <div className="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col gap-6 w-full max-w-[90rem] mx-auto mt-6">
@@ -181,17 +179,17 @@ export default function Content() {
               percentageChange={10}
             />
             <DataCard2
-              analyticName="Opened Tickets"
-              amount={1000 + " Tickets"}
-              percentageChange={10}
-            />
-            <DataCard2
-              analyticName="In-Progress Tickets"
+              analyticName="Under Review Tickets"
               amount={1000 + " Tickets"}
               percentageChange={10}
             />
             <DataCard2
               analyticName="Resolved Tickets"
+              amount={1000 + " Tickets"}
+              percentageChange={10}
+            />
+            <DataCard2
+              analyticName="Rejected Tickets"
               amount={1000 + " Tickets"}
               percentageChange={10}
             />
@@ -259,17 +257,17 @@ export default function Content() {
               percentageChange={10}
             />
             <DataCard2
-              analyticName="Opened Tickets"
-              amount={1000 + " Tickets"}
-              percentageChange={10}
-            />
-            <DataCard2
-              analyticName="In-Progress Tickets"
+              analyticName="Underreview Tickets"
               amount={1000 + " Tickets"}
               percentageChange={10}
             />
             <DataCard2
               analyticName="Resolved Tickets"
+              amount={1000 + " Tickets"}
+              percentageChange={10}
+            />
+            <DataCard2
+              analyticName="Rejected Tickets"
               amount={1000 + " Tickets"}
               percentageChange={10}
             />
