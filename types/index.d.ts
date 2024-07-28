@@ -154,11 +154,20 @@ interface SenderProp {
   name: string;
   lastMsg: LastMessage;
   unreadCount: number;
+  isOnline:boolean;
+}
+
+interface MsgProp {
+  content:string;
+  img?:string;
+  timestamp:string;
 }
 
 
-
-
+interface ChatMsgProp {
+  sender:SenderProp;
+  msg:MsgProp;
+}
 
 
 

@@ -4,9 +4,9 @@ import { Chip, Avatar } from "@nextui-org/react";
 
 function ChatUser(sender: SenderProp) {
   return (
-    <div className="grid grid-cols-12 gap-1 gap-y-0 grid-rows-2 h-[65px] rounded-md hover:bg-gray-200 cursor-pointer">
-      <div className="col-start-1 col-end-3 row-start-1 row-end-3 flex overflow-hidden justify-center items-center">
-        {" "}
+    <div className="grid grid-cols-12 gap-1 gap-y-0 grid-rows-2 h-[60px] rounded-md hover:bg-gray-200 cursor-pointer">
+      <div className="col-start-1 col-end-3 row-start-1 row-end-3 flex overflow-hidden justify-center items-center ">
+        
         <Avatar src={sender.img} size="lg" />
       </div>
       <div className="col-start-3 col-end-11 row-start-1 row-end-2 flex overflow-hidden justify-start items-end font-semibold">
