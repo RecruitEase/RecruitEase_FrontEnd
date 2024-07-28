@@ -140,6 +140,52 @@ declare interface ApplicationProps{
 }
 
 
+//for chat.......................
+
+
+
+interface LastMessage {
+  content: string;
+  timestamp: string;
+}
+
+interface SenderProp {
+  img: string;
+  name: string;
+  lastMsg: LastMessage;
+  unreadCount: number;
+  isOnline:boolean;
+}
+
+interface MsgProp {
+  content:string;
+  img?:string;
+  timestamp:string;
+}
+
+
+interface ChatMsgProp {
+  sender:SenderProp;
+  msg:MsgProp;
+
+  isSenderLoggedUser?:boolean;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
