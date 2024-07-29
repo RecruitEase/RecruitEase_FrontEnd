@@ -39,6 +39,7 @@ import React, {useState} from "react";
 import Image from "next/image";
 import {useTheme} from "next-themes";
 import {signOut, useSession} from "next-auth/react";
+import {UserDropdown} from "@/components/dashboard_navbar/user-dropdown";
 
 
 
@@ -142,55 +143,7 @@ export const Navbar = () => {
               Home
             </Link>
           </NavbarItem>
-          <Dropdown>
-            <NavbarItem>
-              <DropdownTrigger>
-                <Button
-                    disableRipple
-                    className="p-0 bg-transparent data-[hover=true]:bg-transparent text-medium"
-                    endContent={icons.chevron}
-                    radius="sm"
-                    variant="light"
-                >
-                  Explore
-                </Button>
-              </DropdownTrigger>
-            </NavbarItem>
-            <DropdownMenu
-                aria-label="ACME features"
-                className="w-[340px]"
-                itemClasses={{
-                  base: "gap-4",
-                }}
-            >
-              <DropdownItem
-                  key="supreme_support"
-                  description="Checkout all listed job vacancies."
-                  startContent={icons.user}
-                  href={"jobs"}
-              >
-                All Jobs
-              </DropdownItem>
-              <DropdownItem
-                  key="99_uptime"
-                  description="Explore different job categories."
-                  startContent={icons.server}
-                  href={"/jobs/categories"}
-              >
-                Categories
-              </DropdownItem>
-              <DropdownItem
-                  key="production_ready"
-                  description="Job vacancies recommended for you."
-                  startContent={icons.flash}
-                  href={"/recommendations"}
-              >
-                Recommendations
-              </DropdownItem>
 
-
-            </DropdownMenu>
-          </Dropdown>
 
           <NavbarItem>
             <Link color="foreground" href="/about">
@@ -240,48 +193,50 @@ export const Navbar = () => {
                 </NavbarItem>
               </>
           ) : (
-              <Dropdown placement="bottom-end">
-                <DropdownTrigger>
-                  <Avatar
-                      isBordered
-                      as="button"
-                      className="transition-transform"
-                      color="secondary"
-                      name="Jason Hughes"
-                      size="sm"
-                      src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  />
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Profile Actions" variant="flat">
+              <UserDropdown />
 
-
-                  {avatarItems.map((item, index) => {
-                    if (index == avatarItems.length - 1) {
-                      return (
-                          <DropdownItem key={"logout-key"} color={"danger"} onClick={()=>signOut()}>
-                            Log Out
-                          </DropdownItem>
-                      )
-                    } else if (index == 0) {
-                      return (
-                          <DropdownItem key="profile" className="h-14 gap-2">
-                            <p className="font-semibold">Signed in as</p>
-                            <p className="font-semibold">{user?.email}</p>
-                          </DropdownItem>
-
-                      )
-                    } else {
-                      return (
-                          <DropdownItem key={`${item.label}-${index}`} href={item.url}>
-                            {item.label}
-                          </DropdownItem>
-                      )
-                    }
-                  })}
-
-
-                </DropdownMenu>
-              </Dropdown>
+              // <Dropdown placement="bottom-end">
+              //   <DropdownTrigger>
+              //     <Avatar
+              //         isBordered
+              //         as="button"
+              //         className="transition-transform"
+              //         color="secondary"
+              //         name="Jason Hughes"
+              //         size="sm"
+              //         src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              //     />
+              //   </DropdownTrigger>
+              //   <DropdownMenu aria-label="Profile Actions" variant="flat">
+              //
+              //
+              //     {avatarItems.map((item, index) => {
+              //       if (index == avatarItems.length - 1) {
+              //         return (
+              //             <DropdownItem key={"logout-key"} color={"danger"} onClick={()=>signOut()}>
+              //               Log Out
+              //             </DropdownItem>
+              //         )
+              //       } else if (index == 0) {
+              //         return (
+              //             <DropdownItem key="profile" className="h-14 gap-2">
+              //               <p className="font-semibold">Signed in as</p>
+              //               <p className="font-semibold">{user?.email}</p>
+              //             </DropdownItem>
+              //
+              //         )
+              //       } else {
+              //         return (
+              //             <DropdownItem key={`${item.label}-${index}`} href={item.url}>
+              //               {item.label}
+              //             </DropdownItem>
+              //         )
+              //       }
+              //     })}
+              //
+              //
+              //   </DropdownMenu>
+              // </Dropdown>
           )}
 
         </NavbarContent>

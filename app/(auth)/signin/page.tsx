@@ -34,7 +34,7 @@ const SignIn = () => {
                 password: password.current,
                 redirect: false,
             });
-            // console.log("dsdes",result);
+            console.log("dsdes",result);
 
             if (result?.status == 200) {
                 toast.success('Logged in successfully!', {
