@@ -25,8 +25,8 @@ const Applications = () => {
           onSelectionChange={setSelected}
         >
           <Tab key="Application Stages" title="Application Stages">
-            <Card>
-              <CardBody>
+            <Card className="bg-transparent shadow-none">
+              <CardBody >
                 <ApplicationComponent />
               </CardBody>
             </Card>

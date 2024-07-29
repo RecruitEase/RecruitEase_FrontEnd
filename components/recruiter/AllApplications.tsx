@@ -7,8 +7,35 @@ import {
 } from "react-icons/md";
 import { Button } from "@nextui-org/react";
 import { FaPeopleArrows, FaHistory } from "react-icons/fa";
-import { Spinner } from "@nextui-org/react";
+import { Spinner ,Select,SelectItem} from "@nextui-org/react";
 import RecommendBtn from "./RecommendBtn";
+import { FaTag } from "react-icons/fa";
+
+const tabList = [
+  { key: "underReview", title: "Under Review", color: "#59cfa6" }, // Light Blue
+  {
+    key: "preScreeningPassed",
+    title: "Pre-Screening Passed",
+    color: "#827717",
+  }, // Light Green
+  {
+    key: "preScreeningFailed",
+    title: "Pre-Screening Failed",
+    color: "#B71C1C",
+  }, // Light Red
+  { key: "shortlisted", title: "Shortlisted", color: "#F57F17" }, // Light Yellow
+  {
+    key: "interviewScheduled",
+    title: "Interview Scheduled",
+    color: "#6A1B9A",
+  }, // Light Purple
+  { key: "interviewed", title: "Interviewed", color: "#006064" }, // Light Teal
+  { key: "offered", title: "Offered", color: "#E65100" }, // Light Orange
+  { key: "hired", title: "Hired", color: "#2E7D32" }, // Light Lime
+  { key: "rejected", title: "Rejected", color: "#880E4F" }, // Light Pink
+  { key: "archived", title: "Archived", color: "#424242" }, // Light Grey
+];
+
 
 interface ApplicationProps {
   name: string;
@@ -94,7 +121,40 @@ export default function AllApplications() {
         )}
       </div>
       <div className="relative col-span-5 bg-transparent rounded-lg overflow-hidden shadow-lg">
-        <div className="flex flex-col gap-2 justify-center items-center"></div>
+      <div
+                        className={
+                          "flex  flex-col gap-2 justify-center items-center"
+                        }
+                      >
+                        <Select
+                          label={"Move to"}
+                          placeholder="Select a status"
+                          className="max-w-xs col-span-6"
+                          size={"sm"}
+                          defaultSelectedKeys={["underReview"]}
+                        >
+                          {tabList.map((tab) => (
+                            <SelectItem key={tab.key}>{tab.title}</SelectItem>
+                          ))}
+                        </Select>
+                        <div className={"col-span-6 flex justify-end"}>
+                          <FaTag
+                            style={{
+                              fill: tabList.find(
+                                (obj) => obj.key == applicant.status
+                              ).color,
+                              display: "unset",
+                            }}
+                          />
+                          &nbsp;
+                          <span className="text-sm font-semibold text-gray-800 dark:text-white">
+                            {
+                              tabList.find((obj) => obj.key == applicant.status)
+                                .title
+                            }
+                          </span>
+                        </div>
+                      </div>
         <div className="border-b px-4 pb-6">
           <div className="grid grid-cols-12 gap-2 items-center justify-center"></div>
           <div className="text-center my-4">
