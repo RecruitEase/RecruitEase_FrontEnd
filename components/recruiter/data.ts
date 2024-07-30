@@ -235,7 +235,6 @@ const jobStats = [
             { key: "all", label: "All" },
             { key: "live", label: "Live" },
             { key: "archived", label: "Archived" },
-            { key: "confirmationPending", label: "Confirmation Pending" },
 
         ];
 
@@ -270,7 +269,7 @@ const jobStats = [
                 applications: 100,
                 createdDate: "2021-10-01",
                 lastUpdated: "2021-10-01",
-                status: "Confirmation Pending",
+                status: "archived",
             },
             {
                 id: 5,

@@ -27,7 +27,6 @@ import { capitalize } from "@/utils/stringUtils";
 const statusColorMap: Record<string, ChipProps["color"]> = {
   live: "success",
   archived: "danger",
-  confirmationPending: "warning",
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
@@ -41,7 +40,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 
 type Vacancy = (typeof vacancies)[0];
 
-export default function VacancyTable() {
+const VacancyTable = ({ filter }) => {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
@@ -80,6 +79,30 @@ export default function VacancyTable() {
       );
     }
 
+    if (filter.job !== "All") {
+      filteredVacancies = filteredVacancies.filter(
+        (vacancy) => vacancy.title === filter.job
+      );
+    }
+
+    if (filter.type !== "All") {
+      filteredVacancies = filteredVacancies.filter(
+        (vacancy) => vacancy.type === filter.type
+      );
+    }
+
+    if (filter.fromDate) {
+      filteredVacancies = filteredVacancies.filter(
+        (vacancy) => new Date(vacancy.createdDate) >= new Date(filter.fromDate)
+      );
+    }
+
+    if (filter.toDate) {
+      filteredVacancies = filteredVacancies.filter(
+        (vacancy) => new Date(vacancy.createdDate) <= new Date(filter.toDate)
+      );
+    }
+
     if (statusFilter.has("all")) {
       return filteredVacancies; // If "all" is selected, do not filter by status
     } else {
@@ -89,7 +112,7 @@ export default function VacancyTable() {
     }
 
     return filteredVacancies;
-  }, [vacancies, filterValue, statusFilter]);
+  }, [vacancies, filterValue, filter, statusFilter]);
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -361,4 +384,6 @@ export default function VacancyTable() {
       </TableBody>
     </Table>
   );
-}
+};
+
+export default VacancyTable;
