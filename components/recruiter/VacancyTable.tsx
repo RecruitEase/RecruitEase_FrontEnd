@@ -79,31 +79,31 @@ const VacancyTable = ({ filter }) => {
         vacancy.title.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
-
-    if (filter.job !== "All") {
-      filteredVacancies = filteredVacancies.filter(
+if(filter) {
+  if (filter.job !== "All") {
+    filteredVacancies = filteredVacancies.filter(
         (vacancy) => vacancy.title === filter.job
-      );
-    }
+    );
+  }
 
-    if (filter.type !== "All") {
-      filteredVacancies = filteredVacancies.filter(
+  if (filter.type !== "All") {
+    filteredVacancies = filteredVacancies.filter(
         (vacancy) => vacancy.type === filter.type
-      );
-    }
+    );
+  }
 
-    if (filter.fromDate) {
-      filteredVacancies = filteredVacancies.filter(
+  if (filter.fromDate) {
+    filteredVacancies = filteredVacancies.filter(
         (vacancy) => new Date(vacancy.createdDate) >= new Date(filter.fromDate)
-      );
-    }
+    );
+  }
 
-    if (filter.toDate) {
-      filteredVacancies = filteredVacancies.filter(
+  if (filter.toDate) {
+    filteredVacancies = filteredVacancies.filter(
         (vacancy) => new Date(vacancy.createdDate) <= new Date(filter.toDate)
-      );
-    }
-
+    );
+  }
+}
     if (statusFilter.has("all")) {
       return filteredVacancies; // If "all" is selected, do not filter by status
     } else {
@@ -140,38 +140,38 @@ const VacancyTable = ({ filter }) => {
         case "id":
           return (
             <div className="flex flex-col">
-              <p className="text-bold text-small">{cellValue}</p>
+              <p className="text-bold text-medium">{cellValue}</p>
               {/* <p className="text-bold text-tiny text-default-500">ID</p> */}
             </div>
           );
         case "title":
           return (
             <div className="flex flex-col">
-              <p className="text-bold text-small">{cellValue}</p>
+              <p className="text-bold text-medium">{cellValue}</p>
             </div>
           );
         case "status":
           return (
-            <Chip color={statusColorMap[cellValue]} size="sm">
+            <Chip color={statusColorMap[cellValue]} size="md">
               {capitalize(cellValue.toString())}
             </Chip>
           );
         case "applications":
           return (
             <div className="flex flex-col">
-              <p className="text-bold text-small">{cellValue}</p>
+              <p className="text-bold text-medium">{cellValue}</p>
             </div>
           );
         case "createdDate":
           return (
             <div className="flex flex-col">
-              <p className="text-bold text-small">{cellValue}</p>
+              <p className="text-bold text-medium">{cellValue}</p>
             </div>
           );
         case "lastUpdated":
           return (
             <div className="flex flex-col">
-              <p className="text-bold text-small">{cellValue}</p>
+              <p className="text-bold text-medium">{cellValue}</p>
             </div>
           );
         case "actions":
@@ -228,7 +228,7 @@ const VacancyTable = ({ filter }) => {
               inputWrapper: "border-1",
             }}
             placeholder="Search by name..."
-            size="sm"
+            size="md"
             startContent={<SearchIcon className="text-default-300" />}
             value={filterValue}
             variant="bordered"
@@ -239,8 +239,8 @@ const VacancyTable = ({ filter }) => {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
+                  endContent={<ChevronDownIcon className="text-medium" />}
+                  size="md"
                   variant="flat"
                 >
                   Status
@@ -264,8 +264,8 @@ const VacancyTable = ({ filter }) => {
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  size="sm"
+                  endContent={<ChevronDownIcon className="text-medium" />}
+                  size="md"
                   variant="flat"
                 >
                   Columns
@@ -289,13 +289,13 @@ const VacancyTable = ({ filter }) => {
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
+          <span className="text-default-400 text-medium">
             Total {vacancies.length} items
           </span>
-          <label className="flex items-center text-default-400 text-small">
+          <label className="flex items-center text-default-400 text-medium">
             Rows per page:
             <select
-              className="bg-transparent outline-none text-default-400 text-small"
+              className="bg-transparent outline-none text-default-400 text-medium"
               onChange={onRowsPerPageChange}
             >
               <option value="5">5</option>
@@ -331,7 +331,7 @@ const VacancyTable = ({ filter }) => {
           variant="light"
           onChange={setPage}
         />
-        <span className="text-small text-default-400">
+        <span className="text-medium text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
             : `${selectedKeys.size} of ${items.length} selected`}
@@ -382,9 +382,9 @@ const VacancyTable = ({ filter }) => {
       </TableHeader>
       <TableBody emptyContent={"No vacancies posted"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow className="cursor-pointer hover:bg-gray-100" key={item.id}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey.toString())}</TableCell>
+              <TableCell >{renderCell(item, columnKey.toString())}</TableCell>
             )}
           </TableRow>
         )}

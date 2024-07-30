@@ -245,7 +245,7 @@ const jobStats = [
                 applications: 100,
                 createdDate: "2021-10-01",
                 lastUpdated: "2021-10-01",
-                status: "Live",
+                status: "live",
             },
             {
                 id: 2,
@@ -261,7 +261,7 @@ const jobStats = [
                 applications: 100,
                 createdDate: "2021-10-01",
                 lastUpdated: "2021-10-01",
-                status: "Live",
+                status: "live",
             },
             {
                 id: 4,
@@ -277,7 +277,7 @@ const jobStats = [
                 applications: 100,
                 createdDate: "2021-10-01",
                 lastUpdated: "2021-10-01",
-                status: "Live",
+                status: "live",
             },
             {
                 id: 6,
@@ -285,7 +285,7 @@ const jobStats = [
                 applications: 100,
                 createdDate: "2021-10-01",
                 lastUpdated: "2021-10-01",
-                status: "Live",
+                status: "live",
             },
             {
                 id: 7,
@@ -293,7 +293,7 @@ const jobStats = [
                 applications: 100,
                 createdDate: "2021-10-01",
                 lastUpdated: "2021-10-01",
-                status: "Live",
+                status: "live",
             },
             {
                 id: 8,
@@ -301,7 +301,7 @@ const jobStats = [
                 applications: 100,
                 createdDate: "2021-10-01",
                 lastUpdated: "2021-10-01",
-                status: "Live",
+                status: "live",
             },
         ];
       
