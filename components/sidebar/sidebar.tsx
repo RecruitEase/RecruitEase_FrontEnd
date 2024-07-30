@@ -25,6 +25,9 @@ import {InterviewIcon} from "../icons/sidebar/Interview-icon";
 import {OffersIcon} from "../icons/sidebar/offers-icon";
 import { CVIcon } from "../icons/sidebar/cv-icon";
 import { ApplicationIcon } from "../icons/sidebar/application-icon";
+import { RecruiterIcon } from "../icons/sidebar/recruiter-icon";
+import { CandidateIcon } from "../icons/sidebar/candidate-icon";
+import { ModeratorIcon } from "../icons/sidebar/moderator-icon";
 
 declare interface SideBarProps {
     role: string;
@@ -162,6 +165,43 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                                     </>
                                 )
                             }
+
+                            {role == "admin" &&
+                                (
+                                    <>
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/manage-recruiters`)}
+                                            title="Manage Recruiters"
+                                            icon={<RecruiterIcon/>}
+                                            href={`/${role}/manage-recruiters`}
+                                        />
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/manage-candidates`)}
+                                            title="Manage JobSeekers"
+                                            icon={<CandidateIcon/>}
+                                            href={`/${role}/manage-candidates`}
+                                        />
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/manage-moderators`)}
+                                            title="Manage Moderators"
+                                            icon={<ModeratorIcon/>}
+                                            href={`/${role}/manage-moderators`}
+                                        />
+
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/reports`)}
+                                            title="Reports"
+                                            icon={<ReportsIcon/>}
+                                            href={`/${role}/reports`}
+                                        />
+
+
+
+                                    </>
+                                )
+                            }
+
+
                             <SidebarItem
                                 isActive={pathname === `/${role}/chat`}
                                 title="Chats"
@@ -173,7 +213,7 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
 
                         <SidebarMenu title="General">
 
-                            {role == "candidate" &&
+                            {role != "recruiter"  &&
                                 (<>
                                         <SidebarItem
                                             isActive={pathname.startsWith(`/${role}/edit-profile`)}
