@@ -23,6 +23,7 @@ import { ChevronDownIcon } from "./ChevronDownIcon";
 import { SearchIcon } from "./SearchIcon";
 import { vacancyColumns, vacancyStatusOptions, vacancies } from "./data";
 import { capitalize } from "@/utils/stringUtils";
+import { IoNewspaperSharp } from "react-icons/io5";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   live: "success",
@@ -140,7 +141,7 @@ const VacancyTable = ({ filter }) => {
           return (
             <div className="flex flex-col">
               <p className="text-bold text-small">{cellValue}</p>
-              <p className="text-bold text-tiny text-default-500">ID</p>
+              {/* <p className="text-bold text-tiny text-default-500">ID</p> */}
             </div>
           );
         case "title":
@@ -175,8 +176,21 @@ const VacancyTable = ({ filter }) => {
           );
         case "actions":
           return (
-            <div className="flex flex-col">
-              <CiEdit />
+            <div className="flex flex-row gap-4">
+              <div
+                onClick={() => (location.href = `/recruiter/vacancy/123/edit`)}
+                className="cursor-pointer"
+              >
+                <CiEdit />
+              </div>
+              <div
+                onClick={() =>
+                  (location.href = `/recruiter/vacancy/123/applications`)
+                }
+                className="cursor-pointer"
+              >
+                <IoNewspaperSharp />
+              </div>
             </div>
           );
         default:
@@ -348,14 +362,7 @@ const VacancyTable = ({ filter }) => {
       aria-label="Example table with custom cells, pagination and sorting"
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
-      checkboxesProps={{
-        classNames: {
-          wrapper: "after:bg-foreground after:text-background text-background",
-        },
-      }}
       classNames={classNames}
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
