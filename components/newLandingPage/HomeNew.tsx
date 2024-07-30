@@ -26,6 +26,37 @@ import Create from "@/app/(newDashoard)/candidate/cvs/create/page";
 import Link from "next/link";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { motion, useScroll } from "framer-motion";
+import man from '@/public/assets/man.png';
+import searchIcon from '@/public/assets/search.png';
+
+const wrapper = {
+  hidden:{
+      opacity:0
+  },
+  visible:{
+      opacity:1,
+      transition:{
+          staggerChildren:0.25,
+      }
+  }
+}
+
+const container = {
+  visible:{
+      transition:{
+          staggerChildren:0.025
+      }
+  }
+}
+
+const list = {
+  hidden:{opacity:0, x:-100},
+  visible:{
+      opacity:1,
+      x:0,
+      transition:{duration:0.5 , ease:[0.455, 0.03, 0.515, 0.955], delay:1}
+  }
+}
 const jobs: JobProps[] = [
   {
     key: 1,
@@ -196,28 +227,111 @@ const HomeNew = () => {
   return (
     <div className={"relative"}>
       <div className={"max-w-screen-2xl mx-auto overflow-hidden shadow-none "}>
-        <Card className="w-full h-fit mt-3 shadow-none">
-          {/*<CardHeader className="absolute z-10 top-1 flex-col items-start">*/}
-          {/*    <p className="text-tiny text-white/60 uppercase font-bold">RecruitEase</p>*/}
-          {/*    <h4 className="text-white/90 font-medium text-xl">Making Recruitment and Job Finding Easy</h4>*/}
-          {/*</CardHeader>*/}
-          <CardBody>
-            <Hero />
-          </CardBody>
-        </Card>
-        <h1 className="header-box-title">Recent Jobs</h1>
-        <EmblaCarouselJobs slides={SLIDES} options={OPTIONS} />
-        <h1 className="mt-6 header-box-title">Job Fields</h1>
-        <EmblaCarouselCategories slides={SLIDES_CATEGORIES} options={OPTIONS} />
 
-        <Apps />
+
+        <div className="flex justify-center h-[600px] bg-recruitBlue text-white">
+          <div className="w-[1400px] flex items-center">
+            <div className="flex flex-col gap-[30px]">
+              <motion.h1   initial='hidden' animate='visible' variants={wrapper} className="text-[50px]">
+                Find the perfect <i className="font-light"> job opportunities </i> for your career growth
+              </motion.h1>
+              <div className="flex items-center justify-between bg-white rounded-md">
+                <div className="flex items-center w-full gap-[10px]">
+                  <img src="/assets/search.png" alt="search image" className="w-[20px] h-[20px] m-[10px]"/>
+                  <input
+            type="text"
+            placeholder='Try "software developer"'
+            className="text-black border-none outline-none w-full"
+          />
+                </div>
+                <button
+                    className="w-[120px] h-[50px] bg-success text-white border-none rounded-tr-md rounded-br-md cursor-pointer">
+                  Search
+                </button>
+              </div>
+              <div className="flex items-center gap-[10px]">
+                <span>Popular: </span>
+                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Software Engineer</button>
+                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">FrontEnd Dev</button>
+                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Sales Executive</button>
+                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Project Manager</button>
+              </div>
+              <motion.ul initial='hidden' animate='visible' variants={wrapper} className='text-white space-y-2'>
+                        <motion.li variants={list} className='flex gap-3'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                 className="fill-current h-5 shrink-0 mt-0.5">
+                                <path
+                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                            </svg>
+                            <span>Apply for jobs with ease</span>
+                        </motion.li>
+                        <motion.li variants={list} className='flex gap-3 '>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                 className="fill-current h-5 shrink-0 mt-0.5">
+                                <path
+                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                            </svg>
+                            <span>Receive personalized job recommendations</span>
+                        </motion.li>
+                        <motion.li variants={list} className='flex gap-3'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                 className="fill-current h-5 shrink-0 mt-0.5">
+                                <path
+                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                            </svg>
+                            <span>Create and manage your CV and portfolio</span>
+                        </motion.li>
+                        <motion.li variants={list} className='flex gap-3'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                 className="fill-current h-5 shrink-0 mt-0.5">
+                                <path
+                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                            </svg>
+                            <span>Participate in online interviews through the platform </span>
+                        </motion.li>
+                    </motion.ul>
+                    <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 1.5}}
+                                className=' flex flex-col items-center sm:flex-row gap-3'>
+                            <Button color={"success"} href={"/jobs"} as={Link} >
+                                Get Started
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                     className="fill-current h-3.5 ">
+                                    <path
+                                        d="M429.8 273l17-17-17-17L276.2 85.4l-17-17-33.9 33.9 17 17L354.9 232 24 232 0 232l0 48 24 0 330.8 0L242.2 392.6l-17 17 33.9 33.9 17-17L429.8 273z"></path>
+                                </svg>
+                            </Button>
+
+                    </motion.div>
+            </div>
+            <motion.div initial={{opacity: 0, x: -300}} animate={{opacity: 1, x: 0}}
+                                transition={{duration: 0.5, delay: 1.5}} className='h-full lg:block hidden'>
+              <img src="/assets/man.png" alt="man image" className="h-full max-w-max"/>
+              </motion.div>
+          </div>
+        </div>
+
+
+
+        {/* <Card className="w-full h-fit mt-3 shadow-none">
+          <CardBody>
+            <Hero/>
+          </CardBody>
+        </Card> */}
         
+        <h1 className="header-box-title mt-5">Recent Jobs</h1>
+        <EmblaCarouselJobs slides={SLIDES} options={OPTIONS}/>
+        <h1 className="mt-6 header-box-title">Job Fields</h1>
+        <EmblaCarouselCategories slides={SLIDES_CATEGORIES} options={OPTIONS}/>
+
+        <Apps/>
+
         <section className="text-gray-700 body-font">
           <div className="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-            <div className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
+            <div
+                className="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
               <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
                 Don&apos;t have a CV?
-                <br />
+                <br/>
                 We got you!
               </h1>
               <p className="mb-8 leading-relaxed">
@@ -232,9 +346,9 @@ const HomeNew = () => {
               </p>
               <div className="flex justify-center">
                 <Button
-                  as={Link}
-                  href="/candidate/cv/create"
-                  className="inline-flex text-white bg-recruitBlue border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+                    as={Link}
+                    href="/candidate/cv/create"
+                    className="inline-flex text-white bg-recruitBlue border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
                 >
                   Create CV Now
                 </Button>
@@ -242,27 +356,28 @@ const HomeNew = () => {
             </div>
             <div className="lg:w-full md:w-1/2 w-5/6">
               <img
-                className="object-cover object-center rounded"
-                alt="hero"
-                src="/assets/landing/cv2.png"
+                  className="object-cover object-center rounded"
+                  alt="hero"
+                  src="/assets/landing/cv2.png"
               />
             </div>
           </div>
         </section>
 
         <h1 className="text-center text-4xl font-bold leading-tight text-gray-900 sm:text-5xl sm:leading-tight lg:leading-tight lg:text-6xl font-pj">
-        Not Just for Job Seekers, but Also a Powerful Tool for <span className="text-recruitBlue">Recruiters</span>!
-                  </h1>
+          Not Just for Job Seekers, but Also a Powerful Tool for <span className="text-recruitBlue">Recruiters</span>!
+        </h1>
 
         <motion.section
-          initial={{ opacity: 0, scale: 0.7 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          className='"pt-12 pb-12 sm:pb-16 lg:pt-8'
+            initial={{opacity: 0, scale: 0.7}}
+            whileInView={{opacity: 1, scale: 1}}
+            viewport={{once: true}}
+            transition={{delay: 0.5, duration: 0.5}}
+            className='"pt-12 pb-12 sm:pb-16 lg:pt-8'
         >
           <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div className="grid max-w-lg grid-cols-1 mx-auto lg:max-w-full lg:items-center lg:grid-cols-2 gap-y-12 lg:gap-x-16">
+            <div
+                className="grid max-w-lg grid-cols-1 mx-auto lg:max-w-full lg:items-center lg:grid-cols-2 gap-y-12 lg:gap-x-16">
               <div>
                 <div className="text-center lg:text-left">
                   <h1 className="text-3xl font-bold leading-tight text-gray-900 sm:text-4xl sm:leading-tight lg:leading-tight lg:text-5xl font-pj">
@@ -283,65 +398,65 @@ const HomeNew = () => {
                 <div className="flex items-center justify-center mt-10 space-x-6 lg:justify-start sm:space-x-8">
                   <div className="flex items-center">
                     <p className="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">
-                      <AnimatedCounter end={1000} duration={3} />+
+                      <AnimatedCounter end={1000} duration={3}/>+
                     </p>
                     <p className="ml-3 text-sm text-gray-900 font-pj">
                       Recruiters
-                      <br />
+                      <br/>
                       Registered
                     </p>
                   </div>
 
                   <div className="hidden sm:block">
                     <svg
-                      className="text-gray-400"
-                      width="16"
-                      height="39"
-                      viewBox="0 0 16 39"
-                      fill="none"
-                      stroke="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
+                        className="text-gray-400"
+                        width="16"
+                        height="39"
+                        viewBox="0 0 16 39"
+                        fill="none"
+                        stroke="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
                     >
                       <line
-                        x1="0.72265"
-                        y1="10.584"
-                        x2="15.7226"
-                        y2="0.583975"
+                          x1="0.72265"
+                          y1="10.584"
+                          x2="15.7226"
+                          y2="0.583975"
                       ></line>
                       <line
-                        x1="0.72265"
-                        y1="17.584"
-                        x2="15.7226"
-                        y2="7.58398"
+                          x1="0.72265"
+                          y1="17.584"
+                          x2="15.7226"
+                          y2="7.58398"
                       ></line>
                       <line
-                        x1="0.72265"
-                        y1="24.584"
-                        x2="15.7226"
-                        y2="14.584"
+                          x1="0.72265"
+                          y1="24.584"
+                          x2="15.7226"
+                          y2="14.584"
                       ></line>
                       <line
-                        x1="0.72265"
-                        y1="31.584"
-                        x2="15.7226"
-                        y2="21.584"
+                          x1="0.72265"
+                          y1="31.584"
+                          x2="15.7226"
+                          y2="21.584"
                       ></line>
                       <line
-                        x1="0.72265"
-                        y1="38.584"
-                        x2="15.7226"
-                        y2="28.584"
+                          x1="0.72265"
+                          y1="38.584"
+                          x2="15.7226"
+                          y2="28.584"
                       ></line>
                     </svg>
                   </div>
 
                   <div className="flex items-center">
                     <p className="text-3xl font-medium text-gray-900 sm:text-4xl font-pj">
-                      <AnimatedCounter end={20000} duration={3} />+
+                      <AnimatedCounter end={20000} duration={3}/>+
                     </p>
                     <p className="ml-3 text-sm text-gray-900 font-pj">
                       Job Positions
-                      <br />
+                      <br/>
                       Filled
                     </p>
                   </div>
@@ -350,16 +465,16 @@ const HomeNew = () => {
 
               <div>
                 <img
-                  className="w-full"
-                  src="/assets/landing/illustration.png"
-                  alt=""
+                    className="w-full"
+                    src="/assets/landing/illustration.png"
+                    alt=""
                 />
               </div>
             </div>
           </div>
         </motion.section>
-        <Comparison />
-        <Footer />
+        <Comparison/>
+        <Footer/>
       </div>
     </div>
   );
