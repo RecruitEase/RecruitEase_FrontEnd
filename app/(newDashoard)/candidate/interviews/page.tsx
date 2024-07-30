@@ -135,7 +135,7 @@ const InterviewsOffers = () => {
         <div>
             {myPopUp}
             <header className="home-header">
-                <HeaderBox type="title" title="Interview Offers" subtext="Upcoming interviews list is here." />
+                <HeaderBox type="title" title="Scheduled Interviews" subtext="Upcoming interviews list is here." />
             </header>
 
             {/*<Button onPress={popupview}> ll</Button>*/}

@@ -21,8 +21,10 @@ import {ChangeLogIcon} from "../icons/sidebar/changelog-icon";
 import {usePathname} from "next/navigation";
 import Image from "next/image";
 import {useTheme} from "next-themes";
-import { InterviewIcon } from "../icons/sidebar/Interview-icon";
-import { OffersIcon } from "../icons/sidebar/offers-icon";
+import {InterviewIcon} from "../icons/sidebar/Interview-icon";
+import {OffersIcon} from "../icons/sidebar/offers-icon";
+import { CVIcon } from "../icons/sidebar/cv-icon";
+import { ApplicationIcon } from "../icons/sidebar/application-icon";
 
 declare interface SideBarProps {
     role: string;
@@ -59,59 +61,107 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                 </div>
                 <div className="flex flex-col justify-between h-full">
                     <div className={Sidebar.Body()}>
-                        <SidebarItem
-                            title={"Dashboard"}
-                            icon={<HomeIcon/>}
-                            isActive={pathname === `/${role}`}
-                            href={`/${role}`}
-                        />
-                        <SidebarMenu title="Main Menu">
-                            <SidebarItem
-                                isActive={pathname === `/${role}/profile`}
+                        {role == "candidate" &&
+                            (<SidebarItem
+                                isActive={pathname === `/${role}`}
                                 title="Profile"
                                 icon={<AccountsIcon/>}
-                                href={`/${role}/profile`}
-                            />
+                                href={`/${role}`}
+                            />)}
+
+                        {role != "candidate" &&
+                            (<SidebarItem
+                                title={"Dashboard"}
+                                icon={<HomeIcon/>}
+                                isActive={pathname === `/${role}`}
+                                href={`/${role}`}
+                            />)}
+
+
+                        <SidebarMenu title="Main Menu">
+
 
                             {role == "recruiter" &&
                                 (
                                     <>
-
+                                        <SidebarItem
+                                            isActive={pathname === `/${role}/profile`}
+                                            title="Profile"
+                                            icon={<AccountsIcon/>}
+                                            href={`/${role}/profile`}
+                                        />
                                         <SidebarItem
                                             isActive={pathname.startsWith(`/${role}/vacancy`) || pathname.startsWith(`/${role}/candidateProfileView`)}
                                             title="Vacancies"
                                             icon={<ProductsIcon/>}
                                             href={`/${role}/vacancy`}
                                         />
-                                      <SidebarItem
-                                          isActive={pathname === `/${role}/post`}
-                                          title="Post a Job"
-                                          icon={<ReportsIcon/>}
-                                          href={`/${role}/post`}
-                                      />
-                                      <SidebarItem
-                                          isActive={pathname.startsWith(`/${role}/interviews`) }
-                                          title="Interviews"
-                                          icon={<InterviewIcon/>}
-                                          href={`/${role}/interviews`}
-                                      />
+                                        <SidebarItem
+                                            isActive={pathname === `/${role}/post`}
+                                            title="Post a Job"
+                                            icon={<ReportsIcon/>}
+                                            href={`/${role}/post`}
+                                        />
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/interviews`)}
+                                            title="Interviews"
+                                            icon={<InterviewIcon/>}
+                                            href={`/${role}/interviews`}
+                                        />
                                         <SidebarItem
                                             isActive={pathname === `/${role}/joboffers`}
                                             title="Job Offers"
                                             icon={<OffersIcon/>}
                                             href={`/${role}/joboffers`}
                                         />
-                                      <SidebarItem
-                                          isActive={pathname === `/${role}/tickets`}
-                                          title="Tickets"
-                                          icon={<BalanceIcon/>}
-                                          href={`/${role}/tickets`}
-                                      />
+                                        <SidebarItem
+                                            isActive={pathname === `/${role}/tickets`}
+                                            title="Tickets"
+                                            icon={<BalanceIcon/>}
+                                            href={`/${role}/tickets`}
+                                        />
 
                                     </>
                                 )
                             }
 
+                            {role == "candidate" &&
+                                (
+                                    <>
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/applications`)}
+                                            title="Applications"
+                                            icon={<ApplicationIcon/>}
+                                            href={`/${role}/applications`}
+                                        />
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/cvs`)}
+                                            title="CV Library"
+                                            icon={<CVIcon/>}
+                                            href={`/${role}/cvs`}
+                                        />
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/interviews`)}
+                                            title="Interviews"
+                                            icon={<InterviewIcon/>}
+                                            href={`/${role}/interviews`}
+                                        />
+                                        <SidebarItem
+                                            isActive={pathname === `/${role}/joboffers`}
+                                            title="Job Offers"
+                                            icon={<OffersIcon/>}
+                                            href={`/${role}/joboffers`}
+                                        />
+                                        <SidebarItem
+                                            isActive={pathname === `/${role}/tickets`}
+                                            title="Tickets"
+                                            icon={<BalanceIcon/>}
+                                            href={`/${role}/tickets`}
+                                        />
+
+                                    </>
+                                )
+                            }
                             <SidebarItem
                                 isActive={pathname === `/${role}/chat`}
                                 title="Chats"
@@ -123,19 +173,36 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
 
                         <SidebarMenu title="General">
 
-                            <SidebarItem
-                                isActive={pathname === `/${role}/settings`}
-                                title="Settings"
-                                icon={<SettingsIcon/>}
-                            />
-                            {role == "recruiter" &&
-                                (
+                            {role == "candidate" &&
+                                (<>
                                         <SidebarItem
-                                            isActive={pathname === `/${role}/subscription`}
-                                            title="Subscription"
-                                            icon={<PaymentsIcon/>}
-                                            href={`/${role}/subscription`}
+                                            isActive={pathname.startsWith(`/${role}/edit-profile`)}
+                                            title="Edit Profile"
+                                            icon={<SettingsIcon/>}
+                                            href={`/${role}/edit-profile`}
                                         />
+
+
+                                    </>
+                                )
+                            }
+
+                            {role == "recruiter" &&
+                                (<>
+                                    <SidebarItem
+                                        isActive={pathname === `/${role}/settings`}
+                                        title="Settings"
+                                        icon={<SettingsIcon/>}
+                                        href={`/${role}/settings`}
+                                    />
+
+                                    <SidebarItem
+                                        isActive={pathname === `/${role}/subscription`}
+                                        title="Subscription"
+                                        icon={<PaymentsIcon/>}
+                                        href={`/${role}/subscription`}
+                                    />
+                                    </>
                                 )
                             }
                         </SidebarMenu>
