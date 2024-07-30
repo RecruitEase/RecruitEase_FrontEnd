@@ -6,6 +6,9 @@ import { Button } from "@nextui-org/button";
 import "../../styles/globals.css";
 import {Input} from "@nextui-org/input";
 import {SearchIcon} from "@/components/icons";
+import Swal from "sweetalert2";
+import {Bounce, toast} from "react-toastify";
+import Link from "next/link";
 
 type Status = "Submitted" | "Under Review" | "Interview Called" | "Selected" | "Rejected" | "Withdrawn";
 
@@ -38,6 +41,58 @@ interface ApplicationStatusTableProps {
     users: Applicant[];
 }
 
+
+
+const popupview = () => {
+    Swal.fire({
+        title: "Do you want to withdraw the application?",
+        icon: "warning",
+        customClass: {
+            confirmButton: "bg-[#f31260]", // Custom class for confirm button
+            cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+        },
+        showCancelButton: true,
+        confirmButtonText: "Withdraw"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Simulate a successful withdrawal response
+            const result = {
+                status: 200
+            };
+            if (result?.status === 200) {
+                toast.success("Withdrawn successfully!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce
+                });
+            } else {
+                toast.error("Withdrawal failed!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce
+                });
+            }
+        }
+    });
+};
+
+const view=()=>{
+    window.location.href = '/candidate/applicationsView';
+}
+
+
 const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }) => {
     const renderCell = React.useCallback((user: Applicant, columnKey: string | number) => {
         const cellValue = user[columnKey as keyof Applicant];
@@ -46,9 +101,10 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
             case "position":
                 return (
                     <User
-                        avatarProps={{ radius: "lg", src: user.avatar }}
+                        avatarProps={{radius: "lg", src: user.avatar}}
                         description={user.companyName}
                         name={cellValue as string}
+
                     >
                         {user.companyName}
                     </User>
@@ -75,7 +131,7 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
             case "actions":
                 return (
                     user.status !== "Withdrawn" && (
-                        <Button className={"bg-blue-700 h-8"} color="primary">
+                        <Button className={"bg-blue-700 h-8"} color="primary" onPress={popupview}>
                             Withdraw
                         </Button>
                     )
@@ -105,7 +161,7 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
                     />
                 </div>
             </div>
-            <Table isStriped aria-label="Example table with custom cells">
+            <Table  aria-label="Example table with custom cells">
                 <TableHeader columns={columns}>
                     {(column) => (
                         <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
@@ -115,7 +171,7 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
                 </TableHeader>
                 <TableBody items={users}>
                     {(item) => (
-                        <TableRow key={item.id}>
+                        <TableRow key={item.id} className={"hover:cursor-pointer hover:bg-gray-100"} onClick={view}>
                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                         </TableRow>
                     )}
