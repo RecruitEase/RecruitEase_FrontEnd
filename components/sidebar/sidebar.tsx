@@ -201,6 +201,19 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                                 )
                             }
 
+                            {role == "moderator" &&
+                                (
+                                    <>
+                                        <SidebarItem
+                                            isActive={pathname.startsWith(`/${role}/tickets`)}
+                                            title="Manage Tickets"
+                                            icon={<BalanceIcon/>}
+                                            href={`/${role}/tickets`}
+                                        />
+                                    </>
+                                )
+                            }
+
 
                             <SidebarItem
                                 isActive={pathname === `/${role}/chat`}

@@ -8,7 +8,7 @@ function AllTickets() {
       <header className="home-header">
         <HeaderBox
           type="title"
-          title="All Tickets"
+          title="Manage Tickets"
           subtext="User can see all the tickets here."
         />
       </header>
