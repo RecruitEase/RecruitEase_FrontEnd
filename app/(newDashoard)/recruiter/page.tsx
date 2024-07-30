@@ -28,13 +28,12 @@ const RecruiterDashboard = () => {
           title="Dashboard"
           subtext="Manage you submitted applications from here"
         />
-          <div className="container mx-auto ">
-          <FilterBar />
-        </div>
         <div className="container mx-auto ">
           <DashboardCards />
         </div>
-      
+        <div className="container mx-auto ">
+          <FilterBar />
+        </div>
 
         <div className="container mx-auto ">
           <StatTable />
