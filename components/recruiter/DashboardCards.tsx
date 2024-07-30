@@ -15,7 +15,7 @@ function DashboardCards() {
     <div className="flex items-center space-x-9 justify-center">
       <DataCard2
         analyticName="Total Applications"
-        amount={10 + " Appns"}
+        amount={10}
         percentageChange={10}
       />
 

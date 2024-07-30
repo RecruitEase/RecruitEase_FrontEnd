@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card, CardBody } from "@nextui-org/react";
+import { vacancies } from "./data";
 
 interface FilterBarProps {
   onFilterChange: (filter: {
@@ -29,8 +30,11 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
           className="border border-gray-300 rounded-md p-2"
         >
           <option value="All">Choose a job</option>
-          <option value="all">All</option>
-          <option value="Software Engineer">Software Engineer</option>
+          {vacancies.map((vacancy) => (
+            <option key={vacancy.id} value={vacancy.title}>
+              {vacancy.title}
+            </option>
+          ))}
         </select>
         <select
           value={type}
