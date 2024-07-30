@@ -22,7 +22,11 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {useTheme} from "next-themes";
 
-export const SidebarWrapper = () => {
+declare interface SideBarProps{
+  role:string;
+}
+
+export const SidebarWrapper = ({role}:SideBarProps) => {
   const pathname = usePathname();
   const { collapsed, setCollapsed } = useSidebarContext();
 
@@ -54,17 +58,17 @@ export const SidebarWrapper = () => {
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>
             <SidebarItem
-              title="Home"
+              title={"Dashboard"}
               icon={<HomeIcon />}
-              isActive={pathname === "/"}
-              href="/"
+              isActive={pathname === `/${role}`}
+              href={`/${role}`}
             />
             <SidebarMenu title="Main Menu">
               <SidebarItem
-                isActive={pathname === "/accounts"}
-                title="Accounts"
+                isActive={pathname === `/${role}/profile`}
+                title="Profile"
                 icon={<AccountsIcon />}
-                href="accounts"
+                href={`/${role}/profile`}
               />
               <SidebarItem
                 isActive={pathname === "/payments"}

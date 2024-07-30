@@ -26,7 +26,7 @@ const RecruiterDashboard = () => {
         <HeaderBox
           type="title"
           title="Dashboard"
-          subtext="Manage you submitted applications from here"
+          subtext="Centralizing your hiring workflow"
         />
           <div className="container mx-auto ">
           <FilterBar />

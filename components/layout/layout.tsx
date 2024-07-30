@@ -8,9 +8,10 @@ import { SidebarContext } from "./layout-context";
 
 interface Props {
   children: React.ReactNode;
+  role?:"candidate"|"admin"|"recruiter"|"moderator";
 }
 
-export const Layout = ({ children }: Props) => {
+export const Layout = ({ children,role="candidate" }: Props) => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [_, setLocked] = useLockedBody(false);
   const handleToggleSidebar = () => {
@@ -25,7 +26,7 @@ export const Layout = ({ children }: Props) => {
         setCollapsed: handleToggleSidebar,
       }}>
       <section className='flex'>
-        <SidebarWrapper />
+        <SidebarWrapper role={role} />
         <NavbarWrapper>{children}</NavbarWrapper>
       </section>
     </SidebarContext.Provider>
