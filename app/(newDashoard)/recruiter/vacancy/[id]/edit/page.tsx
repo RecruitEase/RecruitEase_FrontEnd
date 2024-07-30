@@ -21,19 +21,21 @@ import {
   fieldValues,
 } from "@/components/recruiter/data";
 
+const job = {
+  jobTitle: "Software Engineer",
+  jobType: "full time",
+  locations: ["colombo", "galle"],
+  fields: ["Automobile", "Insurance"],
+  experienceLevel: 3,
+  educationLevel: 3,
+  overview: "This is a software engineer job",
+  description: "This is a software engineer job",
+  deadline: "2022-12-31",
+  image: "https://via.placeholder.com/150",
+};
+
 const EditVacancy = () => {
-  const job = {
-    jobTitle: "Software Engineer",
-    jobType: "full time",
-    locations: ["colombo", "galle"],
-    fields: ["Automobile", "Insurance"],
-    experienceLevel: 3,
-    educationLevel: 3,
-    overview: "This is a software engineer job",
-    description: "This is a software engineer job",
-    deadline: "2022-12-31",
-    image: "https://via.placeholder.com/150",
-  };
+
 
   const {
     register,

@@ -76,14 +76,9 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                             {role == "recruiter" &&
                                 (
                                     <>
+
                                         <SidebarItem
-                                            isActive={pathname === `/${role}/subscription`}
-                                            title="Subscription"
-                                            icon={<PaymentsIcon/>}
-                                            href={`/${role}/subscription`}
-                                        />
-                                        <SidebarItem
-                                            isActive={pathname === `/${role}/vacancy`}
+                                            isActive={pathname.startsWith(`/${role}/vacancy`) || pathname.startsWith(`/${role}/candidateProfileView`)}
                                             title="Vacancies"
                                             icon={<ProductsIcon/>}
                                             href={`/${role}/vacancy`}
@@ -117,11 +112,6 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                                 )
                             }
 
-                            <CollapseItems
-                                icon={<BalanceIcon/>}
-                                items={["Banks Accounts", "Credit Cards", "Loans"]}
-                                title="Balances"
-                            />
                             <SidebarItem
                                 isActive={pathname === `/${role}/chat`}
                                 title="Chats"
@@ -129,57 +119,47 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                                 href={`/${role}/chat`}
                             />
 
-                            <SidebarItem
-                                isActive={pathname === "/reports"}
-                                title="Reports"
-                                icon={<ReportsIcon/>}
-                            />
                         </SidebarMenu>
 
                         <SidebarMenu title="General">
+
                             <SidebarItem
-                                isActive={pathname === "/developers"}
-                                title="Developers"
-                                icon={<DevIcon/>}
-                            />
-                            <SidebarItem
-                                isActive={pathname === "/view"}
-                                title="View Test Data"
-                                icon={<ViewIcon/>}
-                            />
-                            <SidebarItem
-                                isActive={pathname === "/settings"}
+                                isActive={pathname === `/${role}/settings`}
                                 title="Settings"
                                 icon={<SettingsIcon/>}
                             />
+                            {role == "recruiter" &&
+                                (
+                                        <SidebarItem
+                                            isActive={pathname === `/${role}/subscription`}
+                                            title="Subscription"
+                                            icon={<PaymentsIcon/>}
+                                            href={`/${role}/subscription`}
+                                        />
+                                )
+                            }
                         </SidebarMenu>
 
-                        <SidebarMenu title="Updates">
-                            <SidebarItem
-                                isActive={pathname === "/changelog"}
-                                title="Changelog"
-                                icon={<ChangeLogIcon/>}
-                            />
-                        </SidebarMenu>
+
                     </div>
-                    <div className={Sidebar.Footer()}>
-                        <Tooltip content={"Settings"} color="primary">
-                            <div className="max-w-fit">
-                                <SettingsIcon/>
-                            </div>
-                        </Tooltip>
-                        <Tooltip content={"Adjustments"} color="primary">
-                            <div className="max-w-fit">
-                                <FilterIcon/>
-                            </div>
-                        </Tooltip>
-                        <Tooltip content={"Profile"} color="primary">
-                            <Avatar
-                                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                                size="sm"
-                            />
-                        </Tooltip>
-                    </div>
+                    {/*<div className={Sidebar.Footer()}>*/}
+                    {/*    <Tooltip content={"Settings"} color="primary">*/}
+                    {/*        <div className="max-w-fit">*/}
+                    {/*            <SettingsIcon/>*/}
+                    {/*        </div>*/}
+                    {/*    </Tooltip>*/}
+                    {/*    <Tooltip content={"Adjustments"} color="primary">*/}
+                    {/*        <div className="max-w-fit">*/}
+                    {/*            <FilterIcon/>*/}
+                    {/*        </div>*/}
+                    {/*    </Tooltip>*/}
+                    {/*    <Tooltip content={"Profile"} color="primary">*/}
+                    {/*        <Avatar*/}
+                    {/*            src="https://i.pravatar.cc/150?u=a042581f4e29026704d"*/}
+                    {/*            size="sm"*/}
+                    {/*        />*/}
+                    {/*    </Tooltip>*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </aside>
