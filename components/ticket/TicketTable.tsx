@@ -283,7 +283,7 @@ export default function TicketTable() {
     switch (columnKey) {
       case "status":
         return (
-          <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
+          <Chip className="capitalize min-w-24 text-center" color={statusColorMap[user.status]} size="sm" variant="flat">
             {cellValue}
           </Chip>
         );

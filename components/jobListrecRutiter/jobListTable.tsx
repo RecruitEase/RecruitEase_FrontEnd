@@ -31,7 +31,7 @@ const capitalize=(str: string) => {
 }
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
-    conformed: "success",
+    confirmed: "success",
     canceled: "danger",
     hold: "warning",
 };

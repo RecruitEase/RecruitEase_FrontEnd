@@ -115,7 +115,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   UnderReview: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "ticketId", "delay", "status"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "ticketId", "date", "status"];
 
 type User = typeof users[0];
 
@@ -192,7 +192,7 @@ export default function MTicketsTable() {
         );
       case "status":
         return (
-          <Chip className="capitalize w-10" color={statusColorMap[user.status]} size="sm" variant="flat">
+          <Chip className="capitalize min-w-24 text-center" color={statusColorMap[user.status]} size="sm" variant="flat">
             {cellValue}
           </Chip>
         );
@@ -378,7 +378,7 @@ export default function MTicketsTable() {
       </TableHeader>
       <TableBody emptyContent={"No users found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id} className=" cursor-pointer hover:bg-gray-200" as={Link} href={"/moderator/tickets/details"} >
+          <TableRow key={item.id} className=" cursor-pointer hover:bg-gray-200" as={Link} href={"/moderator/tickets/"+item.ticketId} >
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}

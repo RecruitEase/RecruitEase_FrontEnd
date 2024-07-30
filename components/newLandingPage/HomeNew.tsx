@@ -22,7 +22,7 @@ import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import EmblaCarouselJobs from "./EmblaCarouselJobs";
 import EmblaCarouselCategories from "./EmblaCarouselCategories";
 import { JobProps, FieldProps } from "@/types";
-import Create from "../../app/(newDashoard)/candidate/cv/create/page";
+import Create from "@/app/(newDashoard)/candidate/cvs/create/page";
 import Link from "next/link";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { motion, useScroll } from "framer-motion";
