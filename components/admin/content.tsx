@@ -63,7 +63,7 @@ const supportTickets = [
 export default function content() {
   return (
     <div className="h-full">
-      <div className="flex flex-wrap xl:flex-nowrap justify-center gap-6 px-4 lg:px-0 sm:pt-10 max-w-[90rem] mx-auto w-full">
+      <div className="flex flex-wrap xl:flex-nowrap justify-center gap-6 px-4 lg:px-0  max-w-[90rem] mx-auto w-full">
         {/* Main Section */}
         <div className="p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 flex flex-col gap-6 w-full xl:max-w-4xl">
           {/* Card Section Top */}
