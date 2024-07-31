@@ -8,6 +8,7 @@ import { DateValue } from "@internationalized/date";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
+import { useRouter } from 'next/navigation';
 
 const position = "Software Engineer";
 const types = [
@@ -16,6 +17,8 @@ const types = [
 ]
 
 export default function interviewSchedule(){
+
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [location, setLocation] = useState("");
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -89,6 +92,8 @@ export default function interviewSchedule(){
 
         console.log(scheduleDetails)
     };
+    const router=useRouter();
+
 
     const conformationPop = () =>{
 
@@ -120,6 +125,7 @@ export default function interviewSchedule(){
                     theme: "colored",
                     transition: Bounce,
                 });
+                router.push("/recruiter/vacancy/abc1/applications");
 
             } else {
                 //not logged in

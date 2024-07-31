@@ -69,7 +69,7 @@ export default function content() {
           {/* Card Section Top */}
           <div className="flex flex-col gap-4">
             <h3 className="text-xl font-semibold">Jobs And Applications</h3>
-            <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-3 gap-5 w-full">
+            <div className="grid md:grid-cols-2 grid-cols-1 2xl:grid-cols-2 gap-5 w-full">
               <SummaryNumber
                 analyticName="Total Jobs"
                 amount={5679}

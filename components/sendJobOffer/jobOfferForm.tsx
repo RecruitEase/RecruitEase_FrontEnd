@@ -7,10 +7,14 @@ import { ClockCircleLinearIcon } from "@nextui-org/shared-icons";
 import { DateValue } from "@internationalized/date";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
+import { useRouter } from 'next/navigation';
 
 const position = "Software Engineer";
 
 const JobOfferForm = () => {
+
+    const router=useRouter();
+
     const [location, setLocation] = useState("");
     const [date, setDate] = useState<DateValue | null>(null);
     const [time, setTime] = useState<Time | null>(null);
@@ -97,6 +101,8 @@ const JobOfferForm = () => {
                     theme: "colored",
                     transition: Bounce,
                 });
+
+                router.push("/recruiter/vacancy/abc1/applications");
 
             } else {
                 //not logged in
