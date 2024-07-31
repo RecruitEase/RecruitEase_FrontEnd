@@ -60,7 +60,7 @@ const job =
       education:"Bachelor's Degree",
       experience:"5 Years",
 
-  };
+};
 
 export default function Home() {
     const params = useParams()
@@ -91,9 +91,9 @@ export default function Home() {
                     <div className="lg:w-1/3">
                         <SummaryCard job={job}/>
 
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
