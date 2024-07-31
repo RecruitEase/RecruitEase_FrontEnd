@@ -22,7 +22,9 @@ const CoverLetter:React.FC<CoverLetterProps> = ({coverLetter}) => {
                 <HeaderDetails coverLetter={coverLetter}></HeaderDetails>
             </div>
             <div>
-                {coverLetter.letter}
+                <div className={"mb-2 mt-4 text-2xl font-bold"}>Cover Letter</div>
+                <div className={"text-justify"}>{coverLetter.letter}</div>
+
             </div>
 
         </div>
