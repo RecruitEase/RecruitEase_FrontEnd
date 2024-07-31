@@ -509,6 +509,8 @@ export default function TicketTable() {
                     </div>
                     <div><p className=" font-semibold">Description:</p></div>
                     <div>{item.description}</div>
+                    {/* <div><p className=" font-semibold">Resolved Note:</p></div>
+                    <div>{item.note}</div> */}
                   </div>
                 ))}
 

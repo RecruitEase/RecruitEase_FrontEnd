@@ -3,6 +3,8 @@ import HeaderBox from '@/components/dashboard/HeaderBox'
 import React, { Key } from 'react'
 import { Card, Input, Autocomplete, AutocompleteItem, Button, Textarea } from "@nextui-org/react"
 import { useState } from 'react';
+import { Bounce, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const ticketTypes = [
   { label: 'Job offer', value: 'Job_offer' },
@@ -32,6 +34,8 @@ const interviews = [
 function Ticket() {
 
   const [type, setType] = useState('');
+  const router = useRouter()
+
 
   const handleTicketTypeChange = (key: Key | null) => {
     console.log('Selected ticket type:');
@@ -151,14 +155,23 @@ function Ticket() {
           </div>
 
           <div className='col-span-12 md:col-span-8'>
-            <Button className='bg-recruitBlue text-white w-fit'>Submit Ticket</Button>
+            <Button className='bg-recruitBlue text-white w-fit' onClick={() => {
+              toast.success('Ticket submitted successfully!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+              });
+              router.push('/candidate/tickets');
+            }}>
+              Submit Ticket</Button>
           </div>
-
         </div>
-
-
-
-
       </div>
     </div>
   )

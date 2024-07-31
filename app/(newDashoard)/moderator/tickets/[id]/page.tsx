@@ -3,6 +3,10 @@ import HeaderBox from '@/components/dashboard/HeaderBox'
 import React from 'react'
 import { Button, Autocomplete, AutocompleteItem, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Textarea, Divider, Chip, divider } from "@nextui-org/react"
 import CustomTextWithoutValidations from "@/components/form_inputs/CustomTextAreaWithoutValidations"
+import { Bounce, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 const status = [
   { label: "Under Review", value: "underReview" },
   { label: "Resolved", value: "resolved" },
@@ -86,6 +90,8 @@ function TicketDetails() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [buttonClicked, setButtonClicked] = React.useState("");
   const [currentStatus, setCurrentStatus] = React.useState("UnderReview")
+  const router = useRouter()
+
 
   const handleButtonClicked = (button: string) => {
     setButtonClicked(button);
@@ -170,7 +176,21 @@ function TicketDetails() {
 
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="success" onPress={onClose} onClick={() => handleCurrentStatus("Resolved")}>
+                      <Button color="success" onPress={onClose} onClick={() => {
+                        handleCurrentStatus("Resolved");
+                        toast.success('Ticket resolved!', {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "colored",
+                          transition: Bounce,
+                        });
+                        // router.push('/candidate/tickets/details');
+                      }}>
                         Resolve
                       </Button>
                     </ModalFooter>
@@ -199,7 +219,21 @@ function TicketDetails() {
 
                     </ModalBody>
                     <ModalFooter>
-                      <Button color="danger" className='text-white' onPress={onClose} onClick={() => handleCurrentStatus("Rejected")}>
+                      <Button color="danger" className='text-white' onPress={onClose} onClick={() => {
+                        handleCurrentStatus("Rejected");
+                        toast.error('Ticket rejected!', {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "colored",
+                          transition: Bounce,
+                        });
+                        // router.push('/moderator/tickets/details');
+                      }}>
                         Reject
                       </Button>
                     </ModalFooter>
@@ -215,7 +249,7 @@ function TicketDetails() {
         {(currentStatus === "Resolved" || currentStatus === "Rejected") ?
           <div className='col-span-12 md:col-span-5 border-2 p-2'>
             <div className='font-extrabold mb-4'>Note</div>
-            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum, repudiandae quo quod omnis illo vel quaerat, architecto consequatur doloribus dolorem incidunt quasi, dolorum in? Maiores inventore libero autem. Magnam!</div>
+            <div>The payment issue for your ticket has been successfully resolved. The transaction has now been completed, and your ticket is confirmed. Thank you for your patience. If you have any further questions or concerns, please do not hesitate to reach out to our support team.</div>
           </div>
           : (
             <div className='border-2 col-span-12 md:col-span-5 p-2'>
@@ -231,12 +265,12 @@ function TicketDetails() {
             <div>
               <div className='ml-2'>{ticketData[0].name}</div>
               {ticketData[1].jobTitle ? <div className="flex mb-1 ml-2 w-full">
-                <p className="text-sm">Job Title : </p>
-                <p className="text-sm">{ticketData[0].jobTitle}</p>
+                {/* <p className="text-sm">Job Title : </p> */}
+                {/* <p className="text-sm">{ticketData[0].jobTitle}</p> */}
               </div> : <p> This is a support Request or other type.</p>}
-              <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm'>Chat</Button>
-              <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm'>View Profile</Button>
-              <Button className='bg-recruitBlue text-white mb-2' size='sm'>View Job Post</Button>
+              <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm' as={Link} href='../chat'>Chat</Button>
+              <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm' as={Link} href='../candidate-profile/12'>View Profile</Button>
+              <Button className='bg-recruitBlue text-white mb-2' size='sm' as={Link} href='../../jobs/12'>View Job Post</Button>
             </div>
           </div>
         </div>
