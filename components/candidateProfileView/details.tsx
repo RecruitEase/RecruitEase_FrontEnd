@@ -16,10 +16,10 @@ interface PersonalDetailsProps {
     location: string;
     email: string;
     avatars: string[];
-    carousel:string[];
+    carousel: string[];
 }
 
-const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email, avatars,carousel }) => {
+const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email, avatars, carousel }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpand = () => {
@@ -47,9 +47,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     <Divider />
                     <CardBody>
                         <ScrollShadow className="w-full h-[116px] pl-4">
-                            {experience.map((item, index) => (
-                                <p key={index}>{item}</p>
-                            ))}
+                            <ul className="list-disc">
+                                {experience.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
                         </ScrollShadow>
                     </CardBody>
                     <Divider />
@@ -60,9 +62,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     <Divider />
                     <CardBody>
                         <ScrollShadow className="w-full h-[80px] pl-4">
-                            {education.map((item, index) => (
-                                <p key={index}>{item}</p>
-                            ))}
+                            <ul className="list-disc">
+                                {education.map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))}
+                            </ul>
                         </ScrollShadow>
                     </CardBody>
                     <Divider />

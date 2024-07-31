@@ -378,7 +378,7 @@ export default function MTicketsTable() {
       </TableHeader>
       <TableBody emptyContent={"No users found"} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id} className=" cursor-pointer hover:bg-gray-200" as={Link} href={"/moderator/tickets/"+item.ticketId} >
+          <TableRow key={item.id} className=" cursor-pointer hover:bg-gray-200" as={Link} href={"/moderator/tickets/" + item.id} >
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
