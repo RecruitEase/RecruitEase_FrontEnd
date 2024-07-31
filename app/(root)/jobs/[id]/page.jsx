@@ -1,13 +1,18 @@
+"use client";
 import SummaryCard from "@/components/Jobs/view/SummaryCard"
-
+import {Button} from "@nextui-org/button";
+import { useRouter,useParams } from 'next/navigation'
+import {Link} from "@nextui-org/react";
+import React from "react";
 const job =
   {
+      id:"1",
     logo: "/assets/temporary/01.jpg",
     title: "Executive - Maintenance",
     company: "PizzaHut Sri Lanka",
     location: "Colombo, Western Province",
     type: "Full-Time",
-    daysLeft: "8 days left",
+    daysLeft: "8",
     overview:"BSc in Engineering with at least 5 years of experience or HND/NDES/NDT with at least 10 years of experience in Mechanical/Electrical/Mechatronic fields. Please refer to the job advert for further information.",
     description: <div className="jobviewDescription">
           <div><font size="3">Gamma Pizzakraft Lanka (Pvt) Ltd is the single franchisee for Pizza Hut and Taco Bell in
@@ -58,8 +63,12 @@ const job =
   };
 
 export default function Home() {
+    const params = useParams()
+    // console.log("cdsdsdcscsdcsd",params)
     return (
+
         <div className="min-h-screen  py-6 flex flex-col justify-center sm:py-12">
+
             <div className="container mx-auto px-4">
                 <div className="flex flex-col lg:flex-row justify-between">
                     <div className="lg:w-2/3 bg-fill p-6 rounded-lg  mb-6 lg:mb-0">
@@ -71,10 +80,11 @@ export default function Home() {
                             <h3 className="text-lg font-bold mb-2">Overview</h3>
                             {job.description}
                             <div className="flex space-x-4">
-                                <button className="bg-green-500 text-white px-4 py-2 rounded">Apply for Job</button>
-                                <button className="bg-white text-gray-800 px-4 py-2 rounded border border-gray-300">Save
+                                <Button className="bg-green-500 text-white px-4 py-2 rounded" as={Link}
+                                        href={`/jobs/${job.id}/apply`}>Apply for Job</Button>
+                                <Button className="bg-white text-gray-800 px-4 py-2 rounded border border-gray-300">Save
                                     Job
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>
