@@ -6,16 +6,19 @@ import {useSession} from "next-auth/react";
 import {Input} from "@nextui-org/input";
 import {useForm} from "react-hook-form";
 import CustomInput from "@/components/form_inputs/CustomInput";
-import { Select, SelectItem, Switch} from "@nextui-org/react";
+import { Select, SelectItem, Switch,Link} from "@nextui-org/react";
 import {toTitleCase} from "@/utils/stringUtils";
 import CustomTextArea from "@/components/form_inputs/CustomTextArea";
 import {Button} from "@nextui-org/button";
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic'
+import {Bounce, toast} from "react-toastify";
+import {useRouter} from "next/navigation";
+
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const JobPost = () => {
-
+    const router=useRouter();
     //react-quill
     const [value, setValue] = useState('');
 
@@ -528,7 +531,20 @@ const JobPost = () => {
 
                 </div>}
             </div>
-            <Button className={"mt-5"} size={"md"} color={"primary"}>Create job vacancy</Button>
+            <Button className={"mt-5"} size={"md"} color={"primary"} onClick={()=>{
+                    toast.success('Vacancy posted successfully!', {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      transition: Bounce,
+                    });
+                    router.push('/recruiter/vacancy');
+                  }} >Create job vacancy</Button>
 
             {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
 
