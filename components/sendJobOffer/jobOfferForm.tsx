@@ -86,7 +86,7 @@ const JobOfferForm = () => {
                 status: 200
             }
             if (result?.status == 200) {
-                toast.success('Deleted successfully!', {
+                toast.success('Job Offer Created successfully!', {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -101,7 +101,7 @@ const JobOfferForm = () => {
             } else {
                 //not logged in
                 //handle error here
-                toast.error('Delete failed!', {
+                toast.error('Job Offer creation failed!', {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,

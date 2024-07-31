@@ -109,7 +109,7 @@ export default function interviewSchedule(){
                 status: 200
             }
             if (result?.status == 200) {
-                toast.success('Deleted successfully!', {
+                toast.success('Scheduled successfully!', {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,

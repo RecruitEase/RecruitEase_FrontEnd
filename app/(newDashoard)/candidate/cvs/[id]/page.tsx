@@ -30,9 +30,7 @@ function View() {
         <Button isDisabled={cv.type != "template"} className='bg-recruitBlue text-white'>
           Edit
         </Button>
-        <Button className='bg-recruitBlue text-white'>
-          Delete
-        </Button>
+
         <Button className='bg-danger text-white'>
           Delete
         </Button>

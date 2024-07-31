@@ -14,12 +14,15 @@ import { CVProps, ApplicationProps } from "@/types/index";
 import { MdOutlineQuiz } from "react-icons/md";
 import { FaPeopleArrows } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
-
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { FaPaste } from "react-icons/fa";
+import { FaPenToSquare } from "react-icons/fa6";
 export default function ApplicationComponent() {
   const applicant: ApplicationProps = {
-    name: "Mary Jane",
+    name: "David Eliot",
     city: "Colombo",
-    email: "maryjane@gmail.com",
+    email: "davideliot@gmail.com",
     status: "underReview",
     appliedDate: "2024-10-10",
     cv: {
@@ -90,6 +93,8 @@ export default function ApplicationComponent() {
     { key: "rejected", title: "Rejected", color: "#880E4F" }, // Light Pink
     { key: "archived", title: "Archived", color: "#424242" }, // Light Grey
   ];
+
+  const router=useRouter();
 
   return (
     <div className="flex flex-col px-4 mb-[100px]">
@@ -171,7 +176,7 @@ export default function ApplicationComponent() {
                         <div className="text-center my-4">
                           <img
                             className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto "
-                            src="https://randomuser.me/api/portraits/women/21.jpg"
+                            src="/assets/temporary/girl.jpg"
                             alt=""
                           />
                           <div>
@@ -198,16 +203,18 @@ export default function ApplicationComponent() {
                           >
                             View CV
                           </button>
-                          <button className="flex-1 rounded-full border-2 border-gray-400 dark:border-gray-700 font-semibold text-black hover:bg-blue-600 hover:text-white dark:text-white px-4 py-2">
+                          <button onClick={()=>{
+                            router.push("/recruiter/chat")
+                          }} className="flex-1 rounded-full border-2 border-gray-400 dark:border-gray-700 font-semibold text-black hover:bg-blue-600 hover:text-white dark:text-white px-4 py-2">
                             Message
                           </button>
                         </div>
                       </div>
                       <div className="px-4 py-4">
-                        <div className="flex gap-2 items-center text-gray-800 dark:text-gray-300 mb-4">
+                        <div className="flex gap-2 items-start text-gray-800 dark:text-gray-300 mb-4">
                           <div
                             className={
-                              "w-1/2 flex flex-col justify-center items-center gap-2"
+                              "w-1/2 flex flex-col justify-center items-start gap-2"
                             }
                           >
                             <Button
@@ -220,23 +227,51 @@ export default function ApplicationComponent() {
                             <Button
                               color={"secondary"}
                               className={" w-full bg-gray-900 text-whiteText"}
+                              as={Link}
+                              href="/recruiter/interviews/schedule"
                             >
                               Schedule Interview <FaPeopleArrows />
                             </Button>
+                            <Button
+                              color={"secondary"}
+                              className={" w-full bg-gray-900 text-whiteText"}
+                              as={Link}
+                              href="/recruiter/joboffers/create"
+                            >
+                              Create Job Offer <FaPenToSquare />
+                            </Button>
 
+                          </div>
+                          <div
+                            className={
+                              "w-1/2 flex flex-col justify-center items-start gap-2"
+                            }
+                          >
+                            
                             <Button
                               color={"secondary"}
                               className={"w-full bg-gray-900 text-whiteText"}
+                              as={Link}
+                              href="/recruiter/candidate-profile/abc123/history"
                             >
                               Applicant History <FaHistory />
                             </Button>
-                          </div>
-                          <div className="flex items-center flex-col justify-center">
+                            <Button
+                              color={"secondary"}
+                              className={"w-full bg-gray-900 text-whiteText"}
+                              as={Link}
+                              href="/recruiter/candidate-profile/abc123"
+                            >
+                              Applicant Profile <FaPaste />
+                            </Button>
+                            <div className="flex items-center flex-col justify-center w-full">
                             <small>Application Date: </small>
                             <small>
                               <b>{applicant.appliedDate}</b>
                             </small>
                           </div>
+                          </div>
+
                         </div>
                       </div>
                     </div>

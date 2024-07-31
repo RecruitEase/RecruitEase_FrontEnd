@@ -1,6 +1,9 @@
 import React from 'react';
 import ProfileImageCard from "@/components/candidateProfileView/profileImageCard";
 import PersonalDetails from "@/components/candidateProfileView/details";
+import { Button } from '@nextui-org/react';
+import Link from 'next/link';
+import { FaHistory } from "react-icons/fa";
 
 const profileData = {
     name: "Sajith Bandara",
@@ -31,7 +34,16 @@ const data = {
 
 const Profile = () => {
     return (
-        <>
+        <><div className="flex justify-end"><Button
+        color={"secondary"}
+        className={"w-fit bg-gray-900 text-whiteText"}
+        as={Link}
+        href="/recruiter/candidate-profile/abc123/history"
+      >
+        Applicant History <FaHistory />
+      </Button>
+</div>
+                                    
             <div className={"pb-4"}><ProfileImageCard profileData={profileData}/></div>
             <div><PersonalDetails {...data}></PersonalDetails></div>
         </>
