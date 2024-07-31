@@ -390,12 +390,7 @@ const jobList = () =>{
 
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary"  onPress={acceptButtonHandle}>
-                                Accept
-                            </Button>
-                            <Button color="danger" variant={"flat"} onPress={declineButtonHandle}>
-                                Decline
-                            </Button>
+
                             <Button startContent={"<>"} color="danger" variant="light" onPress={onClose}>
                                 Close
                             </Button>

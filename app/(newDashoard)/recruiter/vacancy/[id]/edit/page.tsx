@@ -20,7 +20,8 @@ import {
   educationLevelTypes,
   fieldValues,
 } from "@/components/recruiter/data";
-
+import {Bounce, toast} from "react-toastify";
+import {useRouter} from "next/navigation";
 const job = {
   jobTitle: "Software Engineer",
   jobType: "full time",
@@ -75,6 +76,7 @@ const EditVacancy = () => {
     console.log(data);
   };
 
+  const router=useRouter();
   return (
     <div>
       <header className="home-header">
@@ -359,7 +361,20 @@ const EditVacancy = () => {
             </span>
           </div>
         </div>
-        <Button className={"mt-5"} size={"md"} color={"primary"} type="submit">
+        <Button className={"mt-5"} size={"md"} color={"primary"} onClick={()=>{
+                    toast.success('Vacancy modified successfully!', {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      transition: Bounce,
+                    });
+                    router.push('/recruiter/vacancy');
+                  }} >
           Save Changes
         </Button>
       </form>
