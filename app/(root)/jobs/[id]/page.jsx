@@ -4,15 +4,23 @@ import {Button} from "@nextui-org/button";
 import { useRouter,useParams } from 'next/navigation'
 import {Link} from "@nextui-org/react";
 import React from "react";
-const job =
+import {jobs} from '@/constants/jobData'
+
+
+
+
+export default function Home() {
+    const params = useParams()
+
+    var job =
   {
       id:"1",
-    logo: "/assets/temporary/01.jpg",
+    logo: "/assets/temporary/pizzaHut.jpg",
     title: "Executive - Maintenance",
     company: "PizzaHut Sri Lanka",
     location: "Colombo, Western Province",
     type: "Full-Time",
-    daysLeft: "8",
+    daysLeft: "8 days left",
     overview:"BSc in Engineering with at least 5 years of experience or HND/NDES/NDT with at least 10 years of experience in Mechanical/Electrical/Mechatronic fields. Please refer to the job advert for further information.",
     description: <div className="jobviewDescription">
           <div><font size="3">Gamma Pizzakraft Lanka (Pvt) Ltd is the single franchisee for Pizza Hut and Taco Bell in
@@ -62,9 +70,10 @@ const job =
 
 };
 
-export default function Home() {
-    const params = useParams()
-    // console.log("cdsdsdcscsdcsd",params)
+if(jobs.find(job => job.id == params.id)){
+    job=jobs.find(job => job.id == params.id)
+}
+    console.log("cdsdsdcscsdcsd",params)
     return (
 
         <div className="min-h-screen  py-6 flex flex-col justify-center sm:py-12">

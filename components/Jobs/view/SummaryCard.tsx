@@ -31,7 +31,7 @@ const SummaryCard = ({job}) => {
           </div>
           <div className="flex items-center mt-2 text-secondaryText">
             <FiClock className="mr-2" />
-            <p>{job.daysLeft} days left</p>
+            <p>{job.daysLeft}</p>
           </div>
           <div className="flex items-center mt-2 text-secondaryText">
             <FiBriefcase className="mr-2" />
