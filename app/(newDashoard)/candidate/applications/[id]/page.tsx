@@ -12,11 +12,11 @@ import { Link } from "@nextui-org/react";
 
 const data = {
     coverLetter: {
-        avatar: "https://th.bing.com/th/id/OIP.e46LIEi9_bhFGtaEl8miFwHaHa?w=161&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+        avatar: "/assets/companyLogos/IFS.jpg",
         companyName: "IFS",
         position: "Software Engineer",
         date: "2024/08/20",
-        status: "Interview Called",
+        status: "Submitted",
         letter:
             "I am writing to express my interest in the [Job Title] position at [Company Name] as advertised on [Where You Found the Job Posting]. With my background in [Your Field or Major], I am confident in my ability to contribute effectively to your team.\n" +
             "I have [Number] years of experience in [Your Industry or Field], where I have developed skills in [Key Skills or Competencies]. In my previous role at [Previous Company], I successfully [Brief Description of a Key Achievement or Responsibility]. My ability to [Relevant Skill or Competency] has prepared me well for the challenges of the [Job Title] position.\n" +

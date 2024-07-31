@@ -130,7 +130,7 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
                 );
             case "actions":
                 return (
-                    user.status !== "Withdrawn" && (
+                    (user.status !== "Withdrawn" && user.status !== "Rejected" && user.status !== "Selected" && user.status !== "Interview Called") && (
                         <Button className={"bg-blue-700 h-8"} color="primary" onPress={popupview}>
                             Withdraw
                         </Button>
