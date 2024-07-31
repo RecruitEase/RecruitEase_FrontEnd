@@ -6,7 +6,7 @@ const profileData = {
     name: "Sajith Bandara",
     email: "sajithbandara@gamil.com",
     location:"Pallebedda, Ratnapura",
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSpaY0tF99xM90L3_GHqKLapOUSu70Nu3iozdE20Qdvo7aHF5P65_nb2n2Ww&s"
+    imageUrl: "/avatar2.webp"
 }
 
 const data = {
@@ -17,10 +17,10 @@ const data = {
     location: "Udugampola, Gampaha",
     email: "sajithbandara@gmail.com",
     avatars: [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVsHgTWMCMNXjzm54tNMtwsXMQwe0Hej-t0arbxvcXtQxbh7hlxRdmJtOvFg&s",
-        "https://cdn-icons-png.freepik.com/256/3955/3955056.png",
-        "https://www.vectorlogo.zone/logos/github/github-tile.svg",
-        "https://png.pngtree.com/png-vector/20190319/ourmid/pngtree-vector-web-icon-png-image_848026.jpg"
+        "/icons/socialMedia/Facebook.png",
+        "/icons/socialMedia/linkedin.webp",
+        "/icons/socialMedia/github.svg",
+        "/icons/socialMedia/web.jpg"
     ],
     carousel:[
         'https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/79e09a107825591.5fafef7735182.png',
