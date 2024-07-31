@@ -89,7 +89,7 @@ const popupview = () => {
 };
 
 const view=()=>{
-    window.location.href = '/candidate/applicationsView';
+
 }
 
 
@@ -171,7 +171,9 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
                 </TableHeader>
                 <TableBody items={users}>
                     {(item) => (
-                        <TableRow key={item.id} className={"hover:cursor-pointer hover:bg-gray-100"} onClick={view}>
+                        <TableRow key={item.id} className={"hover:cursor-pointer hover:bg-gray-100"} onClick={()=>{
+                            window.location.href = '/candidate/applications/'+item.id;
+                        }}>
                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                         </TableRow>
                     )}
