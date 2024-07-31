@@ -1,7 +1,7 @@
 import React from "react";
 import { FiMapPin, FiClock, FiBriefcase, FiBookmark } from "react-icons/fi";
 
-const SummaryCard = () => {
+const SummaryCard = ({job}) => {
   return (
     <div className="w-full h-screen">
       <div className="w-full h-full py-20 flex flex-wrap justify-center items-center gap-2">
@@ -10,7 +10,7 @@ const SummaryCard = () => {
             {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
             <img
               className="w-[8rem] h-[8rem] rounded-lg outline outline-offset-2 outline-1 outline-blue-400 shadow-lg relative -top-[2rem]"
-              src="https://image-service-cdn.seek.com.au/903000dee27013187498cbc7d98ca876a58951ff/f3c5292cec0e05e4272d9bf9146f390d366481d0"
+              src={job.logo}
               alt="Profile Image"
             />
           </div>
@@ -18,35 +18,34 @@ const SummaryCard = () => {
           <div >
 
           <h2 className="text-xl font-semibold text-primaryText">
-            Medical Marketing Executive (Male/Female)
+            {job.title}
           </h2>
           <p className="text-secondaryText">
-            MIOT Hospital Information Centre Srilanka
+            {job.company}
           </p>
           <div className="flex items-center mt-2 text-secondaryText">
             <FiMapPin className="mr-2" />
-            <p>Colombo, Western Province</p>
+            <p>{job.location}</p>
           </div>
           <div className="flex items-center mt-2 text-secondaryText">
             <FiClock className="mr-2" />
-            <p>8 days left</p>
+            <p>{job.daysLeft} days left</p>
           </div>
           <div className="flex items-center mt-2 text-secondaryText">
             <FiBriefcase className="mr-2" />
-            <p>Full Time</p>
+            <p>{job.type}</p>
           </div>
           <hr className="h-px bg-graybg"></hr>
           <div className="mt-4">
             <p className="text-tertiaryText">
-              2-3 years of relevant experience. Please refer to the job advert
-              for further information.
+              {job.overview}
             </p>
             <div className="mt-2 text-secondaryText">
               <p>
-                <strong>Education:</strong> Bachelor&apos;s Degree
+                <strong>Education:</strong> {job.education}
               </p>
               <p>
-                <strong>Experience:</strong> 2-3 years
+                <strong>Experience:</strong>  {job.experience}
               </p>
               <p>
                 <strong>Salary Range:</strong> Any
