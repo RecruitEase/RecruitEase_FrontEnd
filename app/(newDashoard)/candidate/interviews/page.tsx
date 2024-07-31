@@ -24,7 +24,7 @@ const data: InterviewOfferCard[] = [
     {
         companyName: "IFS",
         position: "Software Engineer",
-        imageUrl: "https://th.bing.com/th/id/OIP.CT-RIB4bV10w5GBDD7_KpAHaHa?rs=1&pid=ImgDetMain",
+        imageUrl: "/assets/companyLogos/IFS.jpg",
         type: "Online",
         location: "",
         link:"https://www.youtube.com/#!",
@@ -39,7 +39,7 @@ const data: InterviewOfferCard[] = [
     {
         companyName: "AWS",
         position: "Quality Assurance Engineer",
-        imageUrl: "https://i1.wp.com/blog.devget.net/wp-content/uploads/2020/04/aws-logo-100584713-orig.png?fit=2048%2C2048&ssl=1",
+        imageUrl: "/assets/companyLogos/aws.jpeg",
         type: "Onsite",
         location: "15/1A, 1st lane, Jambugasmulla Road, Nugegoda ",
         link:"",
