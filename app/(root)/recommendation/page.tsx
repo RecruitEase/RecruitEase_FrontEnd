@@ -1,16 +1,20 @@
 "use client"
 import React from 'react'
-import { Card, CardHeader, Image, Autocomplete, AutocompleteItem, Checkbox } from "@nextui-org/react";
+import { Card, CardHeader, Image, Autocomplete, AutocompleteItem, Checkbox, Chip } from "@nextui-org/react";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdAccessTime } from "react-icons/md";
 import { CiFilter } from "react-icons/ci";
 
 
 const recom = [
-  { key: 1, role: 'Assistant Operations Manager', type: 'On site', image: '/assets/BI.png', numSkills: '3', company: 'Brian Industies', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '4 days left' },
-  { key: 2, role: 'Assistant Operations Manager', type: 'On site', image: '/assets/BI.png', numSkills: '3', company: 'Brian Industies', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '4 days left' },
-  { key: 3, role: 'Assistant Operations Manager', type: 'On site', image: '/assets/BI.png', numSkills: '3', company: 'Brian Industies', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '4 days left' },
-  { key: 4, role: 'Assistant Operations Manager', type: 'On site', image: '/assets/BI.png', numSkills: '3', company: 'Brian Industies', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '4 days left' },
+  { key: 1, role: 'Assistant Operations Manager', type: 'On site', image: '/assets/jobs/BI.png', numSkills: '3', company: 'Brian Industies', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '4 days left' },
+  { key: 2, role: 'Cashier-Female', type: 'On site', image: '/assets/jobs/pizzahut.jpg', numSkills: '7', company: 'PizzaHut', jobType: 'Part time', location: 'Nuwara Eliya, Central Province', daysLeft: '14 days left' },
+  { key: 3, role: 'Junior Executive - Account Service', type: 'On site', image: '/assets/jobs/rocell.jpg', numSkills: '4', company: 'Rocell Industies', jobType: 'Full time', location: 'Jaffna, Northern Province', daysLeft: '24 days left' },
+  { key: 4, role: 'Officer-Customer Verfica', type: 'On site', image: '/assets/jobs/dialog.jpg', numSkills: '1', company: 'Dialog Finance', jobType: 'Part time', location: 'Colombo, Western Province', daysLeft: '17 days left' },
+  { key: 5, role: 'Management Trainee', type: 'On site', image: '/assets/jobs/keells.jpg', numSkills: '5', company: 'Keells', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '27 days left' },
+  { key: 6, role: 'Marketing Manager', type: 'On site', image: '/assets/jobs/britishCouncil.png', numSkills: '3', company: 'British Council', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '7 days left' },
+  { key: 7, role: 'Trainee Account Executive', type: 'On site', image: '/assets/jobs/vaasan.jpg', numSkills: '2', company: 'Vaasan Eye Care', jobType: 'Part time', location: 'Colombo, Western Province', daysLeft: '15 days left' },
+  { key: 8, role: 'Billing Assistant', type: 'On site', image: '/assets/jobs/nawaloka.png', numSkills: '1', company: 'Navaloka Hospitals PLC', jobType: 'Full time', location: 'Colombo, Western Province', daysLeft: '25 days left' },
 ]
 
 const industries = [
@@ -67,7 +71,7 @@ function Recommendation() {
 
       <header className="home-header">
         <p className="mx-auto max-w-2xl text-xl font-bold tracking-tight text-primaryText sm:text-4xl mt-4">
-          Job recommendations For You
+          Job recommendations for you
         </p>
       </header>
 
@@ -189,13 +193,13 @@ function Recommendation() {
                   <div className='relative md:col-span-1 col-span-3'>
                     <Image
                       alt="BI logo"
-                      height={90}
+                      height={65}
                       radius="sm"
                       src={item.image}
-                      width={80}
+                      width={65}
                     />
                   </div>
-                  <div className='relative md:col-span-6 col-span-9'>
+                  <div className='relative sm:col-span-6 col-span-9'>
                     <p className="text-md font-bold">{item.role} | {item.type}</p>
                     <p className="text-small text-default-500 font-   semibold">{item.company}</p>
                     <div className='inline-flex items-center mt-2 gap-2'>
@@ -203,13 +207,16 @@ function Recommendation() {
                       <p className='font-mono '>{item.location}</p>
                     </div>
                   </div>
-                  <div className="relative md:col-span-2 col-span-12 md:col-end-13 md:col-start-11">
+                  <div className="relative sm:col-span-2 col-span-12 sm:col-end-13 sm:col-start-11">
+
+                    {item.jobType === 'Full time' && <Chip color="warning" variant="flat">{item.jobType}</Chip>}
+                    {item.jobType === 'Part time' && <Chip color="success" variant="flat">{item.jobType}</Chip>}
                     <div className='flex items-center gap-2'>
                       <MdAccessTime />
                       <p>{item.daysLeft}</p>
                     </div>
-                    <p className=''>{item.jobType}</p>
-                    <div className='bg-recruitBlue text-white rounded-md w-fit  pl-1 pr-1'>{item.numSkills} skills matched </div>
+                    {/* <div className='bg-recruitBlue text-white rounded-md w-fit  pl-1 pr-1'>{item.numSkills} skills matched </div> */}
+                    <Chip color="primary" variant="flat">{item.numSkills} skills matched</Chip>
                   </div>
                 </CardHeader>
               </Card>
