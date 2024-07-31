@@ -227,9 +227,7 @@ const HomeNew = () => {
   return (
     <div className={"relative"}>
       <div className={"max-w-screen-2xl mx-auto overflow-hidden shadow-none "}>
-
-
-        <div className="flex justify-center h-[600px] bg-recruitBlue text-white">
+        <div className="px-10 flex justify-center h-[600px] bg-recruitBlue text-white">
           <div className="w-[1400px] flex items-center">
             <div className="flex flex-col gap-[30px]">
               <motion.h1   initial='hidden' animate='visible' variants={wrapper} className="text-[50px]">
@@ -305,7 +303,7 @@ const HomeNew = () => {
             </div>
             <motion.div initial={{opacity: 0, x: -300}} animate={{opacity: 1, x: 0}}
                                 transition={{duration: 0.5, delay: 1.5}} className='h-full lg:block hidden'>
-              <img src="/assets/man.png" alt="man image" className="h-full max-w-max"/>
+              <img src="/assets/woman-bg.png" alt="man image" className="h-full max-w-max"/>
               </motion.div>
           </div>
         </div>

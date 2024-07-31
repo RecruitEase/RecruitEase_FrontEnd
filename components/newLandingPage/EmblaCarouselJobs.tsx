@@ -45,7 +45,7 @@ const EmblaCarouselJobs: React.FC<PropType> = (props) => {
   const router = useRouter();
 
 const handleClick = (id: string) => () => {
-    router.push(`/jobs/view/${id}`);
+    router.push(`/jobs/${id}`);
 }
 
   return (

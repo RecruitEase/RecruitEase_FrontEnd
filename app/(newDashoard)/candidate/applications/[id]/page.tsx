@@ -8,6 +8,7 @@ import { Button } from "@nextui-org/button";
 import Swal from "sweetalert2";
 import { Bounce, toast } from "react-toastify";
 import Questions from "@/components/applicationsView/Questions";
+import { Link } from "@nextui-org/react";
 
 const data = {
     coverLetter: {
@@ -161,8 +162,8 @@ const ApplicationView: React.FC = () => {
                 </Questions>
             </div>
             <div className={"flex w-full justify-end gap-4 mt-4"}>
-                <Button className={"bg-recruitBlue text-white font-bold"}>Show Job</Button>
-                <Button className={"bg-warning text-white font-bold"} onClick={withdrawButton}>
+                <Button className={"bg-recruitBlue text-white font-bold"} as={Link} href={"/jobs/1"}>Show Job</Button>
+                <Button className={"bg-danger text-white font-bold"} onClick={withdrawButton}>
                     Withdraw
                 </Button>
             </div>

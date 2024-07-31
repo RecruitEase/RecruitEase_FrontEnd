@@ -1,5 +1,7 @@
 import React from "react";
 import { FiMapPin, FiClock, FiBriefcase, FiBookmark } from "react-icons/fi";
+import {Button} from "@nextui-org/button";
+import {Link} from "@nextui-org/react";
 
 const SummaryCard = ({job}) => {
   return (
@@ -55,13 +57,11 @@ const SummaryCard = ({job}) => {
     
           </div>
 
-          <div className="p-4  border-t">
-            <button className="w-full bg-green-500 text-white py-2 rounded">
-              Apply for Job
-            </button>
-            <button className="w-full mt-2 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-              Save Job
-            </button>
+          <div className="flex w-full justify-around p-4  border-t">
+            <Button   className="bg-green-500 text-white px-4 py-2 rounded" as={Link} href={`/jobs/${job.id}/apply`}>Apply for Job</Button>
+            <Button className="bg-white text-gray-800 px-4 py-2 rounded border border-gray-300">Save
+              Job
+            </Button>
           </div>
         </div>
       </div>
