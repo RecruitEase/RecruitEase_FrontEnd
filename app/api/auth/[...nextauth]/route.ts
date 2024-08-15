@@ -51,7 +51,8 @@ const handler= NextAuth({
                 }
             }
         })
-    ],pages:{
+    ],
+    pages:{
         signIn:"/signin"
     },
     callbacks:{
@@ -64,7 +65,7 @@ const handler= NextAuth({
             session.user=token as any;
             return session;
         }
-    }
+    },
 });
 
 export {handler as GET, handler as POST}
