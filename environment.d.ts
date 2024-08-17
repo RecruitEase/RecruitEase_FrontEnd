@@ -7,6 +7,8 @@ declare global {
             API_GATEWAY_LOGIN: RequestInfo | URL;
             AUTH_GOOGLE_ID: string;
             AUTH_GOOGLE_SECRET: string;
+            NEXT_PUBLIC_API_URL: string;
+            NEXTAUTH_SECRET: string;
             // add more environment variables and their types here
         }
     }

@@ -14,10 +14,8 @@ import {
 } from "@nextui-org/react";
 
 import {Button} from "@nextui-org/button";
-import axios from "axios";
+import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
 
-const BASE_URL = "http://localhost:8222";
-const token = "eyJhbGciOiJIUzM4NCJ9.eyJjcmVhdGVkQXQiOiIyMDI0LTA4LTA4VDA2OjQ2OjUzLjI0MDIxMCIsInJvbGUiOiJyZWNydWl0ZXIiLCJyb2xlRGV0YWlscyI6eyJyZWNydWl0ZXJJZCI6IjhhNjNhOTU3LTY4NDktNDQwYS05OTM4LTZmYzEzZGI0Njc2YSIsImZpcnN0TmFtZSI6IkNoYXRodXJhIiwibGFzdE5hbWUiOiJMYWtzaGFuIiwid2Vic2l0ZSI6bnVsbCwiYnVzaW5lc3NSZWdpc3RyYXRpb25OdW1iZXIiOiJhYmMxMjMiLCJwcm9maWxlUGljIjoiaHR0cDovL2V4YW1wbGUuY29tL3JlY3J1aXRlci5qcGciLCJjb21wYW55TmFtZSI6IkNoYXRodXJhTGFrc2hhbiBJbmMuIn0sImlkIjoiYTRhYmI0MjItYWU2OC00OTAwLWIzMjUtODhjZTMyNmM5YjQxIiwiaXNBY3RpdmUiOnRydWUsImVtYWlsIjoicmVjcnVpdGVyQHJlY3J1aXRlYXNlLmxrIiwic3ViIjoiYTRhYmI0MjItYWU2OC00OTAwLWIzMjUtODhjZTMyNmM5YjQxIiwiaWF0IjoxNzIzNjUyMTg3LCJleHAiOjE3MjM2NTU3ODd9.iErijCb7CeYY46Z1eazOlKj42k_MCEwNsoU-b6v2yY8pfDsn-IE8ia5QRxMwhDN3"
 type userDetails = {
     id: number,
     name: string,
@@ -34,41 +32,6 @@ type userDetails = {
     description: string
 }
 
-const fetchInterviewData = () => {
-    return axios.get(BASE_URL+'/api/v1/interviews/list', {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-        .then(response => {
-            const data = response.data.content;
-            if (!Array.isArray(data)) {
-                console.error("Unexpected data format:", data);
-                return [];
-            }
-            return data;
-        })
-        .catch(error => {
-            console.error("Error fetching interview data:", error);
-            return [];
-        });
-
-
-};
-
-const fetchApplicationDetails = (applicationId:String) => {
-
-    return axios.get(BASE_URL+`/api/v1/applications/view/${applicationId}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-        .then(response => response.data.content)
-        .catch(error => {
-            console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
-            return null;
-        });
-};
 //
 // const users:userDetails[] = [
 //     {
@@ -358,8 +321,38 @@ const fetchApplicationDetails = (applicationId:String) => {
 // ];
 
 
-const jobList = () =>{
+const JobList = () =>{
 
+    const axios=useAxiosAuth();
+
+
+const fetchInterviewData = () => {
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
+        .then(response => {
+            const data = response.data.content;
+            if (!Array.isArray(data)) {
+                console.error("Unexpected data format:", data);
+                return [];
+            }
+            return data;
+        })
+        .catch(error => {
+            console.error("Error fetching interview data:", error);
+            return [];
+        });
+
+
+};
+
+const fetchApplicationDetails = (applicationId:String) => {
+
+    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
+        .then(response => response.data.content)
+        .catch(error => {
+            console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
+            return null;
+        });
+};
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [selectedCard, setSelectedCard] = useState<userDetails | null>(null);
@@ -516,4 +509,4 @@ const jobList = () =>{
     )
 }
 
-export default jobList;
+export default JobList;

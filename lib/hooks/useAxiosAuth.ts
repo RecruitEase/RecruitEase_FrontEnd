@@ -11,9 +11,7 @@ const useAxiosAuth=()=>{
     useEffect(()=>{
         // console.log("cdcsdescsdcscsxds")
         const requestIntercept=axiosWithAuth.interceptors.request.use((config)=>{
-            if(!config.headers["Authorization"]){
                 config.headers["Authorization"]=`Bearer ${session?.user.accessToken}`;
-            }
             return config;
         })
 
