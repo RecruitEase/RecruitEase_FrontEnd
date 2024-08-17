@@ -2,3 +2,44 @@ svg icon collection : https://www.svgrepo.com/collection/solar-linear-icons/
 
 
 always use "    const axios=useAxiosAuth();   " when using axios get, post req  for req with headers
+
+
+
+
+//useage of axiosauth
+"use client"
+import React, { useEffect } from 'react';
+import { Card, CardHeader, Image, Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
+import CustomInputWithoutValidation from '@/components/form_inputs/CustomInputWithoutValidations';
+import Link from 'next/link';
+import HeaderBox from "@/components/dashboard/HeaderBox";
+import axios from 'axios';
+import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
+
+
+const Management = () => {
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [cvs, setCvs] = React.useState([{ key: 1, name: 'CV1', image: '/assets/cv.png' },
+    ]);
+
+
+
+  const axios= useAxiosAuth();
+  
+useEffect(()=>{
+  axios.get('http://localhost:8222/api/v1/applications/candidate/cand4567').then((res)=>{ 
+    console.log("ccdds",res.data)
+    setCvs([{ key: 5, name: 'CV5', image: '/assets/cv.png' },{ key: 2, name: 'CV2', image: '/assets/cv.png' },
+      { key: 3, name: 'CV3', image: '/assets/cv.png' },
+      { key: 4, name: 'CV4', image: '/assets/cv.png' },])
+  })
+
+})
+
+  return (
+      
+  );
+};
+
+export default Management;
