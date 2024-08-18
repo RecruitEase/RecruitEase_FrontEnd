@@ -9,25 +9,31 @@ import {SearchIcon} from "@/components/icons";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import Link from "next/link";
+import { ApplicationProp, JobProps, RecruiterProp } from "@/types";
 
-type Status = "Submitted" | "Under Review" | "Interview Called" | "Selected" | "Rejected" | "Withdrawn";
 
-interface Applicant {
-    id: number;
-    position: string;
-    date: string;
-    status: Status;
-    avatar: string;
-    companyName: string;
-}
 
-const statusColorMap: Record<Status, string> = {
-    Submitted: "#D7F8FE",
-    "Under Review": "#C9A9E9",
-    "Interview Called": "#fbdba7",
-    Selected: "#a2e9c1",
-    Rejected: "#FAA0BF",
-    Withdrawn: "#E4E4E7"
+const statusTitleMap: Record<string, string> = {
+    underReview: "Under Review",
+    withdrawn: "Withdrawn",
+    shortlisted: "Shortlisted",
+    interviewScheduled: "Interview Scheduled",
+    interviewed: "Interviewed",  // You might want to assign the same color as "Shortlisted"
+    offered: "Offered",
+    hired: "Hired",         // Same color as "Offered"
+    rejected: "Rejected",
+    archived: "Archived",      // Same color as "Withdrawn"
+};
+const statusColorMap: Record<string, string> = {
+    underReview: "#D7F8FE",
+    withdrawn: "#E4E4E7",
+    shortlisted: "#C9A9E9",
+    interviewScheduled: "#fbdba7",
+    interviewed: "#C9A9E9",  // You might want to assign the same color as "Shortlisted"
+    offered: "#a2e9c1",
+    hired: "#a2e9c1",         // Same color as "Offered"
+    rejected: "#FAA0BF",
+    archived: "#E4E4E7",      // Same color as "Withdrawn"
 };
 
 const columns = [
@@ -38,7 +44,9 @@ const columns = [
 ];
 
 interface ApplicationStatusTableProps {
-    users: Applicant[];
+    applications: ApplicationProp[];
+    jobs: JobProps[];
+    recruiters: RecruiterProp[];
 }
 
 
@@ -93,26 +101,31 @@ const view=()=>{
 }
 
 
-const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }) => {
-    const renderCell = React.useCallback((user: Applicant, columnKey: string | number) => {
-        const cellValue = user[columnKey as keyof Applicant];
+const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ applications,jobs,recruiters }) => {
+    const renderCell = React.useCallback((application: ApplicationProp, columnKey: string | number) => {
+        const cellValue = application[columnKey as keyof ApplicationProp];
 
         switch (columnKey) {
             case "position":
-                return (
+                
+                    const recruiter=recruiters.find(recruiter=>recruiter.recruiterId===application.recruiterId);
+                    
+                    return (
+
                     <User
-                        avatarProps={{radius: "lg", src: user.avatar}}
-                        description={user.companyName}
+                        avatarProps={{radius: "lg", src: recruiter?.profilePic}}
+                        description={recruiter?.companyName}
                         name={cellValue as string}
 
                     >
-                        {user.companyName}
+                        {recruiter?.companyName}
                     </User>
                 );
             case "date":
+                const date = new Date(application.createdAt);
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold text-sm capitalize">{cellValue as string}</p>
+                        <p className="text-bold text-sm capitalize">{date.toLocaleString()}</p>
                         {/*<p className="text-bold text-sm capitalize text-default-400">{user.team}</p>*/}
                     </div>
                 );
@@ -120,17 +133,16 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
                 return (
                     <Chip
                         className="capitalize min-w-32 text-center "
-                        style={{ backgroundColor: statusColorMap[user.status], color:"#000000"}}
+                        style={{ backgroundColor: statusColorMap[application.status], color:"#000000"}}
                         size="md"
                         variant="flat"
-                        // color={"#000000"}
                     >
-                        {cellValue as string}
+                        {statusTitleMap[application.status]}
                     </Chip>
                 );
             case "actions":
                 return (
-                    (user.status !== "Withdrawn" && user.status !== "Rejected" && user.status !== "Selected" && user.status !== "Interview Called") && (
+                    (application.status == "underReview") && (
                         <Button className={"bg-blue-700 h-8"} color="primary" onPress={popupview}>
                             Withdraw
                         </Button>
@@ -169,10 +181,10 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ users }
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody items={users}>
+                <TableBody items={applications}>
                     {(item) => (
-                        <TableRow key={item.id} className={"hover:cursor-pointer hover:bg-gray-100"} onClick={()=>{
-                            window.location.href = '/candidate/applications/'+item.id;
+                        <TableRow key={item.applicationId} className={"hover:cursor-pointer hover:bg-gray-100"} onClick={()=>{
+                            window.location.href = '/candidate/applications/'+item.applicationId;
                         }}>
                             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                         </TableRow>
