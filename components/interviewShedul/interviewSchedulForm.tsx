@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const position = "Software Engineer";
 const types = [
@@ -16,25 +17,42 @@ const types = [
     {key:"Onsite", label:"Onsite"}
 ]
 
-export default function interviewSchedule(){
+type DateObject = {
+    calendar: any;
+    era: string;
+    year: number;
+    month: number;
+    day: number;
+};
+
+export default function InterviewSchedule(){
 
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [location, setLocation] = useState("");
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [date, setDate] = useState<DateValue | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState<Time | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [description, setDescription] = useState("");
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffDate, setCutoffDate] = useState<DateValue | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffTime, setCutoffTime] = useState<Time | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [type,setType] = useState<Key | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [dressCode, setDressCode] = useState("");
+    const [dateFormat, setDateFormat] = useState<Date | null>(null);
+
+    function formatDate(dateObj: DateObject): string {
+        const { year, month, day } = dateObj;
+        const formattedMonth = month.toString().padStart(2, '0'); // Ensure month is two digits
+        const formattedDay = day.toString().padStart(2, '0');     // Ensure day is two digits
+
+        return `${year}-${formattedMonth}-${formattedDay}`;
+    }
+
+    function formatTimeToAMPM(hours: number, minutes: number): string {
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12;
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+        return `${formattedHours}:${formattedMinutes} ${period}`;
+    }
+
 
     const typeSet = (type:Key) => {
         setType(type);
@@ -47,14 +65,19 @@ export default function interviewSchedule(){
     };
     const dateSet = (date: DateValue) => {
         if (date) {
-            setDate(date);
+
+            // @ts-ignore
+            setDate(formatDate(date))
+
         }else {
             setDate(null);
         }
     }
-    const timeSet = (time: Time) => {
+    const timeSet = (time:Time) => {
         if (time) {
-            setTime(time);
+            const formattedTime = formatTimeToAMPM(time.hour, time.minute);;
+            // @ts-ignore
+            setTime(formattedTime);
         }else {
             setTime(null);
         }
@@ -64,33 +87,87 @@ export default function interviewSchedule(){
     };
     const cutoffDateSet = (cutoffDate: DateValue) => {
         if (cutoffDate) {
-            setCutoffDate(cutoffDate);
+            // @ts-ignore
+            setCutoffDate(formatDate(cutoffDate));
         }else {
             setCutoffDate(null);
         }
     };
-    const cutoffTimeSet = (cutoffTime: Time) => {
+    const cutoffTimeSet = (cutoffTime:Time) => {
         if (cutoffTime) {
-            setCutoffTime(cutoffTime);
+            const formattedTime = formatTimeToAMPM(cutoffTime.hour, cutoffTime.minute);
+            // @ts-ignore
+            setCutoffTime(formattedTime);
+            // const formattedTime = formatTimeToAMPM(cutoffTime);
         }else {
             setCutoffTime(null);
         }
     };
 
+    const axios=useAxiosAuth();
+
+
     const sendDetails = () => {
-        const scheduleDetails = {
+
+        return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/create`,{
+            applicationId:"d84ac88d-4aef-4f34-afe9-4f618c193738",
+            candidateId:"3b0334d9-4464-4e7d-9d05-a2859a5a583a",
             type:type,
-            location:location,
             date:date,
             time:time,
+            location:location,
+            link:"",
+            dressCode:dressCode,
             description:description,
             cutoffDate:cutoffDate,
             cutoffTime:cutoffTime,
-            dressCode:dressCode
+        })
+            .then(response => {
+                if(response.status === 201){
+                    toast.success('Scheduled successfully!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Bounce,
+                    });
+                    router.push("/recruiter/vacancy/abc1/applications");
 
-        }
 
-        console.log(scheduleDetails)
+                }else{
+                    toast.error('Failed!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Bounce,
+                    });
+                }
+            })
+            .catch(error => {
+                console.error(`Error fetching`, error);
+                toast.error('Failed!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+                return null;
+            });
+
     };
     const router=useRouter();
 
@@ -108,41 +185,36 @@ export default function interviewSchedule(){
             showCancelButton: true,
             confirmButtonText: "Yes",
 
-        }).then(() => {
+        }).then(() =>
             sendDetails()
-            const result = {
-                status: 200
-            }
-            if (result?.status == 200) {
-                toast.success('Scheduled successfully!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-                router.push("/recruiter/vacancy/abc1/applications");
-
-            } else {
-                //not logged in
-                //handle error here
-                toast.error('Delete failed!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-            }
-        });
+            // if (result?.status === 200) {
+            //     toast.success('Scheduled successfully!', {
+            //         position: "top-right",
+            //         autoClose: 5000,
+            //         hideProgressBar: false,
+            //         closeOnClick: true,
+            //         pauseOnHover: true,
+            //         draggable: true,
+            //         progress: undefined,
+            //         theme: "colored",
+            //         transition: Bounce,
+            //     });
+            //     router.push("/recruiter/vacancy/abc1/applications");
+            //
+            // } else {
+            //     toast.error('Delete failed!', {
+            //         position: "top-right",
+            //         autoClose: 5000,
+            //         hideProgressBar: false,
+            //         closeOnClick: true,
+            //         pauseOnHover: true,
+            //         draggable: true,
+            //         progress: undefined,
+            //         theme: "colored",
+            //         transition: Bounce,
+            //     });
+            // }
+        );
     }
 
     return (
@@ -188,6 +260,7 @@ export default function interviewSchedule(){
                         )}
                         fullWidth
                         onChange={timeSet}
+
                     />
                 </div>
             </div>
@@ -210,7 +283,7 @@ export default function interviewSchedule(){
                         label="Position"
                         defaultValue={position}
                         className="w-full"
-                        // onChange={(element) => locationSet(element.target.value)}
+                        onChange={(element) => locationSet(element.target.value)}
                     />
                 </div>
             </div>
@@ -253,5 +326,3 @@ export default function interviewSchedule(){
         </div>
     );
 };
-
-// export default interviewSchedule;
