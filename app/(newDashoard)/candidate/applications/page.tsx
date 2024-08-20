@@ -9,6 +9,7 @@ import axios from 'axios';
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
 import { useSession } from 'next-auth/react';
 import content from '../../../../components/admin/content';
+import ApplicationStatusTableNew from '@/components/applicationStatus/ApplicationStatusTableNew';
 
 type Status = "Submitted" | "Under Review" | "Interview Called" | "Selected" | "Rejected" | "Withdrawn";
 
@@ -71,8 +72,8 @@ useEffect(() => {
     fetchData();
 }, []); // Empty dependency array ensures this effect runs only once on mount
 
-if (loading) return <p>Loading...</p>;
-if (error) return <p>Error: {error}</p>;
+// if (loading) return <p>Loading...</p>;
+// if (error) return <p>Error: {error}</p>;
 
     // const users: Applicant[] = [
     //     {
@@ -152,7 +153,9 @@ if (error) return <p>Error: {error}</p>;
             </header>
             {loading && <p>Loading...</p>}
             {!loading && error &&  <p>Error: {error}</p>}
-            {!loading && !error &&  <ApplicationStatusTable applications={applications} recruiters={recruiters} jobs={jobs} />}
+            {/* {!loading && !error &&  <ApplicationStatusTable applications={applications} recruiters={recruiters} jobs={jobs} />} */}
+            {!loading && !error &&  <ApplicationStatusTableNew applications={applications} recruiters={recruiters} jobs={jobs} />}
+            {/* <ApplicationStatusTableNew /> */}
         </div>
     );
 }
