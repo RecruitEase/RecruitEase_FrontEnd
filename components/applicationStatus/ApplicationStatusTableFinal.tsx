@@ -25,22 +25,12 @@ import { ChevronDownIcon } from "../recruiter/ChevronDownIcon";
 import { toTitleCase } from "@/lib/utils";
 import { PlusIcon } from "../recruiter/PlusIcon";
 import { ApplicationProp, JobProps, RecruiterProp } from "@/types";
-import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import Swal from "sweetalert2";
-import { Bounce, toast } from "react-toastify";
-import { title } from '../primitives';
 
-
-
-interface ApplicationStatusTableProps {
-  applications: ApplicationProp[];
-  jobs: JobProps[];
-  recruiters: RecruiterProp[];
-}
 
 
 
 const columns = [
+  {name: "RECRUITER", uid: "recruiter", sortable: true},
   {name: "POSITION", uid: "title", sortable: true},
   {name: "DATE", uid: "date", sortable: true},
   {name: "STATUS", uid: "status", sortable: true},
@@ -84,33 +74,21 @@ const statusOptions = [
   { name: "Archived", uid: "archived" },
 ];
 
+const INITIAL_VISIBLE_COLUMNS = ["recruiter", "status", "actions","date","title"];
+
+type User = ApplicationTableRowProp;
+interface ApplicationStatusTableProps {
+  applications: ApplicationProp[];
+  jobs: JobProps[];
+  recruiters: RecruiterProp[];
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const INITIAL_VISIBLE_COLUMNS:string[] = ["title","date"];
-
-// type User = typeof users[0];
 interface ApplicationTableRowProp extends ApplicationProp {
   recruiter:RecruiterProp | null;
   job:JobProps | null;
 }
+
 
 function mapToApplicationTableRowProps(applications:ApplicationProp[],jobs:JobProps[],recruiters:RecruiterProp[]): ApplicationTableRowProp[] {
   return applications.map(application => {
@@ -124,136 +102,9 @@ function mapToApplicationTableRowProps(applications:ApplicationProp[],jobs:JobPr
     };
   });
 }
-export default function ApplicationStatusTableNew({ applications,jobs,recruiters }:ApplicationStatusTableProps) {
-  const combinedList:ApplicationTableRowProp[] =[
-    {
-        "applicationId": "3d0ff653-7efe-4843-bc1c-b74bd7cb3f4b",
-        "candidateId": "3b0334d9-4464-4e7d-9d05-a2859a5a583a",
-        "jobId": "xyz",
-        "cvId": "zyx",
-        "recruiterId": "33d27ee6-86e8-4a13-b6ae-1ff8fb51daba",
-        "status": "archived",
-        "coverLetter": "I am excited to apply for this position because...",
-        "score": 85,
-        "answers": "answer1, answer2, answer3",
-        "createdAt": "2024-08-18T17:02:42.248331",
-        "recruiter": {
-            "id": "e7984f26-9ea7-43e7-84c0-50ab4942f8ca",
-            "email": "recruiter@recruitease.lk",
-            "role": "recruiter",
-            "isActive": true,
-            "createdAt": "2024-08-18T14:14:13.975163",
-            "firstName": "Chathura",
-            "lastName": "Lakshan",
-            "profilePic": "/profileImages/noImage.png",
-            "recruiterId": "33d27ee6-86e8-4a13-b6ae-1ff8fb51daba",
-            "companyName": "ChathuraLakshan Inc.",
-            "city": "Colombo",
-            "gender": "Male",
-            "address": "456 Corporate Ave, Business City, USA",
-            "businessRegistrationNumber": "abc123",
-            "website": null
-        },
-        "job": {
-            "jobId": "xyz",
-            "logo": "https://example.com/logo.png",
-            "title": "Software Engineer",
-            "company": "TechCorp",
-            "location": "New York, NY",
-            "type": "Full-time",
-            "daysLeft": "5 days left"
-        }
-    },
-    {
-        "applicationId": "92f80e05-2ed7-4af3-bf53-13123846275e",
-        "candidateId": "3b0334d9-4464-4e7d-9d05-a2859a5a583a",
-        "jobId": "zxyz",
-        "cvId": "zyxz",
-        "recruiterId": "33d27ee6-86e8-4a13-b6ae-1ff8fb51daba",
-        "status": "withdrawn",
-        "coverLetter": "I am excited to apply for this position because...",
-        "score": 85,
-        "answers": "answer1, answer2, answer3",
-        "createdAt": "2024-08-18T18:43:27.419755",
-        "recruiter": {
-            "id": "e7984f26-9ea7-43e7-84c0-50ab4942f8ca",
-            "email": "recruiter@recruitease.lk",
-            "role": "recruiter",
-            "isActive": true,
-            "createdAt": "2024-08-18T14:14:13.975163",
-            "firstName": "Chathura",
-            "lastName": "Lakshan",
-            "profilePic": "/profileImages/noImage.png",
-            "recruiterId": "33d27ee6-86e8-4a13-b6ae-1ff8fb51daba",
-            "companyName": "ChathuraLakshan Inc.",
-            "city": "Colombo",
-            "gender": "Male",
-            "address": "456 Corporate Ave, Business City, USA",
-            "businessRegistrationNumber": "abc123",
-            "website": null
-        },
-        "job": {
-            "jobId": "zxyz",
-            "logo": "https://example.com/logo.png",
-            "title": "Software Engineer",
-            "company": "TechCorp",
-            "location": "New York, NY",
-            "type": "Full-time",
-            "daysLeft": "5 days left"
-        }
-    }
-]
-  // const combinedList:ApplicationTableRowProp[] = mapToApplicationTableRowProps(applications,jobs,recruiters);
-  console.log("csdes",combinedList)
-  
 
-
-  const axios=useAxiosAuth();
-  const popupview = (applicationId:String) => {
-      Swal.fire({
-          title: "Do you want to withdraw the application?",
-          icon: "warning",
-          customClass: {
-              confirmButton: "bg-[#f31260]", // Custom class for confirm button
-              cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
-          },
-          showCancelButton: true,
-          confirmButtonText: "Withdraw"
-      }).then(async (result) => {
-          if (result.isConfirmed) {
-
-              // Fetch application data API call
-          const result = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/withdraw/${applicationId}`)
-              if (result?.status === 200) {
-                  toast.success("Withdrawn successfully!", {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                      transition: Bounce
-                  });
-                  applications[applications.findIndex(application=>application.applicationId==applicationId)].status="withdrawn";
-              } else {
-                  toast.error("Withdrawal failed!", {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                      transition: Bounce
-                  });
-              }
-          }
-      });
-  };
-
+export default function ApplicationStatusTableFinal({ applications,jobs,recruiters }:ApplicationStatusTableProps) {
+  const users= mapToApplicationTableRowProps(applications,jobs,recruiters);
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
@@ -276,7 +127,7 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...combinedList];
+    let filteredUsers = [...users];
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
@@ -290,7 +141,7 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
     }
 
     return filteredUsers;
-  }, [applications, filterValue, statusFilter]);
+  }, [users, filterValue, statusFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -302,63 +153,69 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: ApplicationTableRowProp, b: ApplicationTableRowProp) => {
-      const first = a[sortDescriptor.column as keyof ApplicationTableRowProp] as string;
-      const second = b[sortDescriptor.column as keyof ApplicationTableRowProp] as string;
+    return [...items].sort((a: User, b: User) => {
+      const first = a[sortDescriptor.column as keyof User] as number;
+      const second = b[sortDescriptor.column as keyof User] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((application: ApplicationTableRowProp, columnKey: React.Key) => {
-    const cellValue = application[columnKey as keyof ApplicationTableRowProp];
+  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
+    const cellValue = user[columnKey as keyof User];
 
     switch (columnKey) {
-      case "position":
-                
-                    
-                    return (
-
-                    <User
-                        avatarProps={{radius: "lg", src: application.recruiter?.profilePic}}
-                        description={application.recruiter?.companyName}
-                        name={cellValue as string}
-
-                    >
-                        {application.recruiter?.companyName}
-                    </User>
-                );
-      case "date":
-        const date = new Date(application.createdAt);
-        
+      case "recruiter":
         return (
-            <div className="flex flex-col">
+          <User
+            avatarProps={{radius: "lg", src: user.recruiter?.profilePic}}
+            description={user.recruiter?.email}
+            name={user.recruiter?.companyName}
+          />
+        );
+        case "title":
+
+        return (
+          <div className="flex flex-col">
+                <p className="text-bold text-sm capitalize">{toTitleCase(user.job?.title || "")}</p>
+            </div>
+        );
+      case "date":
+        const date = new Date(user.createdAt);
+
+        return (
+          <div className="flex flex-col">
                 <p className="text-bold text-sm capitalize">{date.toLocaleString()}</p>
                 {/*<p className="text-bold text-sm capitalize text-default-400">{user.team}</p>*/}
             </div>
         );
-        case "status":
-          return (
-              <Chip
-                  className="capitalize min-w-32 text-center "
-                  style={{ backgroundColor: statusColorMap[application.status], color:"#000000"}}
-                  size="md"
-                  variant="flat"
-              >
-                  {statusTitleMap[application.status]}
-              </Chip>
-          );
+      case "status":
+        return (
+          <Chip
+              className="capitalize min-w-32 text-center "
+              style={{ backgroundColor: statusColorMap[user.status], color:"#000000"}}
+              size="md"
+              variant="flat"
+          >
+              {statusTitleMap[user.status]}
+          </Chip>
+      );
       case "actions":
           return (
               
-                  <Button className={"bg-blue-700 h-8"} isDisabled={application.status != "underReview"} color="primary" onPress={()=>popupview(application.applicationId)}>
-                      Withdraw
-                  </Button>
-              
-          );
+          <div>
+            <Button className={"bg-blue-700 h-8 mx-1"} isDisabled={user.status != "underReview"} color="primary" >
+                Withdraw
+            </Button>
+                        <Button className={"bg-blue-700 h-8 mx-1"}  color="primary" >
+                        View
+                    </Button>
+                    </div>
+        
+        );
       default:
-          return "cellValue";
+        return "cellValue";
     }
   }, []);
 
@@ -400,7 +257,7 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Search by position..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
@@ -449,13 +306,13 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />}>
+            {/* <Button color="primary" endContent={<PlusIcon />}>
               Add New
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">Total {applications.length} applications</span>
+          <span className="text-default-400 text-small">Total {users.length} applications</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
@@ -476,7 +333,7 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    applications.length,
+    users.length,
     hasSearchFilter,
   ]);
 
@@ -484,9 +341,9 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">
-          {selectedKeys === "all"
+          {/* {selectedKeys === "all"
             ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${filteredItems.length} selected`} */}
         </span>
         <Pagination
           isCompact
@@ -519,7 +376,7 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
         wrapper: "max-h-[382px]",
       }}
       selectedKeys={selectedKeys}
-      selectionMode="none"
+      // selectionMode="multiple"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
@@ -537,7 +394,7 @@ export default function ApplicationStatusTableNew({ applications,jobs,recruiters
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={combinedList}>
+      <TableBody emptyContent={"No users found"} items={sortedItems}>
         {(item) => (
           <TableRow key={item.applicationId}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

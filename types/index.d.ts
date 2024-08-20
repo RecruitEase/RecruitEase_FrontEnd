@@ -15,7 +15,7 @@ interface RecruiterProp {
   recruiterId: string;
   email: string;
   role: string;
-  isActive: string;
+  isActive: boolean;
   createdAt: string;
   firstName: string;
   lastName: string;
@@ -25,7 +25,7 @@ interface RecruiterProp {
   gender: string;
   businessRegistrationNumber: string;
   address: string;
-  website: string;
+  website: string | null;
 }
 
 
@@ -174,7 +174,6 @@ declare interface CustomFormInputWithoutValidationProps{
 }
 
 declare interface JobProps {
-  key: number;
   jobId:string,
   logo: string;
   title: string;
@@ -211,7 +210,7 @@ interface ApplicationProp {
   recruiterId: string;
   status: string;
   coverLetter: string;
-  score: string;
+  score: number;
   answers: string;
   createdAt: string;
 }

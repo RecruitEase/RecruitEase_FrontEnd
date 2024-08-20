@@ -1,6 +1,6 @@
 "use client";
 import React,{useEffect, useState} from 'react';
-import ApplicationStatusTable from "@/components/applicationStatus/applicationStatusTable";
+import ApplicationStatusTable from "@/components/applicationStatus/ApplicationStatusTable";
 import HeaderBox from "@/components/dashboard/HeaderBox";
 import Swal from "sweetalert2";
 import { Bounce, toast } from "react-toastify";
@@ -10,8 +10,7 @@ import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
 import { useSession } from 'next-auth/react';
 import content from '../../../../components/admin/content';
 import ApplicationStatusTableNew from '@/components/applicationStatus/ApplicationStatusTableNew';
-
-type Status = "Submitted" | "Under Review" | "Interview Called" | "Selected" | "Rejected" | "Withdrawn";
+import ApplicationStatusTableFinal from '@/components/applicationStatus/ApplicationStatusTableFinal';
 
 
 
@@ -56,6 +55,7 @@ useEffect(() => {
             console.log("reecruiters",recruiterResponse.data)
             setRecruiters(recruiterResponse.data.content.recruiterList);
             
+            //todo: job fetch
             //get job details for
             // const jobIdList=applicationList.map(app=>app.jobId);
             // const jobResponse = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/jobs/`,{jobIdList});
@@ -153,9 +153,8 @@ useEffect(() => {
             </header>
             {loading && <p>Loading...</p>}
             {!loading && error &&  <p>Error: {error}</p>}
-            {/* {!loading && !error &&  <ApplicationStatusTable applications={applications} recruiters={recruiters} jobs={jobs} />} */}
-            {!loading && !error &&  <ApplicationStatusTableNew applications={applications} recruiters={recruiters} jobs={jobs} />}
-            {/* <ApplicationStatusTableNew /> */}
+            {!loading && !error &&   <ApplicationStatusTableFinal applications={applications} jobs={jobs} recruiters={recruiters} />}
+           
         </div>
     );
 }
