@@ -25,6 +25,10 @@ import { ChevronDownIcon } from "../recruiter/ChevronDownIcon";
 import { toTitleCase } from "@/lib/utils";
 import { PlusIcon } from "../recruiter/PlusIcon";
 import { ApplicationProp, JobProps, RecruiterProp } from "@/types";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import Swal from "sweetalert2";
+import { Bounce, toast } from "react-toastify";
+import Link from "next/link";
 
 
 
@@ -105,6 +109,52 @@ function mapToApplicationTableRowProps(applications:ApplicationProp[],jobs:JobPr
 
 export default function ApplicationStatusTableFinal({ applications,jobs,recruiters }:ApplicationStatusTableProps) {
   const users= mapToApplicationTableRowProps(applications,jobs,recruiters);
+
+  const axios=useAxiosAuth();
+  const popupview = (applicationId:String) => {
+      Swal.fire({
+          title: "Do you want to withdraw the application?",
+          icon: "warning",
+          customClass: {
+              confirmButton: "bg-[#f31260]", // Custom class for confirm button
+              cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+          },
+          showCancelButton: true,
+          confirmButtonText: "Withdraw"
+      }).then(async (result) => {
+          if (result.isConfirmed) {
+
+              // Fetch application data API call
+          const result = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/withdraw/${applicationId}`)
+              if (result?.status === 200) {
+                  toast.success("Withdrawn successfully!", {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      transition: Bounce
+                  });
+                  applications[applications.findIndex(application=>application.applicationId==applicationId)].status="withdrawn";
+              } else {
+                  toast.error("Withdrawal failed!", {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      transition: Bounce
+                  });
+              }
+          }
+      });
+  };
 
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
@@ -205,10 +255,10 @@ export default function ApplicationStatusTableFinal({ applications,jobs,recruite
           return (
               
           <div>
-            <Button className={"bg-blue-700 h-8 mx-1"} isDisabled={user.status != "underReview"} color="primary" >
+            <Button className={"bg-blue-700 h-8 mx-1"} isDisabled={user.status != "underReview"} color="primary" onPress={()=>popupview(user.applicationId)}>
                 Withdraw
             </Button>
-                        <Button className={"bg-blue-700 h-8 mx-1"}  color="primary" >
+                        <Button className={"bg-blue-700 h-8 mx-1"}  color="primary" as={Link} href={`/candidate/applications/${user.applicationId}`} >
                         View
                     </Button>
                     </div>
