@@ -24,11 +24,13 @@ import { SearchIcon } from "../icons";
 import { ChevronDownIcon } from "../recruiter/ChevronDownIcon";
 import { toTitleCase } from "@/lib/utils";
 import { PlusIcon } from "../recruiter/PlusIcon";
-import { ApplicationProp, JobProps, RecruiterProp } from "@/types";
+import {  JobProps } from "@/types";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import Swal from "sweetalert2";
 import { Bounce, toast } from "react-toastify";
 import Link from "next/link";
+import {ApplicationProp} from "@/types/applications";
+import {RecruiterProp} from "@/types/users";
 
 
 
