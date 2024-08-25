@@ -5,11 +5,9 @@ import HeaderBox from "@/components/dashboard/HeaderBox";
 import { InterviewsOffersCard } from "@/components/interviewsOffers/interviewsOffersCard";
 import {Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/react";
 import { Button } from "@nextui-org/button";
-import axios from 'axios';
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
-const BASE_URL = "http://localhost:8222";
-const token = "eyJhbGciOiJIUzM4NCJ9.eyJjcmVhdGVkQXQiOiIyMDI0LTA4LTA4VDA2OjQ4OjI0LjA2OTExOCIsInJvbGUiOiJjYW5kaWRhdGUiLCJyb2xlRGV0YWlscyI6eyJmaXJzdE5hbWUiOiJDaGF0aHVyYSIsImxhc3ROYW1lIjoiTGFrc2hhbiIsInByb2ZpbGVQaWMiOiJodHRwOi8vZXhkZWFtcGxlLmNvbS9wcm9maWxlLmpwZyIsInByb2ZpbGVTdGF0dXMiOiJDdXJyZW50bHkgV29ya2luZyIsImNhbmRpZGF0ZUlkIjoiMjgyNzc4NzktZmE1NC00ODhhLTliOTMtNWYwMDQ0NDQ5ZGFlIn0sImlkIjoiMjE0NDg3MDItMTRmOS00ZTI5LWI3YzQtYWVjYTg1M2Q1MDYxIiwiaXNBY3RpdmUiOnRydWUsImVtYWlsIjoiY2FuZGlkYXRlQHJlY3J1aXRlYXNlLmxrIiwic3ViIjoiMjE0NDg3MDItMTRmOS00ZTI5LWI3YzQtYWVjYTg1M2Q1MDYxIiwiaWF0IjoxNzIzNjQ4NTM2LCJleHAiOjE3MjM2NTIxMzZ9.Eqglff8KZHf9xWU-ygMcL7TykIPbQWmcuNHAZMlO0X1XEJFbc_Lo7qIcOl8yE_2j"
-    type InterviewOfferCard = {
+   type InterviewOfferCard = {
     companyName: string;
     position: string;
     imageUrl: string;
@@ -23,48 +21,45 @@ const token = "eyJhbGciOiJIUzM4NCJ9.eyJjcmVhdGVkQXQiOiIyMDI0LTA4LTA4VDA2OjQ4OjI0
     description: string;
 };
 
-const fetchInterviewData = () => {
-    return axios.get(BASE_URL+'/api/v1/interviews/list', {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-        .then(response => {
-            const data = response.data.content;
-            if (!Array.isArray(data)) {
-                console.error("Unexpected data format:", data);
-                return [];
-            }
-            return data;
-        })
-        .catch(error => {
-            console.error("Error fetching interview data:", error);
-            return [];
-        });
-
-
-};
-
-const fetchApplicationDetails = (applicationId:String) => {
-
-    return axios.get(BASE_URL+`/api/v1/applications/view/${applicationId}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(response => response.data.content)
-        .catch(error => {
-            console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
-            return null;
-        });
-};
-
 const InterviewsOffers = () => {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [selectedCard, setSelectedCard] = useState<InterviewOfferCard | null>(null);
     const [mode,setMode]=useState("")
     const [modeName,setModeName]=useState("")
     const [interviewOfferCards, setInterviewOfferCards] = useState<InterviewOfferCard[]>([]);
+
+
+    const axios=useAxiosAuth();
+
+    const fetchInterviewData = () => {
+
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
+            .then(response => {
+                const data = response.data.content;
+                if (!Array.isArray(data)) {
+                    console.error("Unexpected data format:", data);
+                    return [];
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error("Error fetching interview data:", error);
+                return [];
+            });
+
+
+    };
+
+    const fetchApplicationDetails = (applicationId:String) => {
+
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
+            .then(response => response.data.content)
+            .catch(error => {
+                console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
+                return null;
+            });
+    };
+
 
     useEffect(() => {
         // Fetch interviews first
@@ -78,11 +73,9 @@ const InterviewsOffers = () => {
                     }))
                 );
 
-                // Wait for all promises to resolve
                 return Promise.all(companyDetailsPromises);
             })
             .then(results => {
-                // Process the results and merge data
                 const mergedData: InterviewOfferCard[] = results
                     .map(({ interview, companyDetails }) => {
                         if (companyDetails) {

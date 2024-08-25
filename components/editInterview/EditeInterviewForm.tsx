@@ -2,7 +2,7 @@
 
 import React, {Key, useState} from 'react';
 import { Input, DatePicker, TimeInput, Button, Textarea } from "@nextui-org/react";
-import { Time } from "@internationalized/date";
+import {parseDate, Time} from "@internationalized/date";
 import { ClockCircleLinearIcon } from "@nextui-org/shared-icons";
 import { DateValue } from "@internationalized/date";
 import Swal from "sweetalert2";
@@ -25,17 +25,18 @@ type DateObject = {
     day: number;
 };
 
-export default function InterviewSchedule(){
+// @ts-ignore
+export default function EditeInterviewForm({currentData}){
 
-
-    const [location, setLocation] = useState("");
-    const [date, setDate] = useState<DateValue | null>(null);
-    const [time, setTime] = useState<Time | null>(null);
+    console.log("description"+currentData.description)
+    const [location, setLocation] = useState(currentData.location);
+    const [date, setDate] = useState<DateValue | null>(currentData.date);
+    const [time, setTime] = useState<Time | null>(currentData.time);
     const [description, setDescription] = useState("");
-    const [cutoffDate, setCutoffDate] = useState<DateValue | null>(null);
-    const [cutoffTime, setCutoffTime] = useState<Time | null>(null);
-    const [type,setType] = useState<Key | null>(null);
-    const [dressCode, setDressCode] = useState("");
+    const [cutoffDate, setCutoffDate] = useState<DateValue | null>(currentData.cutoffDate);
+    const [cutoffTime, setCutoffTime] = useState<Time | null>(currentData.cutoffTime);
+    const [type,setType] = useState<Key | null>(currentData.type);
+    const [dressCode, setDressCode] = useState(currentData.dressCode);
     const [dateFormat, setDateFormat] = useState<Date | null>(null);
 
     function formatDate(dateObj: DateObject): string {
@@ -74,6 +75,7 @@ export default function InterviewSchedule(){
         }
     }
     const timeSet = (time:Time) => {
+        console.log("time:"+time)
         if (time) {
             const formattedTime = formatTimeToAMPM(time.hour, time.minute);;
             // @ts-ignore
@@ -83,7 +85,7 @@ export default function InterviewSchedule(){
         }
     };
     const descriptionSet = (description: string) => {
-        setLocation(description);
+        setDescription(description);
     };
     const cutoffDateSet = (cutoffDate: DateValue) => {
         if (cutoffDate) {
@@ -104,14 +106,27 @@ export default function InterviewSchedule(){
         }
     };
 
+    const getTimeFormat=(inputTime:string)=>{
+        const [time, period] = inputTime.split(' ');
+        const [hours, minutes] = time.split('.');
+
+        const hours24 = period.toUpperCase() === 'PM' ? parseInt(hours) + 12 : parseInt(hours);
+        const defaultTime = new Time(hours24, parseInt(minutes));
+
+        return defaultTime
+    }
+    const getDateFormat=(inputDate:string)=>{
+        const defaultDate = parseDate(inputDate);
+        console.log(defaultDate)
+        return defaultDate
+    }
+
     const axios=useAxiosAuth();
 
 
     const sendDetails = () => {
 
-        return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/create`,{
-            applicationId:"d84ac88d-4aef-4f34-afe9-4f618c193738",
-            candidateId:"3b0334d9-4464-4e7d-9d05-a2859a5a583a",
+        return axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/${currentData.id}`,{
             type:type,
             date:date,
             time:time,
@@ -123,8 +138,8 @@ export default function InterviewSchedule(){
             cutoffTime:cutoffTime,
         })
             .then(response => {
-                if(response.status === 201){
-                    toast.success('Scheduled successfully!', {
+                if(response.status === 200){
+                    toast.success('Update scheduled successfully!', {
                         position: "top-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -178,8 +193,8 @@ export default function InterviewSchedule(){
             title: "Are scheduling details correct?",
             icon:"info",
             customClass: {
-                confirmButton: 'bg-primary', // Custom class for confirm button
-                cancelButton: 'bg-[#a1a1aa]'   // Custom class for cancel button
+                confirmButton: 'bg-primary',
+                cancelButton: 'bg-[#a1a1aa]'
             },
 
             showCancelButton: true,
@@ -189,7 +204,6 @@ export default function InterviewSchedule(){
             sendDetails()
         );
     }
-
 
     return (
         <div className={"flex flex-col gap-4 "}>
@@ -201,6 +215,8 @@ export default function InterviewSchedule(){
                     className="max-w-xs"
                     // @ts-ignore
                     onSelectionChange={(key: React.Key) => typeSet(key)}
+                    defaultValue={currentData.type}
+                    defaultSelectedKey={currentData.type}
                 >
                     {(types) => <AutocompleteItem key={types.key}>{types.label}</AutocompleteItem>}
                 </Autocomplete>
@@ -215,6 +231,7 @@ export default function InterviewSchedule(){
                         placeholder="Enter location"
                         onChange={(element) => locationSet(element.target.value)}
                         isDisabled={type === "Online" ? true : false}
+                        defaultValue={currentData.location}
                     />
                 </div>
                 <div className={"col-span-12 sm:col-span-3 w-full"}>
@@ -223,13 +240,14 @@ export default function InterviewSchedule(){
                         className="max-w-md w-full"
                         isRequired
                         fullWidth
+                        defaultValue={getDateFormat(currentData.date)}
                         onChange={dateSet}
                     />
                 </div>
                 <div className={"col-span-12 sm:col-span-3 w-full"}>
                     <TimeInput
                         label="Event Time"
-                        // defaultValue={new Time(0o0, 0o0)}
+                        defaultValue={getTimeFormat(currentData.time)}
                         endContent={(
                             <ClockCircleLinearIcon/>
                         )}
@@ -249,6 +267,7 @@ export default function InterviewSchedule(){
                         placeholder="Enter dress code"
                         onChange={(element) => dressCodeSet(element.target.value)}
                         className="w-full"
+                        defaultValue={currentData.dressCode}
                     />
                 </div>
 
@@ -259,7 +278,6 @@ export default function InterviewSchedule(){
                         label="Position"
                         defaultValue={position}
                         className="w-full"
-                        onChange={(element) => locationSet(element.target.value)}
                     />
                 </div>
             </div>
@@ -269,6 +287,7 @@ export default function InterviewSchedule(){
                     placeholder="Enter your description"
                     className="w-full "
                     fullWidth
+                    defaultValue={currentData.description}
                     onChange={(element) => descriptionSet(element.target.value)}
                 />
             </div>
@@ -280,13 +299,14 @@ export default function InterviewSchedule(){
                     className="max-w-xs w-full"
                     isRequired
                     fullWidth
+                    defaultValue={getDateFormat(currentData.cutoffDate)}
                     onChange={cutoffDateSet}
                 />
             </div>
             <div className={"w-full"}>
                 <TimeInput
                     label="CutOff Time"
-                    // defaultValue={new Time(0o0, 0o0)}
+                    defaultValue={getTimeFormat(currentData.cutoffTime)}
                     endContent={(
                         <ClockCircleLinearIcon/>
                     )}
@@ -297,7 +317,7 @@ export default function InterviewSchedule(){
             </div>
             <div className={"w-full flex justify-end"}>
                 <Button color="primary" onPress={conformationPop}>
-                    Send
+                    Save
                 </Button>
             </div>
         </div>

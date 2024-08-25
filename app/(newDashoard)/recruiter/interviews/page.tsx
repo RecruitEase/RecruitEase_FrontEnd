@@ -15,9 +15,12 @@ import {
 
 import {Button} from "@nextui-org/button";
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
+import { useRouter } from 'next/navigation';
+import {Bounce, toast} from "react-toastify";
 
 type userDetails = {
     id: number,
+    interviewId:string,
     name: string,
     role:string,
     team:string,
@@ -35,6 +38,7 @@ type userDetails = {
 const JobList = () =>{
 
     const axios=useAxiosAuth();
+    const router=useRouter();
 
 const fetchInterviewData = () => {
     return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
@@ -51,8 +55,6 @@ const fetchInterviewData = () => {
             console.error("Error fetching interview data:", error);
             return [];
         });
-
-
 };
 
 const fetchApplicationDetails = (applicationId:String) => {
@@ -64,6 +66,14 @@ const fetchApplicationDetails = (applicationId:String) => {
             return null;
         });
 };
+
+const editInterview = (interviewId: string | undefined) =>{
+    if (interviewId) {
+        router.push(`/recruiter/interviews/editInterview/${interviewId}`)
+    } else {
+        console.error('Interview ID is undefined. Cannot navigate to edit page.');
+    }
+}
 
     const [selectedCard, setSelectedCard] = useState<userDetails | null>(null);
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -90,6 +100,7 @@ const fetchApplicationDetails = (applicationId:String) => {
                     date: any;
                     imageUrl: any;
                     link: any;
+                    interviewId:string;
                     remainingDays: any;
                     description: any;
                     location: any;
@@ -100,11 +111,12 @@ const fetchApplicationDetails = (applicationId:String) => {
                     dressCode: any;
                     status: any
                 } | null)[] = results
-                    .map(({ interview, companyDetails}) => {
+                    .map(({ interview, companyDetails},index) => {
                         if (companyDetails) {
                             return {
 
-                                id: 1,
+                                id: index+1,
+                                interviewId:interview.id,
                                 team: companyDetails.position,
                                 imageUrl: companyDetails.imageUrl,
                                 status:companyDetails.status,
@@ -115,7 +127,7 @@ const fetchApplicationDetails = (applicationId:String) => {
                                 time: interview.time,
                                 dressCode: interview.dressCode,
                                 remainingDays: interview.remainingDays,
-                                description: interview.description,
+                                description: interview.description
 
                             };
                         } else {
@@ -184,7 +196,7 @@ const fetchApplicationDetails = (applicationId:String) => {
 
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary">
+                            <Button color="primary" onPress={()=>editInterview(selectedCard?.interviewId)}>
                                 Edit
                             </Button>
                             <Button startContent={"<>"} color="danger" variant="light" onPress={onClose}>
