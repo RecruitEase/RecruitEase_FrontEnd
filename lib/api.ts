@@ -24,14 +24,39 @@ axiosInstance.interceptors.request.use(async (config) => {
     return Promise.reject(error);
 });
 
+
+// user detail apis.............................................................................................................................................................................
+export const getUsers=async (recruiterIds:string[],adminIds:string[],moderatorIds:string[],candidateIds:string[])=>{
+    return (await axiosInstance.post(`user/detail-list`,
+        {
+            recruiterIdList:recruiterIds,
+            adminIdList:adminIds,
+            moderatorIdList:moderatorIds,
+            candidateIdList:candidateIds
+
+        })).data.content;
+}
+export const getRecruiters=async (recruiterIds:string[])=>{
+    return (await axiosInstance.post(`user/recruiter-list`,{recruiterIdList:recruiterIds})).data.content.recruiterList;
+}
+export const getAdmins=async (adminIds:string[])=>{
+    return (await axiosInstance.post(`user/admin-list`,{adminIdList:adminIds})).data.content.adminIdList;
+}
+export const getModerators=async (moderatorIds:string[])=>{
+    return (await axiosInstance.post(`user/moderator-list`,{moderatorIdList:moderatorIds})).data.content.moderatorIdList;
+}
+export const getCandidates=async (candidateIds:string[])=>{
+    return (await axiosInstance.post(`user/candidate-list`,{candidateIdList:candidateIds})).data.content.candidateIdList;
+}
+
+
+// application detail apis.............................................................................................................................................................................
 export const getApplications=async (candidateId:string)=>{
     return (await axiosInstance.get(`api/v1/applications/candidate/${candidateId}`)).data.content;
 }
-
-export const getRecruiters=async (recruiterIds:string[])=>{
-    return (await axiosInstance.post(`user/detail-list`,{recruiterIdList:recruiterIds})).data.content.recruiterList;
+export const getApplication=async (applicationId:string)=>{
+    return (await axiosInstance.get(`api/v1/applications/view/${applicationId}`)).data.content;
 }
-
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);

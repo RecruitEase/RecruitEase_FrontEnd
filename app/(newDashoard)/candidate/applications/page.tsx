@@ -4,8 +4,10 @@ import HeaderBox from "@/components/dashboard/HeaderBox";
 import { JobProps } from '@/types';
 import { useSession } from 'next-auth/react';
 import ApplicationStatusTableFinal from '@/components/applicationStatus/ApplicationStatusTableFinal';
-import {useApplications} from "@/lib/hooks/useApplications";
+import {useApplication, useApplications} from "@/lib/hooks/useApplications";
 import { useRecruiters } from '@/lib/hooks/useRecruiters';
+import LoadingComponent from '@/components/LoadingComponent';
+import ErrorComponent from '@/components/ErrorComponent';
 
 
 
@@ -42,13 +44,13 @@ const ApplicationStatus = () => {
     //get job details for applications
 
 
-    if(applicationsQuery.isPending || recruitersQuery.isPending){
-        return <span>Loading data....</span>
-    }
+    // if(applicationsQuery.isPending || recruitersQuery.isPending){
+    //     return <LoadingComponent />
+    // }
 
-    if(applicationsQuery.isError || recruitersQuery.isError){
-        return <span>Error fetching data</span>
-    }
+    // if(applicationsQuery.isError || recruitersQuery.isError){
+    //     return <ErrorComponent />
+    // }
 
     return (
         <div>
@@ -59,7 +61,15 @@ const ApplicationStatus = () => {
                     subtext="Manage your submitted applications from here"
                 />
             </header>
-  <ApplicationStatusTableFinal applications={applicationsQuery.data!} jobs={jobs} recruiters={recruitersQuery.data!} />
+            {
+            (applicationsQuery.isPending || recruitersQuery.isPending)? 
+            <LoadingComponent />
+            :
+            (applicationsQuery.isError || recruitersQuery.isError)?
+            < ErrorComponent />
+            :
+             <ApplicationStatusTableFinal applications={applicationsQuery.data!} jobs={jobs} recruiters={recruitersQuery.data!} />
+            }
            
         </div>
     );

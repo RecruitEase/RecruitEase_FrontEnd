@@ -1,5 +1,5 @@
-import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, QueryClient, useQueryClient } from '@tanstack/react-query';
-import {getApplications, getRecruiters} from "@/lib/api";
+import { useQuery} from '@tanstack/react-query';
+import {getRecruiters} from "@/lib/api";
 import {RecruiterProp} from "@/types/users";
 
 export function useRecruiters(recruiterIds:string[]) {
