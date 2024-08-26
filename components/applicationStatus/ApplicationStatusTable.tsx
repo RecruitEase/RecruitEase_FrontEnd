@@ -9,7 +9,10 @@ import {SearchIcon} from "@/components/icons";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import Link from "next/link";
-import { ApplicationProp, JobProps, RecruiterProp } from "@/types";
+import {  JobProps } from "@/types";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import {ApplicationProp} from "@/types/applications";
+import {RecruiterProp} from "@/types/users";
 
 
 
@@ -51,57 +54,60 @@ interface ApplicationStatusTableProps {
 
 
 
-const popupview = () => {
-    Swal.fire({
-        title: "Do you want to withdraw the application?",
-        icon: "warning",
-        customClass: {
-            confirmButton: "bg-[#f31260]", // Custom class for confirm button
-            cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
-        },
-        showCancelButton: true,
-        confirmButtonText: "Withdraw"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Simulate a successful withdrawal response
-            const result = {
-                status: 200
-            };
-            if (result?.status === 200) {
-                toast.success("Withdrawn successfully!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce
-                });
-            } else {
-                toast.error("Withdrawal failed!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce
-                });
-            }
-        }
-    });
-};
 
-const view=()=>{
 
-}
+
 
 
 const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ applications,jobs,recruiters }) => {
+
+    const axios=useAxiosAuth();
+    const popupview = (applicationId:String) => {
+        Swal.fire({
+            title: "Do you want to withdraw the application?",
+            icon: "warning",
+            customClass: {
+                confirmButton: "bg-[#f31260]", // Custom class for confirm button
+                cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+            },
+            showCancelButton: true,
+            confirmButtonText: "Withdraw"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+
+                // Fetch application data API call
+            const result = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/withdraw/${applicationId}`)
+                if (result?.status === 200) {
+                    toast.success("Withdrawn successfully!", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Bounce
+                    });
+                    applications[applications.findIndex(application=>application.applicationId==applicationId)].status="withdrawn";
+                } else {
+                    toast.error("Withdrawal failed!", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        transition: Bounce
+                    });
+                }
+            }
+        });
+    };
+
+
     const renderCell = React.useCallback((application: ApplicationProp, columnKey: string | number) => {
         const cellValue = application[columnKey as keyof ApplicationProp];
 
@@ -142,11 +148,11 @@ const ApplicationStatusTable: React.FC<ApplicationStatusTableProps> = ({ applica
                 );
             case "actions":
                 return (
-                    (application.status == "underReview") && (
-                        <Button className={"bg-blue-700 h-8"} color="primary" onPress={popupview}>
+                    
+                        <Button className={"bg-blue-700 h-8"} isDisabled={application.status != "underReview"} color="primary" onPress={()=>popupview(application.applicationId)}>
                             Withdraw
                         </Button>
-                    )
+                    
                 );
             default:
                 return cellValue;

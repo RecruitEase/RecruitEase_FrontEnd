@@ -10,72 +10,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 
 
 
-interface RecruiterProp {
-  id: string;
-  recruiterId: string;
-  email: string;
-  role: string;
-  isActive: string;
-  createdAt: string;
-  firstName: string;
-  lastName: string;
-  profilePic: string;
-  companyName: string;
-  city: string;
-  gender: string;
-  businessRegistrationNumber: string;
-  address: string;
-  website: string;
-}
-
-
-interface CandidateProp {
-  id: string;
-  candidateId: string;
-  email: string;
-  role: string;
-  isActive: string;
-  createdAt: string;
-  firstName: string;
-  lastName: string;
-  profilePic: string;
-  city: string;
-  gender: string;
-  profileStatus: string;
-}
-
-
-
-
-interface ModeratorProp {
-  id: string;
-  moderatorId: string;
-  email: string;
-  role: string;
-  isActive: string;
-  createdAt: string;
-  firstName: string;
-  lastName: string;
-  profilePic: string;
-  city: string;
-  gender: string;
-}
-
-
-
-interface AdminProp {
-  id: string;
-  moderatorId: string;
-  email: string;
-  role: string;
-  isActive: string;
-  createdAt: string;
-  firstName: string;
-  lastName: string;
-  profilePic: string;
-  city: string;
-  gender: string;
-}
 
 
 declare interface HeaderBoxProps {
@@ -174,8 +108,7 @@ declare interface CustomFormInputWithoutValidationProps{
 }
 
 declare interface JobProps {
-  key: number;
-  id:string,
+  jobId:string,
   logo: string;
   title: string;
   company: string;
@@ -202,19 +135,7 @@ declare interface CVProps{
 }
 
 
-//applications.........................
-interface ApplicationProp {
-  applicationId: string;
-  candidateId: string;
-  jobId: string;
-  cvId: string;
-  recruiterId: string;
-  status: string;
-  coverLetter: string;
-  score: string;
-  answers: string;
-  createdAt: string;
-}
+
 
 //for chat.......................
 

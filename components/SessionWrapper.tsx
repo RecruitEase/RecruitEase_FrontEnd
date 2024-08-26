@@ -1,11 +1,12 @@
 "use client";
 import { useSession } from "next-auth/react";
+import LoadingComponent from "./LoadingComponent";
 
 const SessionWrapper = ({ children }) => {
   const { status } = useSession();
 
   if (status === "loading") {
-    return <p>Loading...</p>; // Or a custom loading component
+    return <LoadingComponent />; // Or a custom loading component
   }
 
   return <>{children}</>;

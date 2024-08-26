@@ -9,6 +9,8 @@ import Swal from "sweetalert2";
 import { Bounce, toast } from "react-toastify";
 import Questions from "@/components/applicationsView/Questions";
 import { Link } from "@nextui-org/react";
+import {useApplication} from "@/lib/hooks/useApplications";
+import {useParams} from "next/navigation";
 
 const data = {
     coverLetter: {
@@ -139,7 +141,15 @@ const withdrawButton = () => {
     popup();
 };
 
+
 const ApplicationView: React.FC = () => {
+
+    const params = useParams<{id:string}>()
+
+    const applicationQuery=useApplication(params.id)
+
+    console.log(applicationQuery.data)
+
     return (
         <div>
             <HeaderBox
