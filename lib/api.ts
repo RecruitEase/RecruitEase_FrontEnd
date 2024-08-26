@@ -48,7 +48,9 @@ export const getModerators=async (moderatorIds:string[])=>{
 export const getCandidates=async (candidateIds:string[])=>{
     return (await axiosInstance.post(`user/candidate-list`,{candidateIdList:candidateIds})).data.content.candidateIdList;
 }
-
+export const getRecruiter=async (recruiterId:string)=>{
+    return (await axiosInstance.get(`user/recruiter/${recruiterId}`)).data.content;
+}
 
 // application detail apis.............................................................................................................................................................................
 export const getApplications=async (candidateId:string)=>{

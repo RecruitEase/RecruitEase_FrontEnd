@@ -11,6 +11,8 @@ import Questions from "@/components/applicationsView/Questions";
 import { Link } from "@nextui-org/react";
 import {useApplication} from "@/lib/hooks/useApplications";
 import {useParams} from "next/navigation";
+import { useRecruiter } from "@/lib/hooks/useRecruiters";
+import LoadingComponent from "@/components/LoadingComponent";
 
 const data = {
     coverLetter: {
@@ -141,14 +143,23 @@ const withdrawButton = () => {
     popup();
 };
 
-
+const job = {
+    jobId: "001",
+    logo: "https://example.com/logo1.png",
+    title: "Software Engineer",
+    company: "Tech Innovations Inc.",
+    location: "New York, NY",
+    type: "Full-time",
+    daysLeft: "10 days left",
+  };
 const ApplicationView: React.FC = () => {
 
     const params = useParams<{id:string}>()
 
     const applicationQuery=useApplication(params.id)
+    const recruiterQuery=useRecruiter(applicationQuery.data?.recruiterId)
+    //todo:fetch job
 
-    console.log(applicationQuery.data)
 
     return (
         <div>
@@ -159,7 +170,7 @@ const ApplicationView: React.FC = () => {
             />
             <div className={"w-full grid grid-cols-12 gap-8"}>
                 <div className={"col-span-12 sm:col-span-8"}>
-                    <CoverLetter coverLetter={data.coverLetter} />
+                    {(applicationQuery.data && recruiterQuery.data)? <CoverLetter job={job} application={applicationQuery.data!} recruiter={recruiterQuery.data!} /> : <LoadingComponent/>}
                 </div>
                 <div className={"col-span-12 sm:col-span-4"}>
                     <CV cvImage={data.cvImage} />

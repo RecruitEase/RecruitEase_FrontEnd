@@ -62,13 +62,17 @@ const ApplicationStatus = () => {
                 />
             </header>
             {
-            (applicationsQuery.isPending || recruitersQuery.isPending)? 
+            (applicationsQuery.isFetching || recruitersQuery.isFetching)? 
             <LoadingComponent />
-            :
-            (applicationsQuery.isError || recruitersQuery.isError)?
+            :(applicationsQuery.isSuccess && applicationsQuery.data.length==0)?
+            <div className="flex justify-center items-center h-96">
+                No applications found
+                </div>
+            :(applicationsQuery.isError || recruitersQuery.isError)?
             < ErrorComponent />
             :
              <ApplicationStatusTableFinal applications={applicationsQuery.data!} jobs={jobs} recruiters={recruitersQuery.data!} />
+
             }
            
         </div>

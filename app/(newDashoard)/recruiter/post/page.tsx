@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import HeaderBox from "@/components/dashboard/HeaderBox";
 import {useTheme} from "next-themes";
 import {useSession} from "next-auth/react";
@@ -21,6 +21,7 @@ const JobPost = () => {
     const router=useRouter();
     //react-quill
     const [value, setValue] = useState('');
+
 
     const modules = {
         toolbar: [

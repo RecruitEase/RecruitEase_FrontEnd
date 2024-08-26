@@ -12,8 +12,8 @@ export function useApplications(candidateId: string) {
 export function useApplication(applicationId: string|null) {
     const queryClient=useQueryClient();
 
-    return useQuery({
-        queryKey:['application',{applicationId}],
+    return useQuery<ApplicationProp>({
+        queryKey:['application',applicationId],
         queryFn:()=>getApplication(applicationId!),
         enabled:!!applicationId,
         placeholderData:()=>{
