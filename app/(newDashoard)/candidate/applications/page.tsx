@@ -1,87 +1,56 @@
-import React from 'react';
-import ApplicationStatusTable from "@/components/applicationStatus/applicationStatusTable";
+"use client";
+import React,{ useState} from 'react';
 import HeaderBox from "@/components/dashboard/HeaderBox";
-import Swal from "sweetalert2";
-import { Bounce, toast } from "react-toastify";
+import { JobProps } from '@/types';
+import { useSession } from 'next-auth/react';
+import ApplicationStatusTableFinal from '@/components/applicationStatus/ApplicationStatusTableFinal';
+import {useApplication, useApplications} from "@/lib/hooks/useApplications";
+import { useRecruiters } from '@/lib/hooks/useRecruiters';
+import LoadingComponent from '@/components/LoadingComponent';
+import ErrorComponent from '@/components/ErrorComponent';
 
-type Status = "Submitted" | "Under Review" | "Interview Called" | "Selected" | "Rejected" | "Withdrawn";
 
-interface Applicant {
-    id: number;
-    position: string;
-    date: string;
-    status: Status;
-    avatar: string;
-    companyName: string;
-}
 
 const ApplicationStatus = () => {
-    const users: Applicant[] = [
-        {
-            id: 1,
-            position: "Community Manager",
-            date: "2024/02/01",
-            status: "Submitted",
-            avatar: "/assets/companyLogos/IFS.jpg",
-            companyName: "IFS",
-        },
-        {
-            id: 2,
-            position: "Technical Lead",
-            date: "2024/02/01",
-            status: "Under Review",
-            avatar: "/assets/companyLogos/aws.jpeg",
-            companyName: "AWS",
-        },
-        {
-            id: 3,
-            position: "Senior Developer",
-            date: "2024/02/01",
-            status: "Under Review",
-            avatar: "/assets/companyLogos/Microsoft.jpg",
-            companyName: "Microsoft",
-        },
-        {
-            id: 4,
-            position: "Community Manager",
-            date: "2024/02/01",
-            status: "Submitted",
-            avatar: "/assets/companyLogos/Salesforce.jpeg",
-            companyName: "Salesforce",
-        },
-        {
-            id: 5,
-            position: "Sales Manager",
-            date: "2024/02/01",
-            status: "Interview Called",
-            avatar: "/assets/companyLogos/OIP.jpeg",
-            companyName: "Oracle",
-        },
-        {
-            id: 6,
-            position: "Community Manager",
-            date: "2024/02/01",
-            status: "Withdrawn",
-            avatar: "/assets/companyLogos/Intuit.png",
-            companyName: "Intuit",
-        },
-        {
-            id: 7,
-            position: "Community Manager",
-            date: "2024/02/01",
-            status: "Selected",
-            avatar: "/assets/companyLogos/VMware.jpeg",
-            companyName: "VMware",
-        },
-        {
-            id: 8,
-            position: "Community Manager",
-            date: "2024/02/01",
-            status: "Rejected",
-            avatar: "/assets/companyLogos/Infosys.jpeg",
-            companyName: "Infosys",
+    const { data: session } = useSession();
+    const candidateId=session?.user.roleDetails.candidateId;
+
+
+
+    const [jobs, setJobs] = useState<JobProps[]>([]);
+
+
+
+    const applicationsQuery=useApplications(candidateId);
+    console.log("applicationsQuery",applicationsQuery.data)
+
+
+
+    // Extract recruiterIds and get unique ids
+    const recruiterIdList:string[] = [];
+
+    applicationsQuery.data?.map(app => {
+        if (recruiterIdList.indexOf(app.recruiterId) === -1) {
+            recruiterIdList.push(app.recruiterId)
         }
-    ];
+    });
+
+    console.log("recIdsFromuseQuery",recruiterIdList)
+
+    const recruitersQuery=useRecruiters(recruiterIdList);
+    console.log("recruiterssQuery",recruitersQuery.data)
+
+    //todo: job fetch
+    //get job details for applications
+
+
+    // if(applicationsQuery.isPending || recruitersQuery.isPending){
+    //     return <LoadingComponent />
+    // }
+
+    // if(applicationsQuery.isError || recruitersQuery.isError){
+    //     return <ErrorComponent />
+    // }
 
     return (
         <div>
@@ -92,7 +61,20 @@ const ApplicationStatus = () => {
                     subtext="Manage your submitted applications from here"
                 />
             </header>
-            <ApplicationStatusTable users={users} />
+            {
+            (applicationsQuery.isFetching || recruitersQuery.isFetching)? 
+            <LoadingComponent />
+            :(applicationsQuery.isSuccess && applicationsQuery.data.length==0)?
+            <div className="flex justify-center items-center h-96">
+                No applications found
+                </div>
+            :(applicationsQuery.isError || recruitersQuery.isError)?
+            < ErrorComponent />
+            :
+             <ApplicationStatusTableFinal applications={applicationsQuery.data!} jobs={jobs} recruiters={recruitersQuery.data!} />
+
+            }
+           
         </div>
     );
 }

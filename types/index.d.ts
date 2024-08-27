@@ -2,10 +2,17 @@
 import {UseFormRegister} from "react-hook-form/dist/types/form";
 import {FieldErrors} from "react-hook-form/dist/types/errors";
 import {SVGProps} from "react";
+import { ApplicationProp } from "./applications";
+import { RecruiterProp } from "./users";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
+
+
+
+
+
 
 declare interface HeaderBoxProps {
   type?: "title" | "greeting";
@@ -13,6 +20,17 @@ declare interface HeaderBoxProps {
   subtext: string;
   user?: string;
 }
+
+declare interface ReactQuillReadOnlyProps {
+  content?: string;
+}
+
+declare interface CoverLetterProps {
+  application: ApplicationProp;
+  recruiter:RecruiterProp;
+  job:JobProps
+}
+
 
 declare interface IconProps  {
   fill?: string;
@@ -103,8 +121,7 @@ declare interface CustomFormInputWithoutValidationProps{
 }
 
 declare interface JobProps {
-  key: number;
-  id:string,
+  jobId:string,
   logo: string;
   title: string;
   company: string;
@@ -130,14 +147,7 @@ declare interface CVProps{
   type: string
 }
 
-declare interface ApplicationProps{
-  name: string;
-  city: string;
-  email: string;
-  status: string;
-  appliedDate: string;
-  cv: CVProps;
-}
+
 
 
 //for chat.......................
