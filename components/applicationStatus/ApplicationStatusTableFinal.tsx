@@ -31,6 +31,7 @@ import { Bounce, toast } from "react-toastify";
 import Link from "next/link";
 import {ApplicationProp} from "@/types/applications";
 import {RecruiterProp} from "@/types/users";
+import { useWithdrawApplication } from "@/lib/hooks/useApplications";
 
 
 
@@ -112,8 +113,8 @@ function mapToApplicationTableRowProps(applications:ApplicationProp[],jobs:JobPr
 export default function ApplicationStatusTableFinal({ applications,jobs,recruiters }:ApplicationStatusTableProps) {
   const users= mapToApplicationTableRowProps(applications,jobs,recruiters);
 
-  const axios=useAxiosAuth();
-  const popupview = (applicationId:String) => {
+  const withdrawApplicationMutation=useWithdrawApplication();
+  const popupview = (applicationId:string) => {
       Swal.fire({
           title: "Do you want to withdraw the application?",
           icon: "warning",
@@ -127,33 +128,8 @@ export default function ApplicationStatusTableFinal({ applications,jobs,recruite
           if (result.isConfirmed) {
 
               // Fetch application data API call
-          const result = await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/withdraw/${applicationId}`)
-              if (result?.status === 200) {
-                  toast.success("Withdrawn successfully!", {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                      transition: Bounce
-                  });
-                  applications[applications.findIndex(application=>application.applicationId==applicationId)].status="withdrawn";
-              } else {
-                  toast.error("Withdrawal failed!", {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                      transition: Bounce
-                  });
-              }
+              withdrawApplicationMutation.mutate(applicationId);
+              
           }
       });
   };

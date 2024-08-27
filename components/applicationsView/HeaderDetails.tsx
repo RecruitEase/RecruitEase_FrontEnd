@@ -1,5 +1,7 @@
 import React from "react";
 import {Chip, User} from "@nextui-org/react";
+import { RecruiterProp } from "@/types/users";
+import { CoverLetterProps } from "@/types";
 
 interface details{}
 type Status = "Submitted" | "Under Review" | "Interview Called" | "Selected" | "Rejected" | "Withdrawn";
@@ -14,21 +16,8 @@ const statusColorMap: Record<Status, string> = {
     Withdrawn: "#E4E4E7"
 };
 
-type CoverLetter = {
-    avatar: string;
-    companyName: string;
-    position: string;
-    date: string;
-    status: string;
-    letter: string;
-};
 
-type CoverLetterProps = {
-    coverLetter: CoverLetter;
-};
-
-
-const HeaderDetails:React.FC<CoverLetterProps> = ({coverLetter}) => {
+const HeaderDetails:React.FC<CoverLetterProps> = ({recruiter,application,job}) => {
     // @ts-ignore
     return (
         <div className={"mb-4 flex flex-wrap w-full"}>
@@ -36,20 +25,20 @@ const HeaderDetails:React.FC<CoverLetterProps> = ({coverLetter}) => {
             <div className={"flex justify-end w-full"}>
                 <Chip
                     className="capitalize min-w-32 text-center "
-                    style={{backgroundColor: statusColorMap[coverLetter.status], color: "#000000"}}
+                    style={{backgroundColor: statusColorMap[application.status], color: "#000000"}}
                     size="md"
                     variant="flat"
                     // color={"#000000"}
                 >
-                    {coverLetter.status}
+                    {application.status}
                 </Chip>
             </div>
 
             <div className={"w-full"}>
                 <User
-                    avatarProps={{radius: "lg", src: coverLetter.avatar}}
-                    description={coverLetter.date}
-                    name={coverLetter.companyName + "-" + coverLetter.position}
+                    avatarProps={{radius: "lg", src: recruiter.profilePic}}
+                    description={recruiter.companyName}
+                    name={recruiter.companyName + " - " + job.title}
                 >
                 </User>
             </div>

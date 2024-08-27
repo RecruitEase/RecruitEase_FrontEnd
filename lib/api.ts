@@ -48,7 +48,21 @@ export const getModerators=async (moderatorIds:string[])=>{
 export const getCandidates=async (candidateIds:string[])=>{
     return (await axiosInstance.post(`user/candidate-list`,{candidateIdList:candidateIds})).data.content.candidateIdList;
 }
+export const getRecruiter=async (recruiterId:string)=>{
+    return (await axiosInstance.get(`user/recruiter/${recruiterId}`)).data.content;
+}
 
+export const getCandidate=async (candidateId:string)=>{
+    return (await axiosInstance.get(`user/candidate/${candidateId}`)).data.content;
+}
+
+export const getAdmin=async (adminId:string)=>{
+    return (await axiosInstance.get(`user/admin/${adminId}`)).data.content;
+}
+
+export const getModerator=async (moderatorId:string)=>{
+    return (await axiosInstance.get(`user/moderator/${moderatorId}`)).data.content;
+}
 
 // application detail apis.............................................................................................................................................................................
 export const getApplications=async (candidateId:string)=>{
@@ -56,6 +70,10 @@ export const getApplications=async (candidateId:string)=>{
 }
 export const getApplication=async (applicationId:string)=>{
     return (await axiosInstance.get(`api/v1/applications/view/${applicationId}`)).data.content;
+}
+
+export const withdrawApplication=async (applicationId:string)=>{
+    return (await axiosInstance.put(`api/v1/applications/withdraw/${applicationId}`)).status;
 }
 
 // export const getTodosIds= async()=>{
