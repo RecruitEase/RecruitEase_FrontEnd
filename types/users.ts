@@ -55,7 +55,7 @@ export interface ModeratorProp {
 
 export interface AdminProp {
     id: string;
-    moderatorId: string;
+    adminId: string;
     email: string;
     role: string;
     isActive: string;

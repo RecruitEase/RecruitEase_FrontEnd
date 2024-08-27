@@ -1,6 +1,7 @@
-import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, QueryClient, useQueryClient } from '@tanstack/react-query';
-import {getApplication, getApplications} from "@/lib/api";
+import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, QueryClient, useQueryClient, useMutation } from '@tanstack/react-query';
+import {getApplication, getApplications, withdrawApplication} from "@/lib/api";
 import {ApplicationProp} from "@/types/applications";
+import { Bounce, toast } from "react-toastify";
 
 export function useApplications(candidateId: string) {
     return useQuery<ApplicationProp[]>({
@@ -27,4 +28,54 @@ export function useApplication(applicationId: string|null) {
 
         }
     })
+}
+
+
+// mutations...................................
+
+export function useWithdrawApplication(){
+    const queryClient=useQueryClient();
+
+    return useMutation({
+        mutationFn:(applicationId:string)=>withdrawApplication(applicationId),
+        onSettled:async (data,error,variables)=> {
+            //data : output on sucess
+            //error : output on error
+            //variables : input data
+            if (error) {
+                console.log(error)
+            } else {
+                await queryClient.invalidateQueries({queryKey: ['applications']})
+                await queryClient.invalidateQueries({queryKey: ["application", variables],
+                })
+            }
+        },
+        onSuccess:()=>{
+            toast.success("Withdrawn successfully!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        },
+        onError:()=>{
+            toast.error("Withdrawal failed!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        }
+    })
+
 }

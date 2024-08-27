@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import { Bounce, toast } from "react-toastify";
 import Questions from "@/components/applicationsView/Questions";
 import { Link } from "@nextui-org/react";
-import {useApplication} from "@/lib/hooks/useApplications";
+import {useApplication, useWithdrawApplication} from "@/lib/hooks/useApplications";
 import {useParams} from "next/navigation";
 import { useRecruiter } from "@/lib/hooks/useRecruiters";
 import LoadingComponent from "@/components/LoadingComponent";
@@ -94,54 +94,8 @@ interface Question {
     userAnswers: string[];
 }
 
-const popup = () => {
-    Swal.fire({
-        title: "Do you want to withdraw the application?",
-        icon: "warning",
-        customClass: {
-            confirmButton: "bg-[#f31260]", // Custom class for confirm button
-            cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
-        },
-        showCancelButton: true,
-        confirmButtonText: "Withdraw"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Simulate a successful withdrawal response
-            const result = {
-                status: 200
-            };
-            if (result?.status == 200) {
-                toast.success("Withdrawn successfully!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce
-                });
-            } else {
-                toast.error("Withdrawal failed!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce
-                });
-            }
-        }
-    });
-};
 
-const withdrawButton = () => {
-    popup();
-};
+
 
 const job = {
     jobId: "001",
@@ -155,6 +109,28 @@ const job = {
 const ApplicationView: React.FC = () => {
 
     const params = useParams<{id:string}>()
+
+    const withdrawApplicationMutation=useWithdrawApplication();
+    const popupview = () => {
+        Swal.fire({
+            title: "Do you want to withdraw the application?",
+            icon: "warning",
+            customClass: {
+                confirmButton: "bg-[#f31260]", // Custom class for confirm button
+                cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+            },
+            showCancelButton: true,
+            confirmButtonText: "Withdraw"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+  
+                // Fetch application data API call
+                withdrawApplicationMutation.mutate(params.id);
+                
+            }
+        });
+    };
+
 
     const applicationQuery=useApplication(params.id)
     const recruiterQuery=useRecruiter(applicationQuery.data?.recruiterId)
@@ -184,7 +160,7 @@ const ApplicationView: React.FC = () => {
             </div>
             <div className={"flex w-full justify-end gap-4 mt-4"}>
                 <Button className={"bg-recruitBlue text-white font-bold"} as={Link} href={"/jobs/1"}>Show Job</Button>
-                <Button className={"bg-danger text-white font-bold"} onClick={withdrawButton}>
+                <Button className={"bg-danger text-white font-bold"} onClick={popupview}>
                     Withdraw
                 </Button>
             </div>
