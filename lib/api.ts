@@ -29,7 +29,7 @@ axiosInstance.interceptors.request.use(async (config) => {
 export const getUsers=async (recruiterIds:string[],adminIds:string[],moderatorIds:string[],candidateIds:string[])=>{
     return (await axiosInstance.post(`user/detail-list`,
         {
-            recruiterIdList:recruiterIds,
+             recruiterIdList:recruiterIds,
             adminIdList:adminIds,
             moderatorIdList:moderatorIds,
             candidateIdList:candidateIds
@@ -75,6 +75,7 @@ export const getApplication=async (applicationId:string)=>{
 export const withdrawApplication=async (applicationId:string)=>{
     return (await axiosInstance.put(`api/v1/applications/withdraw/${applicationId}`)).status;
 }
+
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);

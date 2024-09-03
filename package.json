@@ -43,7 +43,7 @@
 		"@typescript-eslint/eslint-plugin": "^7.10.0",
 		"@typescript-eslint/parser": "^7.10.0",
 		"autoprefixer": "10.4.19",
-		"axios": "^1.7.2",
+		"axios": "^1.7.5",
 		"chart.js": "^4.4.3",
 		"clsx": "2.1.1",
 		"embla-carousel-autoplay": "^8.1.7",
