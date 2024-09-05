@@ -10,7 +10,10 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 };
 
 
-
+declare interface UploadFileProps{
+  file:File;
+  path:string
+}
 
 
 

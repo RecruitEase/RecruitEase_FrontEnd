@@ -2,6 +2,7 @@ import axios from "axios";
 
 import {getSession} from "next-auth/react";
 import {Session} from "next-auth";
+import {UploadFileProps} from "@/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const axiosInstance=axios.create({baseURL:BASE_URL});
@@ -29,7 +30,7 @@ axiosInstance.interceptors.request.use(async (config) => {
 export const getUsers=async (recruiterIds:string[],adminIds:string[],moderatorIds:string[],candidateIds:string[])=>{
     return (await axiosInstance.post(`user/detail-list`,
         {
-             recruiterIdList:recruiterIds,
+            recruiterIdList:recruiterIds,
             adminIdList:adminIds,
             moderatorIdList:moderatorIds,
             candidateIdList:candidateIds
@@ -76,6 +77,13 @@ export const withdrawApplication=async (applicationId:string)=>{
     return (await axiosInstance.put(`api/v1/applications/withdraw/${applicationId}`)).status;
 }
 
+export const uploadFile=async (data:FormData)=>{
+    return (await axiosInstance.post('api/v1/files/upload',data,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    }));
+}
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);
