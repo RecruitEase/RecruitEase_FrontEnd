@@ -90,6 +90,11 @@ export const uploadFile=async (data:FormData)=>{
     }));
 }
 
+//jobs apis.............................................................................................................................................................................
+export const getJobs=async()=>{
+    return (await axiosInstance.get(`api/jobs`)).data.content;
+}
+
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);
 // }
