@@ -3,6 +3,7 @@ import axios from "axios";
 import {getSession} from "next-auth/react";
 import {Session} from "next-auth";
 import {UploadFileProps} from "@/types";
+import {ApplicationProp} from "../types/applications";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const axiosInstance=axios.create({baseURL:BASE_URL});
@@ -75,6 +76,10 @@ export const getApplication=async (applicationId:string)=>{
 
 export const withdrawApplication=async (applicationId:string)=>{
     return (await axiosInstance.put(`api/v1/applications/withdraw/${applicationId}`)).status;
+}
+
+export const createApplication=async (application:ApplicationProp)=>{
+    return (await axiosInstance.post(`api/v1/applications/create`,application)).data.status;
 }
 
 export const uploadFile=async (data:FormData)=>{

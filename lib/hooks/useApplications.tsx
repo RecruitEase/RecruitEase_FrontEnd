@@ -1,7 +1,9 @@
 import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, QueryClient, useQueryClient, useMutation } from '@tanstack/react-query';
-import {getApplication, getApplications, withdrawApplication} from "@/lib/api";
+import {createApplication, getApplication, getApplications, withdrawApplication} from "@/lib/api";
 import {ApplicationProp} from "@/types/applications";
 import { Bounce, toast } from "react-toastify";
+import {useRouter} from "next/navigation";
+
 
 export function useApplications(candidateId: string) {
     return useQuery<ApplicationProp[]>({
@@ -78,4 +80,50 @@ export function useWithdrawApplication(){
         }
     })
 
+}
+
+export function useCreateApplication(){
+
+    const queryClient=useQueryClient();
+    const router=useRouter();
+
+    return useMutation({
+        mutationFn:(data:ApplicationProp)=> createApplication(data),
+        onSettled:async (data,error,variables)=>{//what to run after the mutation whether its a sucess or error
+            //data : output on sucess
+            //error : output on error
+            //variables : input data
+
+
+        },
+        onSuccess:()=>{
+            toast.success("Application submitted successfully!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+            router.push('/candidate/applications');
+        },
+        onError:(error)=>{
+            let msg=error['response'].data.errors.application || "Error Occurred!"
+            console.log("msg",msg)
+            toast.error( msg, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        }
+    })
 }
