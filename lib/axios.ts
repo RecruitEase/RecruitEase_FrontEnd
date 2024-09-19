@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = process.env.API_GATEWAY_BASE_URL;
+const BASE_URL = 'http://35.202.30.82:8222/';
 
 export default axios.create({
     baseURL: BASE_URL,
