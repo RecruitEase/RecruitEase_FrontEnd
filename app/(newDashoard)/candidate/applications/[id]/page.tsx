@@ -105,7 +105,7 @@ const job = {
     location: "New York, NY",
     type: "Full-time",
     daysLeft: "10 days left",
-  };
+  };    
 const ApplicationView: React.FC = () => {
 
     const params = useParams<{id:string}>()

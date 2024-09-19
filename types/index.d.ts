@@ -143,8 +143,10 @@ declare interface CVProps{
   cvId: string,
   cvName: string,
   file: string,
-  modifiedDate: string,
-  type: string
+  cvImage: string,
+  cvData: string,
+  createdAt: string,
+  candidateId: string
 }
 
 
