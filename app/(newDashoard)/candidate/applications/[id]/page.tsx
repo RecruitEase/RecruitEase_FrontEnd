@@ -158,12 +158,12 @@ const ApplicationView: React.FC = () => {
                         </div>
                     </div>
 
-                    <div>
-                        {/*todo:questions*/}
-                        <Questions questions={questions}>
+                    {/*<div>*/}
+                    {/*    /!*todo:questions*!/*/}
+                    {/*    <Questions questions={questions}>*/}
 
-                        </Questions>
-                    </div>
+                    {/*    </Questions>*/}
+                    {/*</div>*/}
 
                 </>
                 : <LoadingComponent/>}

@@ -26,6 +26,7 @@ declare interface HeaderBoxProps {
 
 declare interface ReactQuillReadOnlyProps {
   content?: string;
+  classNameProps?: string;
 }
 
 declare interface CoverLetterProps {

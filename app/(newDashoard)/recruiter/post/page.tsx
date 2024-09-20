@@ -385,7 +385,7 @@ const JobPost = () => {
                         Description <small>( Format options are available)</small>
                         <span className={"text-danger"}> * </span>
                     </label>
-                        <ReactQuill modules={modules} formats={formats} theme="snow" value={value} onChange={setValue} className='h-96' />
+                        <ReactQuill modules={modules} formats={formats} theme="snow" value={value} onChange={setValue} className='h-96 ' />
                         
                     <span className="mt-3 text-danger text-sm">
         {'\u00A0'}
