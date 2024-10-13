@@ -19,21 +19,21 @@ const types = [
 export default function interviewSchedule(){
 
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [location, setLocation] = useState("");
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [date, setDate] = useState<DateValue | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [time, setTime] = useState<Time | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [description, setDescription] = useState("");
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [cutoffDate, setCutoffDate] = useState<DateValue | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [cutoffTime, setCutoffTime] = useState<Time | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [type,setType] = useState<Key | null>(null);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [dressCode, setDressCode] = useState("");
 
     const typeSet = (type:Key) => {

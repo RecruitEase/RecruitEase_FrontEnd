@@ -61,35 +61,35 @@ interface JobListTableProps {
 
 export default function jobListTable({users, popup} : JobListTableProps) {
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [filterValue, setFilterValue] = React.useState("");
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
         column: "age",
         direction: "ascending",
     });
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [page, setPage] = React.useState(1);
 
 
 
     const hasSearchFilter = Boolean(filterValue);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const headerColumns = React.useMemo(() => {
         if (visibleColumns === "all") return columns;
 
         return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
     }, [visibleColumns]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const filteredItems = React.useMemo(() => {
         let filteredUsers = [...users];
 
@@ -109,7 +109,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -117,7 +117,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
         return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const sortedItems = React.useMemo(() => {
         return [...items].sort((a: userDetails, b: userDetails) => {
             const first = a[sortDescriptor.column as keyof userDetails] as number;
@@ -128,7 +128,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
         });
     }, [sortDescriptor, items]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const renderCell = React.useCallback((user: userDetails, columnKey: React.Key) => {
         const cellValue = user[columnKey as keyof userDetails];
 
@@ -185,26 +185,26 @@ export default function jobListTable({users, popup} : JobListTableProps) {
         }
     }, []);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const onNextPage = React.useCallback(() => {
         if (page < pages) {
             setPage(page + 1);
         }
     }, [page, pages]);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const onPreviousPage = React.useCallback(() => {
         if (page > 1) {
             setPage(page - 1);
         }
     }, [page]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setRowsPerPage(Number(e.target.value));
         setPage(1);
     }, []);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const onSearchChange = React.useCallback((value?: string) => {
         if (value) {
             setFilterValue(value);
@@ -214,13 +214,13 @@ export default function jobListTable({users, popup} : JobListTableProps) {
         }
     }, []);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const onClear = React.useCallback(()=>{
         setFilterValue("")
         setPage(1)
     },[])
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
@@ -308,7 +308,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
         hasSearchFilter,
     ]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const bottomContent = React.useMemo(() => {
         return (
             <div className="py-2 px-2 flex justify-between items-center">

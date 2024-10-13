@@ -354,23 +354,23 @@ const fetchApplicationDetails = (applicationId:String) => {
         });
 };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [selectedCard, setSelectedCard] = useState<userDetails | null>(null);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [text ,setText]=useState("")
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [mode,setMode]=useState("")
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [modeName,setModeName]=useState("")
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [users, setUsers] = useState<userDetails[]>([]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     useEffect(() => {
         fetchInterviewData()
             .then(interviews => {
