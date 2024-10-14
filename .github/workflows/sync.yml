@@ -28,7 +28,7 @@ jobs:
           find RecruitEase_Vercel -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           
           # Copy all files from source to destination (excluding .git)
-          rsync -av --exclude='.git' --exclude='RecruitEase_Vercel' ./ RecruitEase_Vercel/
+          rsync -av --exclude='.git' --exclude='.github' --exclude='RecruitEase_Vercel' ./ RecruitEase_Vercel/
           
           # Commit and push changes
           cd RecruitEase_Vercel
