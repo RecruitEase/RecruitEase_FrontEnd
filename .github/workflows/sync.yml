@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.DESTINATION_REPO_PAT }}'
 
       - name: Set up Git for pushing
         run: |
@@ -22,5 +24,5 @@ jobs:
         env:
           DESTINATION_REPO_PAT: ${{ secrets.DESTINATION_REPO_PAT }}
         run: |
-          git remote add destination https://$DESTINATION_REPO_PAT@github.com/chathura226/RecruitEase_FrontEnd_Deploy.git
+          git remote add destination https://github.com/chathura226/RecruitEase_FrontEnd_Deploy.git
           git push destination main --force
