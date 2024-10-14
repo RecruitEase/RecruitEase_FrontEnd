@@ -30,7 +30,7 @@ jobs:
           git rm -rf .
           
           # Copy all files from source to destination
-          cp -r ../RecruitEase_FrontEnd .
+          cp -r ../RecruitEase_FrontEnd/ .
           
           # Commit and push changes
           git add .
