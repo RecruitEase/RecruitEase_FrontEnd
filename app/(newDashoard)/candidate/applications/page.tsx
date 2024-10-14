@@ -15,11 +15,7 @@ const ApplicationStatus = () => {
     const { data: session } = useSession();
     const candidateId=session?.user.roleDetails.candidateId;
 
-
-
     const [jobs, setJobs] = useState<JobProps[]>([]);
-
-
 
     const applicationsQuery=useApplications(candidateId);
     console.log("applicationsQuery",applicationsQuery.data)
