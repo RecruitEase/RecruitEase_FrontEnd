@@ -1,0 +1,26 @@
+name: Sync main branch to another repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v2
+
+      - name: Set up Git for pushing
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Push to destination repo
+        env:
+          DESTINATION_REPO_PAT: ${{ secrets.DESTINATION_REPO_PAT }}
+        run: |
+          git remote add destination https://$DESTINATION_REPO_PAT@github.com/chathura226/RecruitEase_FrontEnd_Deploy.git
+          git push destination main --force
