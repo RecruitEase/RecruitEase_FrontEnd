@@ -18,11 +18,20 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{secrets.DESTINATION_REPO_PAT}}
         run: |
-          git config --global user.name "chathura226"
-          git config --global user.email "chathuralakshan226@gmail.com"
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
           
-          # Add new remote for the destination repository
-          git remote add destination https://${API_TOKEN_GITHUB}@github.com/chathura226/RecruitEase_Vercel.git
+          # Clone the destination repository
+          git clone https://${API_TOKEN_GITHUB}@github.com/chathura226/RecruitEase_Vercel.git RecruitEase_Vercel
           
-          # Force push to the destination repository
-          git push destination main:main --force
+          # Remove all files in the destination repository (except .git)
+          find RecruitEase_Vercel -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          
+          # Copy all files from source to destination (excluding .git)
+          rsync -av --exclude='.git' --exclude='RecruitEase_Vercel' ./ RecruitEase_Vercel/
+          
+          # Commit and push changes
+          cd RecruitEase_Vercel
+          git add .
+          git commit -m "Update from source repository"
+          git push origin main --force
