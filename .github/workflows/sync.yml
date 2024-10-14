@@ -24,6 +24,7 @@ jobs:
           # Clone the destination repository
           git clone https://${API_TOKEN_GITHUB}@github.com/chathura226/RecruitEase_Vercel.git RecruitEase_Vercel
           
+          ls -alh 
           # Remove all files in the destination repository
           cd RecruitEase_Vercel
           git rm -rf .
