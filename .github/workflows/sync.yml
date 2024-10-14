@@ -18,8 +18,8 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{secrets.DESTINATION_REPO_PAT}}
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          git config --global user.name "chathura226"
+          git config --global user.email "chathuralakshan226@gmail.com"
           
           # Add new remote for the destination repository
           git remote add destination https://${API_TOKEN_GITHUB}@github.com/chathura226/RecruitEase_Vercel.git
