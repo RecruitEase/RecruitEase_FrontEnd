@@ -21,19 +21,8 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           
-          # Clone the destination repository
-          cd ..
-          git clone https://${API_TOKEN_GITHUB}@github.com/chathura226/RecruitEase_Vercel.git RecruitEase_Vercel
-          ls -alh 
-          # Remove all files in the destination repository
-          cd RecruitEase_Vercel
-          git rm -rf .
+          # Add new remote for the destination repository
+          git remote add destination https://${API_TOKEN_GITHUB}@github.com/chathura226/RecruitEase_Vercel.git
           
-          # Copy all files from source to destination
-          cp -r ../RecruitEase_FrontEnd/ .
-          
-          # Commit and push changes
-          git add .
-          git commit -m "Update from source repository"
-          git push origin main --force
-          
+          # Force push to the destination repository
+          git push destination main:main --force
