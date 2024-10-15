@@ -25,20 +25,20 @@ const JobPost = () => {
 
     const modules = {
         toolbar: [
-          [{ 'header': [1, 2, false] }],
-          ['bold', 'italic', 'underline','strike', 'blockquote'],
-          [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-          ['link', 'image'],
-          ['clean']
+            [{ 'header': [1, 2, false] }],
+            ['bold', 'italic', 'underline','strike', 'blockquote'],
+            [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+            ['link', 'image'],
+            ['clean']
         ],
-      };
-    
-      const formats = [
+    };
+
+    const formats = [
         'header',
         'bold', 'italic', 'underline', 'strike', 'blockquote',
         'list', 'bullet', 'indent',
         'link', 'image'
-      ];
+    ];
 
 
     const {theme, setTheme} = useTheme();
@@ -51,8 +51,8 @@ const JobPost = () => {
     };
 
     const locations = [
-        {key: "work from home", label: "Work From Home"},
-        {key: "island wide", label: "Island Wide"},
+        {key: "work_from_home", label: "Work From Home"},
+        {key: "island_wide", label: "Island Wide"},
         {key: "ampara", label: "Ampara"},
         {key: "anuradhapura", label: "Anuradhapura"},
         {key: "badulla", label: "Badulla"},
@@ -72,7 +72,7 @@ const JobPost = () => {
         {key: "matara", label: "Matara"},
         {key: "monaragala", label: "Monaragala"},
         {key: "mullativu", label: "Mullativu"},
-        {key: "nuwara eliya", label: "Nuwara Eliya"},
+        {key: "nuwara_eliya", label: "Nuwara Eliya"},
         {key: "polonnaruwa", label: "Polonnaruwa"},
         {key: "puttalam", label: "Puttalam"},
         {key: "ratnapura", label: "Ratnapura"},
@@ -80,18 +80,20 @@ const JobPost = () => {
         {key: "vavuniya", label: "Vavuniya"},
     ];
     const jobTypes = [
-        {key: "full time", label: "Full-time"},
-        {key: "part time", label: "Part-time"},
+        {key: "full_time", label: "Full-time"},
+        {key: "part_time", label: "Part-time"},
         {key: "contract", label: "Contract"},
         {key: "other", label: "Other"},
 
     ];
 
     const experienceLevelTypes = [
-        {key: 1, label: "6 Months"},
-        {key: 2, label: "1-2 Years"},
-        {key: 3, label: "2-3 Years"},
-        {key: 4, label: "3-5 Years"},
+        {key: 1, label: "Entry Level"},
+        {key: 2, label: "6 Months"},
+        {key: 3, label: "1-2 Years"},
+        {key: 4, label: "2-3 Years"},
+        {key: 5, label: "3-5 Years"},
+        {key: 6, label: "5+ Years"},
     ]
 
     const questionTypes = [
@@ -261,15 +263,15 @@ const JobPost = () => {
 
 
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
-                    <label htmlFor={"locations"}>
-                        Locations
+                    <label htmlFor={"location"}>
+                        Location
                         <span className={"text-danger"}> * </span>
                     </label>
                     <Select
 
-                        name="locations"
-                        selectionMode="multiple"
-                        placeholder="Select locations"
+                        name="location"
+                        selectionMode="single"
+                        placeholder="Select the location"
                         selectedKeys={values}
                         variant={"bordered"}
 
@@ -281,10 +283,9 @@ const JobPost = () => {
                             </SelectItem>
                         ))}
                     </Select>
-                    <p className="text-small text-default-500">Selected: {values.size === 0 ? "None" : Array.from(values).map(toTitleCase).join(", ")}</p>
 
                     <span className="mt-3 text-danger text-sm">
-        {errors && errors["locations"] ? errors["locations"]?.message?.toString() : '\u00A0'}
+        {errors && errors["location"] ? errors["location"]?.message?.toString() : '\u00A0'}
              </span>
                 </div>
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
@@ -385,13 +386,13 @@ const JobPost = () => {
                         Description <small>( Format options are available)</small>
                         <span className={"text-danger"}> * </span>
                     </label>
-                        <ReactQuill modules={modules} formats={formats} theme="snow" value={value} onChange={setValue} className='h-96 ' />
-                        
+                    <ReactQuill modules={modules} formats={formats} theme="snow" value={value} onChange={setValue} className='h-96 ' />
+
                     <span className="mt-3 text-danger text-sm">
         {'\u00A0'}
              </span>
                 </div>
-                
+
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
                     <label htmlFor={"deadline"}>
                         Deadline
@@ -533,21 +534,21 @@ const JobPost = () => {
                 </div>}
             </div>
             <Button className={"mt-5"} size={"md"} color={"primary"} onClick={()=>{
-                    toast.success('Vacancy posted successfully!', {
-                      position: "top-right",
-                      autoClose: 5000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                      transition: Bounce,
-                    });
-                    router.push('/recruiter/vacancy');
-                  }} >Create job vacancy</Button>
+                toast.success('Vacancy posted successfully!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+                router.push('/recruiter/vacancy');
+            }} >Create job vacancy</Button>
 
-            {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
+            <pre>{JSON.stringify(watch(), null, 2)}</pre>
 
         </div>
     );
