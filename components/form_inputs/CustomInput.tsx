@@ -12,7 +12,8 @@ const CustomInput = ({
                          type = "text",
                          validationSchema,
                          variant = "bordered",
-                         placeholder = ""
+                         placeholder = "",
+                         defaultValue,
                      }: CustomFormInputProps) => {
 
     return (
@@ -22,6 +23,7 @@ const CustomInput = ({
                 {required && <span className={"text-danger"}> * </span>}
             </label>
             <Input
+                defaultValue={defaultValue}
                 id={name}
                 name={name}
                 type={type}
