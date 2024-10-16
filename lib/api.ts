@@ -2,8 +2,9 @@ import axios from "axios";
 
 import {getSession} from "next-auth/react";
 import {Session} from "next-auth";
-import {UploadFileProps} from "@/types";
+import {JobProps, UploadFileProps} from "@/types";
 import {ApplicationProp} from "../types/applications";
+import {Job} from "@/types/job";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const axiosInstance=axios.create({baseURL:BASE_URL});
@@ -89,6 +90,27 @@ export const uploadFile=async (data:FormData)=>{
         },
     }));
 }
+
+//jobs apis.............................................................................................................................................................................
+export const createJob=async (job:Job)=>{
+    return (await axiosInstance.post(`api/jobs`,job)).data.status;
+}
+export const getJobsByLoggedRecruiter=async ()=>{
+    return (await axiosInstance.get(`api/jobs/get-my-jobs`)).data.content;
+}
+export const getJobsByRecruiterId=async (recruiterId:string)=>{
+    return (await axiosInstance.get(`api/jobs/get-live-jobs-by-recruiter/${recruiterId}`)).data.content;
+}
+export const getAllLiveJobs=async ()=>{
+    return (await axiosInstance.get(`api/jobs/get-all-live-jobs`)).data.content;
+}
+export const getJobById=async (jobId:string)=>{
+    return (await axiosInstance.get(`api/jobs/view/${jobId}`)).data.content;
+}
+export const updateJob=async (data:Job)=>{
+    return (await axiosInstance.put('api/jobs/update-job',data));
+}
+
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);

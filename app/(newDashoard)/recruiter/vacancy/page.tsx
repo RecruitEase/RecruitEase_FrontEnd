@@ -7,6 +7,11 @@ import FilterBar from "@/components/recruiter/FilterBar";
 import VacancyTable from "@/components/recruiter/VacancyTable";
 import { Card, CardBody } from "@nextui-org/react";
 import HeaderBox from "@/components/dashboard/HeaderBox";
+import {useApplications} from "@/lib/hooks/useApplications";
+import {useJobsByLoggedRecruiter} from "@/lib/hooks/useJobs";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import ApplicationStatusTableFinal from "@/components/applicationStatus/ApplicationStatusTableFinal";
 
 const RecruiterDashboard = () => {
   const { theme, setTheme } = useTheme();
@@ -25,6 +30,13 @@ const RecruiterDashboard = () => {
   const handleFilterChange = (newFilter: any) => {
     setFilter(newFilter);
   };
+
+  //fetching data
+  const jobQueryByLoggedRecruiter=useJobsByLoggedRecruiter();
+  console.log("logged user jobs",jobQueryByLoggedRecruiter.data)
+
+
+
 
   return (
     <div className="min-h-screen">
@@ -46,16 +58,30 @@ const RecruiterDashboard = () => {
         </div>
       </div>
 
-      <Card>
-        <CardBody className="flex flex-col gap-4">
-          <div className="container mx-auto px-4">
-            <FilterBar onFilterChange={handleFilterChange} />
-          </div>
-          <div className="container mx-auto px-4">
-            <VacancyTable filter={filter} />
-          </div>
-        </CardBody>
-      </Card>
+      {
+        (jobQueryByLoggedRecruiter.isFetching)?
+            <LoadingComponent />
+            :(jobQueryByLoggedRecruiter.isSuccess && jobQueryByLoggedRecruiter.data.length==0)?
+                <div className="flex justify-center items-center h-96">
+                  You have not posted any vacancies!
+                </div>
+                :(jobQueryByLoggedRecruiter.isError)?
+                    < ErrorComponent />
+                    :
+                    <Card>
+                      <CardBody className="flex flex-col gap-4">
+                        <div className="container mx-auto px-4">
+                          <FilterBar onFilterChange={handleFilterChange} />
+                        </div>
+                        <div className="container mx-auto px-4">
+                          <VacancyTable vacancies={jobQueryByLoggedRecruiter.data!} filter={filter} />
+                        </div>
+                      </CardBody>
+                    </Card>
+
+      }
+
+
     </div>
   );
 };
