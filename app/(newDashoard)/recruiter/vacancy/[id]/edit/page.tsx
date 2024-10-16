@@ -352,7 +352,7 @@ const fetchedJob=getJobQuery.data;
                         id="deadline"
                         variant="bordered"
                         type={"date"}
-                        value={fetchedJob?.deadline}
+                        defaultValue={fetchedJob?.deadline}
                         {...register('deadline', {
                           required: {
                             value: true,
