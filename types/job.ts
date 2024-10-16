@@ -1,17 +1,21 @@
 export interface Job {
-  id: string;
+    jobId?: string;
     title: string;
-    type: "FULL_TIME" | "PART_TIME" | "CONTRACT" | "TEMPORARY" | "INTERNSHIP"; // Enum types for job types
+    type: "full_time" | "part_time" | "contract" | "other"; // Enum types for job types
     location: string;
-    field: string;
-    experienceLevel: string;
-    educationalLevel: string;
+    fields: Field[] | number[];
+    experienceLevel: number;
+    educationLevel: number;
     description: string;
     overview: string;
-    deadline: Date;
-    status: "OPEN" | "CLOSED"; // Enum types for job status
-    recruiterId: string;
-    imageUrl: string;
+    deadline: string;
+    status?: "FILLED" | "LIVE" | "UNPUBLISHED" | "ARCHIVED"; // Enum types for job status
+    recruiterId?: string;
+    imageUrl?: string;
+    createdAt?: string;
   }
 
-  
+export interface Field{
+  key:number;
+  label:string
+}

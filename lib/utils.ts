@@ -15,6 +15,7 @@ export function toTitleCase(str: string): string {
       .join(' ');
 }
 
+
 // FORMAT DATE TIME
 export const formatDateTime = (dateString: Date) => {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {

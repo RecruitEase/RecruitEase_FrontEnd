@@ -14,6 +14,11 @@ import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic'
 import {Bounce, toast} from "react-toastify";
 import {useRouter} from "next/navigation";
+import {useCreateApplication} from "@/lib/hooks/useApplications";
+import {useCreateJob} from "@/lib/hooks/useJobs";
+import {ApplicationProp} from "@/types/applications";
+import {Job} from "@/types/job";
+import {educationLevelTypes, experienceLevelTypes, fieldValues, jobTypes, locations } from '@/components/recruiter/data';
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -50,51 +55,6 @@ const JobPost = () => {
         setIsQuizCreationEnabled(!isQuizCreationEnabled);
     };
 
-    const locations = [
-        {key: "work_from_home", label: "Work From Home"},
-        {key: "island_wide", label: "Island Wide"},
-        {key: "ampara", label: "Ampara"},
-        {key: "anuradhapura", label: "Anuradhapura"},
-        {key: "badulla", label: "Badulla"},
-        {key: "batticaloa", label: "Batticaloa"},
-        {key: "colombo", label: "Colombo"},
-        {key: "galle", label: "Galle"},
-        {key: "gampaha", label: "Gampaha"},
-        {key: "hambantota", label: "Hambantota"},
-        {key: "jaffna", label: "Jaffna"},
-        {key: "kalutara", label: "Kalutara"},
-        {key: "kandy", label: "Kandy"},
-        {key: "kegalle", label: "Kegalle"},
-        {key: "kilinochchi", label: "Kilinochchi"},
-        {key: "kurunegala", label: "Kurunegala"},
-        {key: "mannar", label: "Mannar"},
-        {key: "matale", label: "Matale"},
-        {key: "matara", label: "Matara"},
-        {key: "monaragala", label: "Monaragala"},
-        {key: "mullativu", label: "Mullativu"},
-        {key: "nuwara_eliya", label: "Nuwara Eliya"},
-        {key: "polonnaruwa", label: "Polonnaruwa"},
-        {key: "puttalam", label: "Puttalam"},
-        {key: "ratnapura", label: "Ratnapura"},
-        {key: "trincomalee", label: "Trincomalee"},
-        {key: "vavuniya", label: "Vavuniya"},
-    ];
-    const jobTypes = [
-        {key: "full_time", label: "Full-time"},
-        {key: "part_time", label: "Part-time"},
-        {key: "contract", label: "Contract"},
-        {key: "other", label: "Other"},
-
-    ];
-
-    const experienceLevelTypes = [
-        {key: 1, label: "Entry Level"},
-        {key: 2, label: "6 Months"},
-        {key: 3, label: "1-2 Years"},
-        {key: 4, label: "2-3 Years"},
-        {key: 5, label: "3-5 Years"},
-        {key: 6, label: "5+ Years"},
-    ]
 
     const questionTypes = [
         {key: 1, label: "Single Choice"},
@@ -102,71 +62,7 @@ const JobPost = () => {
         {key: 3, label: "Open"},
     ]
 
-    const educationLevelTypes = [
-        {key: 1, label: "Ordinary Level"},
-        {key: 2, label: "Advanced Level"},
-        {key: 3, label: "Bachelor’s Degree"},
-        {key: 4, label: "Masters Degree"},
-        {key: 5, label: "PhD"},
-        {key: 6, label: "Diploma/HND"},
-        {key: 7, label: "Certificate"},
-    ]
 
-    const fieldValues = [
-        {key: 1, label: "Account & Finance"},
-        {key: 2, label: "Administration / Secretarial"},
-        {key: 3, label: "Agriculture"},
-        {key: 4, label: "Apparel"},
-        {key: 5, label: "Architecture"},
-        {key: 6, label: "Automobile"},
-        {key: 7, label: "Banking and Financial Services"},
-        {key: 8, label: "Beauty & Hairdressing"},
-        {key: 9, label: "BPO/ KPO"},
-        {key: 10, label: "Building & Construction"},
-        {key: 11, label: "Business Management"},
-        {key: 12, label: "Call Center"},
-        {key: 13, label: "Charity / NGO"},
-        {key: 14, label: "Customer Service"},
-        {key: 15, label: "Delivery / Driving / Transport"},
-        {key: 16, label: "Digital Marketing"},
-        {key: 17, label: "Education / Higher Education"},
-        {key: 18, label: "Electronics / Electrical"},
-        {key: 19, label: "Engineering / Manufacturing"},
-        {key: 20, label: "Environment/ Health & Safety"},
-        {key: 21, label: "FMCG/ Food Industry"},
-        {key: 23, label: "Government/ Public Sector"},
-        {key: 24, label: "Hospital/ Nursing/ Healthcare"},
-        {key: 25, label: "Hotel/ Hospitality/ Leisure"},
-        {key: 26, label: "Human Resources / Recruitment"},
-        {key: 27, label: "Insurance"},
-        {key: 28, label: "Interior Design"},
-        {key: 29, label: "Internship / Undergraduate"},
-        {key: 30, label: "IT-HWare/ Networks/ Systems"},
-        {key: 31, label: "IT-SWare / Internet"},
-        {key: 32, label: "Legal / Law"},
-        {key: 33, label: "Media/ Advertising/ Communication/ Design"},
-        {key: 34, label: "Oil, Gas and Nuclear"},
-        {key: 35, label: "Other"},
-        {key: 36, label: "Pharmaceutical"},
-        {key: 37, label: "Production & Operations"},
-        {key: 38, label: "Project Management / Programme Management"},
-        {key: 39, label: "Quality Assurance"},
-        {key: 40, label: "Real Estate"},
-        {key: 41, label: "Recoveries"},
-        {key: 42, label: "Retail / Fashion"},
-        {key: 43, label: "Sales / Marketing / New Business Development"},
-        {key: 44, label: "School Leavers"},
-        {key: 45, label: "Science / Research"},
-        {key: 46, label: "Security/ Military"},
-        {key: 47, label: "Senior Management / Directors"},
-        {key: 48, label: "Sports/Fitness/Recreation"},
-        {key: 49, label: "Startup/ Tech-startup"},
-        {key: 50, label: "Supply Chain / Logistics / Procurement"},
-        {key: 51, label: "Technical/ Mechanical"},
-        {key: 52, label: "Telecommunications"},
-        {key: 53, label: "Training and Development"},
-        {key: 54, label: "Travel/Ticketing/Airline/Shipping"},
-    ];
 
 
     const {
@@ -205,6 +101,26 @@ const JobPost = () => {
         //Todo
     }
 
+
+    const createJobMutation=useCreateJob();
+
+    const handleCreateJob=()=>{
+        const newJob: Job = {
+            title:watch().title,
+            type:watch().type,
+            experienceLevel:Number(watch().experienceLevel),
+            educationLevel:Number(watch().educationLevel),
+            overview:watch().overview,
+            deadline:watch().deadline,
+            location:watch().location,
+            description:value,
+            fields:Array.from(fields,Number)
+        };
+        console.log("newjob",newJob)
+        createJobMutation.mutate(newJob);
+
+    }
+
     // @ts-ignore
     return (
         <div>
@@ -221,7 +137,7 @@ const JobPost = () => {
 
                 <CustomInput
                     className={"lg:w-[45%] w-full"}
-                    name={"jobTitle"}
+                    name={"title"}
                     label={"Job Title"}
                     placeholder={"Enter the job title"}
                     required={true}
@@ -238,26 +154,27 @@ const JobPost = () => {
 
 
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
-                    <label htmlFor={"jobType"}>
+                    <label htmlFor={"type"}>
                         Job Type
                         <span className={"text-danger"}> * </span>
                     </label>
                     <Select
-                        name={"jobType"}
+                        name={"type"}
                         items={jobTypes}
+                        defaultSelectedKeys={['full_time']}
                         placeholder="Select the job type"
                         variant={"bordered"}
-                        {...register("jobType", {
+                        {...register("type", {
                             required: {
                                 value: true,
                                 message: "Please choose the job type",
                             }
                         })}
                     >
-                        {(jobType) => <SelectItem>{jobType.label}</SelectItem>}
+                        {(jobType) => <SelectItem key={jobType.key}>{jobType.label}</SelectItem>}
                     </Select>
                     <span className="mt-3 text-danger text-sm">
-        {errors && errors["jobType"] ? errors["jobType"]?.message?.toString() : '\u00A0'}
+        {errors && errors["type"] ? errors["type"]?.message?.toString() : '\u00A0'}
              </span>
                 </div>
 
@@ -267,27 +184,49 @@ const JobPost = () => {
                         Location
                         <span className={"text-danger"}> * </span>
                     </label>
+
                     <Select
-
-                        name="location"
-                        selectionMode="single"
+                        name={"location"}
+                        items={locations}
                         placeholder="Select the location"
-                        selectedKeys={values}
                         variant={"bordered"}
-
-                        onSelectionChange={setValues}
+                        defaultSelectedKeys={['work_from_home']}
+                        {...register("location", {
+                            required: {
+                                value: true,
+                                message: "Please choose the location",
+                            }
+                        })}
                     >
-                        {locations.map((location) => (
-                            <SelectItem key={location.key}>
-                                {location.label}
-                            </SelectItem>
-                        ))}
+                        {(item) => <SelectItem key={item.key}>{item.label}</SelectItem>}
                     </Select>
-
                     <span className="mt-3 text-danger text-sm">
         {errors && errors["location"] ? errors["location"]?.message?.toString() : '\u00A0'}
              </span>
+
+
+        {/*            <Select*/}
+
+        {/*                name="location"*/}
+        {/*                selectionMode="single"*/}
+        {/*                placeholder="Select the location"*/}
+        {/*                selectedKeys={values}*/}
+        {/*                variant={"bordered"}*/}
+
+        {/*                onSelectionChange={setValues}*/}
+        {/*            >*/}
+        {/*                {locations.map((location) => (*/}
+        {/*                    <SelectItem key={location.key}>*/}
+        {/*                        {location.label}*/}
+        {/*                    </SelectItem>*/}
+        {/*                ))}*/}
+        {/*            </Select>*/}
+
+        {/*            <span className="mt-3 text-danger text-sm">*/}
+        {/*{errors && errors["location"] ? errors["location"]?.message?.toString() : '\u00A0'}*/}
+        {/*     </span>*/}
                 </div>
+
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
                     <label htmlFor={"fields"}>
                         Fields
@@ -309,7 +248,7 @@ const JobPost = () => {
                             </SelectItem>
                         ))}
                     </Select>
-                    <p className="text-small text-default-500">Selected: {fields.size === 0 ? "None" : Array.from(fields).map(key => toTitleCase(fieldValues[key].label)).join(", ")}</p>
+                    <p className="text-small text-default-500">Selected: {fields.size === 0 ? "None" : Array.from(fields).map(key => toTitleCase(fieldValues[key-1].label)).join(", ")}</p>
 
                     <span className="mt-3 text-danger text-sm">
         {errors && errors["fields"] ? errors["fields"]?.message?.toString() : '\u00A0'}
@@ -327,6 +266,7 @@ const JobPost = () => {
                         items={experienceLevelTypes}
                         placeholder="Select the experience level"
                         variant={"bordered"}
+                        defaultSelectedKeys={['1']}
                         {...register("experienceLevel", {
                             required: {
                                 value: true,
@@ -334,10 +274,11 @@ const JobPost = () => {
                             }
                         })}
                     >
-                        {(experienceLevelType) => <SelectItem>{experienceLevelType.label}</SelectItem>}
+                        {(experienceLevelType) => <SelectItem key={experienceLevelType.key}>{experienceLevelType.label}</SelectItem>}
                     </Select>
                     <span className="mt-3 text-danger text-sm">
         {errors && errors["experienceLevel"] ? errors["experienceLevel"]?.message?.toString() : '\u00A0'}
+
              </span>
                 </div>
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
@@ -350,6 +291,7 @@ const JobPost = () => {
                         items={educationLevelTypes}
                         placeholder="Select the education level"
                         variant={"bordered"}
+                        defaultSelectedKeys={['1']}
                         {...register("educationLevel", {
                             required: {
                                 value: true,
@@ -357,7 +299,7 @@ const JobPost = () => {
                             }
                         })}
                     >
-                        {(educationLevelType) => <SelectItem>{educationLevelType.label}</SelectItem>}
+                        {(educationLevelType) => <SelectItem key={educationLevelType.key}>{educationLevelType.label}</SelectItem>}
                     </Select>
                     <span className="mt-3 text-danger text-sm">
         {errors && errors["educationLevel"] ? errors["educationLevel"]?.message?.toString() : '\u00A0'}
@@ -414,27 +356,28 @@ const JobPost = () => {
              </span>
                 </div>
 
-                <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
-                    <label htmlFor={"image"}>
-                        Image <small>Description or poster</small>
-                        <span className={"text-danger"}> * </span>
-                    </label>
-                    <Input
-                        id="image"
-                        variant="bordered"
-                        type={"file"}
+                {/*todo: image and quiz*/}
+        {/*        <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>*/}
+        {/*            <label htmlFor={"image"}>*/}
+        {/*                Image <small>Description or poster</small>*/}
+        {/*                <span className={"text-danger"}> * </span>*/}
+        {/*            </label>*/}
+        {/*            <Input*/}
+        {/*                id="image"*/}
+        {/*                variant="bordered"*/}
+        {/*                type={"file"}*/}
 
-                    />
+        {/*            />*/}
 
-                    <span className="mt-3 text-danger text-sm">
-        {errors && errors["image"] ? errors["image"]?.message?.toString() : '\u00A0'}
-             </span>
-                </div>
+        {/*            <span className="mt-3 text-danger text-sm">*/}
+        {/*{errors && errors["image"] ? errors["image"]?.message?.toString() : '\u00A0'}*/}
+        {/*     </span>*/}
+        {/*        </div>*/}
 
 
-                <Switch onChange={handleSwitchChange}>
-                    Pre-Screening Quiz
-                </Switch>
+        {/*        <Switch onChange={handleSwitchChange}>*/}
+        {/*            Pre-Screening Quiz*/}
+        {/*        </Switch>*/}
 
 
             </div>
@@ -533,22 +476,9 @@ const JobPost = () => {
 
                 </div>}
             </div>
-            <Button className={"mt-5"} size={"md"} color={"primary"} onClick={()=>{
-                toast.success('Vacancy posted successfully!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-                router.push('/recruiter/vacancy');
-            }} >Create job vacancy</Button>
+            <Button  disabled={!isValid || value=='' || fields.size==0} size={"md"} color={"primary"} onClick={handleCreateJob} className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 disabled:bg-gray-400" >Create job vacancy</Button>
 
-            <pre>{JSON.stringify(watch(), null, 2)}</pre>
+            {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
 
         </div>
     );

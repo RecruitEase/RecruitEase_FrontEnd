@@ -1,14 +1,61 @@
-import { useQuery, useQueryClient} from '@tanstack/react-query';
-import {getJobs} from "@/lib/api";
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {createJob, getJobsByLoggedRecruiter} from "@/lib/api";
 import { Job } from '@/types/job';
+import {useRouter} from "next/navigation";
+import {Bounce, toast} from "react-toastify";
 
-
-export function useAllJobs() {
-    return useQuery<Job[], Error>({
-        queryKey:['jobs'],
-        queryFn:()=>getJobs(),
+export function useJobsByLoggedRecruiter() {
+    return useQuery<Job[]>({
+        queryKey:['myjobs'],
+        queryFn:()=>getJobsByLoggedRecruiter(),
     })
-    }
+}
 
-    
-    
+
+export function useCreateJob(){
+
+    const queryClient=useQueryClient();
+    const router=useRouter();
+
+    return useMutation({
+        mutationFn:(data:Job)=> createJob(data),
+        onSettled:async (data,error,variables)=>{//what to run after the mutation whether its a sucess or error
+            //data : output on sucess
+            //error : output on error
+            //variables : input data
+
+
+        },
+        onSuccess:()=>{
+            toast.success("Job created successfully!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+            router.push('/recruiter/vacancy');
+        },
+        onError:(error)=>{
+            let msg="Error Occurred!"
+            console.log("err msg",msg)
+            toast.error( msg, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        }
+    })
+}
+
+
