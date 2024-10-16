@@ -16,7 +16,14 @@ import {
 import {Button} from "@nextui-org/button";
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
 import { useRouter } from 'next/navigation';
-import {Bounce, toast} from "react-toastify";
+import {useInterviews} from "@/lib/hooks/useInterviews";
+import {useApplicationsByList} from "@/lib/hooks/useApplications";
+import {useCandidates} from "@/lib/hooks/useCandidates";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import {InterviewProp} from "@/types/interviews";
+import {CandidateProp} from "@/types/users";
+import {ApplicationProp} from "@/types/applications";
 
 type userDetails = {
     id: number,
@@ -40,33 +47,6 @@ const JobList = () =>{
     const axios=useAxiosAuth();
     const router=useRouter();
 
-const fetchInterviewData = () => {
-    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
-        .then(response => {
-            const data = response.data.content;
-            if (!Array.isArray(data)) {
-                console.error("Unexpected data format:", data);
-                return [];
-            }
-            console.log(data)
-            return data;
-        })
-        .catch(error => {
-            console.error("Error fetching interview data:", error);
-            return [];
-        });
-};
-
-const fetchApplicationDetails = (applicationId:String) => {
-
-    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
-        .then(response => response.data.content)
-        .catch(error => {
-            console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
-            return null;
-        });
-};
-
 const editInterview = (interviewId: string | undefined) =>{
     if (interviewId) {
         router.push(`/recruiter/interviews/editInterview/${interviewId}`)
@@ -81,67 +61,24 @@ const editInterview = (interviewId: string | undefined) =>{
     const [mode,setMode]=useState("")
     const [modeName,setModeName]=useState("")
     const [users, setUsers] = useState<userDetails[]>([]);
-
-    useEffect(() => {
-        fetchInterviewData()
-            .then(interviews => {
-                const companyDetailsPromises = interviews.map((interview: any) =>
-                    fetchApplicationDetails(interview.applicationId).then(companyDetails => ({
-                        interview,
-                        companyDetails
-                    }))
-                );
-
-                // Wait for all promises to resolve
-                return Promise.all(companyDetailsPromises);
-            })
-            .then(results => {
-                const mergedData: ({
-                    date: any;
-                    imageUrl: any;
-                    link: any;
-                    interviewId:string;
-                    remainingDays: any;
-                    description: any;
-                    location: any;
-                    id: number;
-                    team: any;
-                    time: any;
-                    type: any;
-                    dressCode: any;
-                    status: any
-                } | null)[] = results
-                    .map(({ interview, companyDetails},index) => {
-                        if (companyDetails) {
-                            return {
-
-                                id: index+1,
-                                interviewId:interview.id,
-                                team: companyDetails.position,
-                                imageUrl: companyDetails.imageUrl,
-                                status:companyDetails.status,
-                                type: interview.type,
-                                location: interview.location,
-                                link: interview.link,
-                                date: interview.date,
-                                time: interview.time,
-                                dressCode: interview.dressCode,
-                                remainingDays: interview.remainingDays,
-                                description: interview.description
-
-                            };
-                        } else {
-                            return null;
-                        }
-                    })
-                    // .filter((data): data is userDetails => data !== null);
-
-                // @ts-ignore
-                setUsers(mergedData);
-            });
-    }, []);
+    const applicationSet = new Set<string>();
 
 
+    const interviewQuery=useInterviews();
+    // Extract applicationIds and candidateIds
+    const applicationIdList:string[] = [];
+    const candidateIdList:string[] = [];
+    interviewQuery.data?.map(interview => {
+        applicationIdList.push(interview.applicationId)
+        candidateIdList.push(interview.candidateId)
+    });
+
+    const applicationQuery=useApplicationsByList(applicationIdList)
+    const candidateQuery=useCandidates(candidateIdList)
+
+    const applicationList:ApplicationProp[]=[]
+
+    applicationQuery.map(application => applicationList.push(application.data as ApplicationProp))
     const setModes=(card: userDetails)=>{
         if(card.type=="Online"){
             setMode(card.link)
@@ -216,8 +153,15 @@ const editInterview = (interviewId: string | undefined) =>{
             <header className="home-header">
                 <HeaderBox type="title" title="Interview Schedule List" subtext="Current interview list is here."/>
             </header>
+            {
+                (interviewQuery.isFetching || candidateQuery.isFetching)?
+                    <LoadingComponent />
+                    :
+                    (interviewQuery.isError || candidateQuery.isError)?
+                        <ErrorComponent />
+                    :<InterviewListTable interviews={interviewQuery.data} aplications={applicationList} candidates={candidateIdList} popup={popupview}/>
 
-            <InterviewListTable users={users}  popup={popupview}/>
+            }
         </div>
     )
 }

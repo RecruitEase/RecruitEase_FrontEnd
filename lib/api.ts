@@ -76,6 +76,11 @@ export const withdrawApplication=async (applicationId:string)=>{
     return (await axiosInstance.put(`api/v1/applications/withdraw/${applicationId}`)).status;
 }
 
+//interview api endpoints...............................................................................................................
+export const getInterviews=async ()=>{
+    return (await axiosInstance.get(`api/v1/interviews/list`)).data.content;
+}
+
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);
 // }

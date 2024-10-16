@@ -10,6 +10,17 @@ export function useApplications(candidateId: string) {
     })
 }
 
+export function useApplicationsByList(applicationIds: (string|undefined)[]|undefined) {
+    return useQueries<ApplicationProp[]>({
+        queries:(applicationIds??[]).map((applicationId)=>{
+            return{
+                queryKey:['application',applicationId],
+                queryFn:()=>getApplication(applicationId!),
+            }
+        })
+    })
+}
+
 export function useApplication(applicationId: string|null) {
     const queryClient=useQueryClient();
 

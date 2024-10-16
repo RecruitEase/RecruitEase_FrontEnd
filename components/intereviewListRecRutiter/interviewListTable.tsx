@@ -23,6 +23,10 @@ import {
 
 import {columns, statusOptions} from "./data";
 import {ChevronDownIcon, SearchIcon} from "@nextui-org/shared-icons";
+import {ApplicationProp} from "@/types/applications";
+import {CandidateProp, RecruiterProp} from "@/types/users";
+import {InterviewProp} from "@/types/interviews";
+import {JobProps} from "@/types";
 
 
 const capitalize=(str: string) => {
@@ -34,6 +38,20 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
     canceled: "danger",
     hold: "warning",
 };
+
+function mapToInterviewsTableRowProps(applications:ApplicationProp[],interviews:InterviewProp[],candidates:CandidateProp[]) {
+    return interviews.map(interview => {
+        const application = applications.find(a => a.applicationId === interview.applicationId)|| null;
+        const candidate = candidates.find(c => c.candidateId == interviews.candidateId) || null; // Find matching job
+
+        return {
+            ...interviews,
+            application,
+            candidate
+        };
+    });
+}
+
 
 const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "date"];
 
@@ -54,13 +72,15 @@ type userDetails = {
 };
 
 interface JobListTableProps {
-    users: userDetails[];
+    candidates:CandidateProp[],
+    applications:ApplicationProp[],
+    interviews:InterviewProp[];
     popup: (user: userDetails) => void;
 }
 
-export default function InterviewListTable({users, popup} : JobListTableProps) {
+export default function InterviewListTable({candidates,applications,interviews, popup} : JobListTableProps) {
 
-    console.log(users)
+    const users = mapToInterviewsTableRowProps(applications,interviews,candidates)
     const [filterValue, setFilterValue] = React.useState("");
     const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -71,8 +91,6 @@ export default function InterviewListTable({users, popup} : JobListTableProps) {
         direction: "ascending",
     });
     const [page, setPage] = React.useState(1);
-
-
 
     const hasSearchFilter = Boolean(filterValue);
     const headerColumns = React.useMemo(() => {
@@ -86,12 +104,12 @@ export default function InterviewListTable({users, popup} : JobListTableProps) {
 
         if (hasSearchFilter) {
             filteredUsers = filteredUsers.filter((user) =>
-                user.name.toLowerCase().includes(filterValue.toLowerCase()),
+                user.candidate?.firstName.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
         if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
             filteredUsers = filteredUsers.filter((user) =>
-                Array.from(statusFilter).includes(user.status),
+                Array.from(statusFilter).includes(user.application?.status),
             );
         }
 
@@ -167,23 +185,6 @@ export default function InterviewListTable({users, popup} : JobListTableProps) {
                         {/*<p className="text-bold text-tiny capitalize text-default-400">{user.date}</p>*/}
                     </div>
                 );
-            // case "actions":
-            //     return (
-            //         <div className="relative flex justify-end items-center gap-2">
-            //             <Dropdown>
-            //                 <DropdownTrigger>
-            //                     <Button isIconOnly size="sm" variant="light">
-            //                         <VerticalDotsIcon className="text-default-300" />
-            //                     </Button>
-            //                 </DropdownTrigger>
-            //                 <DropdownMenu>
-            //                     <DropdownItem>View</DropdownItem>
-            //                     <DropdownItem>Edit</DropdownItem>
-            //                     <DropdownItem>Delete</DropdownItem>
-            //                 </DropdownMenu>
-            //             </Dropdown>
-            //         </div>
-            //     );
             default:
                 return cellValue;
         }
@@ -256,30 +257,6 @@ export default function InterviewListTable({users, popup} : JobListTableProps) {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        {/*<Dropdown>*/}
-                        {/*    <DropdownTrigger className="hidden sm:flex">*/}
-                        {/*        <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">*/}
-                        {/*            Columns*/}
-                        {/*        </Button>*/}
-                        {/*    </DropdownTrigger>*/}
-                        {/*    <DropdownMenu*/}
-                        {/*        disallowEmptySelection*/}
-                        {/*        aria-label="Table Columns"*/}
-                        {/*        closeOnSelect={false}*/}
-                        {/*        selectedKeys={visibleColumns}*/}
-                        {/*        selectionMode="multiple"*/}
-                        {/*        onSelectionChange={setVisibleColumns}*/}
-                        {/*    >*/}
-                        {/*        {columns.map((column) => (*/}
-                        {/*            <DropdownItem key={column.uid} className="capitalize">*/}
-                        {/*                {capitalize(column.name)}*/}
-                        {/*            </DropdownItem>*/}
-                        {/*        ))}*/}
-                        {/*    </DropdownMenu>*/}
-                        {/*</Dropdown>*/}
-                        {/*<Button color="primary" endContent={<PlusIcon />}>*/}
-                        {/*    Add New*/}
-                        {/*</Button>*/}
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
