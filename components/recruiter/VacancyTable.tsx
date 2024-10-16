@@ -80,7 +80,7 @@ const VacancyTable: ({filter, vacancies}: { filter: any; vacancies: Job[] }) => 
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
     const [statusFilter, setStatusFilter] = React.useState<Selection>(
-        new Set(["all"])
+       "all"
     );
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
@@ -134,11 +134,11 @@ const VacancyTable: ({filter, vacancies}: { filter: any; vacancies: Job[] }) => 
                 );
             }
         }
-        if (statusFilter.has("all")) {
+        if (statusFilter=="all") {
             return filteredVacancies; // If "all" is selected, do not filter by status
         } else {
             filteredVacancies = filteredVacancies.filter((vacancy) =>
-                Array.from(statusFilter).includes(vacancy.status)
+                Array.from(statusFilter).includes(vacancy.status!)
             );
         }
 
