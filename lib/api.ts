@@ -104,7 +104,12 @@ export const getJobsByRecruiterId=async (recruiterId:string)=>{
 export const getAllLiveJobs=async ()=>{
     return (await axiosInstance.get(`api/jobs/get-all-live-jobs`)).data.content;
 }
-
+export const getJobById=async (jobId:string)=>{
+    return (await axiosInstance.get(`api/jobs/view/${jobId}`)).data.content;
+}
+export const updateJob=async (data:Job)=>{
+    return (await axiosInstance.put('api/jobs/update-job',data));
+}
 
 
 // export const getTodosIds= async()=>{

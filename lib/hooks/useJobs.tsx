@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {createJob, getJobsByLoggedRecruiter} from "@/lib/api";
+import {createJob, getJobsByLoggedRecruiter, updateJob, withdrawApplication} from "@/lib/api";
 import { Job } from '@/types/job';
 import {useRouter} from "next/navigation";
 import {Bounce, toast} from "react-toastify";
@@ -11,7 +11,7 @@ export function useJobsByLoggedRecruiter() {
     })
 }
 
-
+//mutations.............................
 export function useCreateJob(){
 
     const queryClient=useQueryClient();
@@ -56,6 +56,54 @@ export function useCreateJob(){
             });
         }
     })
+}
+
+
+export function useUpdateJobMutation(){
+    const queryClient=useQueryClient();
+
+    return useMutation({
+        mutationFn:(updateReq:Job)=>updateJob(updateReq),
+        onSettled:async (data,error,variables)=> {
+            //data : output on sucess
+            //error : output on error
+            //variables : input data
+            if (error) {
+                console.log(error)
+            } else {
+                await queryClient.invalidateQueries({queryKey: ['myjobs']})
+                await queryClient.invalidateQueries({queryKey: ["jobs", variables.jobId],
+                })
+            }
+        },
+        onSuccess:()=>{
+            toast.success("Unpublished successfully!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        },
+        onError:()=>{
+            toast.error("Error Occurred!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        }
+    })
+
 }
 
 
