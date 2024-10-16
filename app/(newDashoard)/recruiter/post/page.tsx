@@ -257,7 +257,7 @@ const JobPost = () => {
 
 
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
-                    <label htmlFor={"educationLevel"}>
+                    <label htmlFor={"experienceLevel"}>
                         Experience Level
                         <span className={"text-danger"}> * </span>
                     </label>

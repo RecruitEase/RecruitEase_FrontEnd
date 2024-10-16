@@ -13,7 +13,8 @@ const CustomInput = ({
                          type = "text",
                          validationSchema,
                          variant = "bordered",
-                         placeholder = ""
+                         placeholder = "",
+    defaultValue,
                      }: CustomFormInputProps) => {
 
     return (
@@ -27,6 +28,7 @@ const CustomInput = ({
                       name={name}
                       variant={variant}
                       placeholder={placeholder}
+                defaultValue={defaultValue}
                       {...register(name, validationSchema)}
             />
 

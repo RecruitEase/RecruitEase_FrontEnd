@@ -1,13 +1,29 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {createJob, getJobsByLoggedRecruiter, updateJob, withdrawApplication} from "@/lib/api";
+import {
+    createJob,
+    getApplication,
+    getJobById,
+    getJobsByLoggedRecruiter,
+    updateJob,
+    withdrawApplication
+} from "@/lib/api";
 import { Job } from '@/types/job';
 import {useRouter} from "next/navigation";
 import {Bounce, toast} from "react-toastify";
+import {ApplicationProp} from "@/types/applications";
 
 export function useJobsByLoggedRecruiter() {
     return useQuery<Job[]>({
         queryKey:['myjobs'],
         queryFn:()=>getJobsByLoggedRecruiter(),
+    })
+}
+
+export function useJob(jobId: string) {
+    const queryClient=useQueryClient();
+    return useQuery<Job>({
+        queryKey:['job',jobId],
+        queryFn:()=>getJobById(jobId!),
     })
 }
 
@@ -77,7 +93,7 @@ export function useUpdateJobMutation(){
             }
         },
         onSuccess:()=>{
-            toast.success("Unpublished successfully!", {
+            toast.success("Updated successfully!", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
