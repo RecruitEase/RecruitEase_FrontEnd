@@ -22,7 +22,7 @@ import {
 } from "@/components/recruiter/data";
 import {Bounce, toast} from "react-toastify";
 import {useParams, useRouter} from "next/navigation";
-import {useJob} from "@/lib/hooks/useJobs";
+import {useJob, useUpdateJobMutation} from "@/lib/hooks/useJobs";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 const job = {
@@ -99,9 +99,28 @@ const fetchedJob=getJobQuery.data;
     mode: "all"
   });
 
+  const updateJobMutation = useUpdateJobMutation();
   const handleJobEdit=()=>{
 
+    const putReq={
+      jobId: params.id,
+      title:watch().title,
+      type:watch().type,
+      experienceLevel:Number(watch().experienceLevel),
+      educationLevel:Number(watch().educationLevel),
+      overview:watch().overview,
+      deadline:watch().deadline,
+      location:watch().location,
+      description:value,
+    };
+    console.log("putReq",putReq)
+    // Fetch application data API call
+    updateJobMutation.mutate(putReq);
+
+
+
   }
+
   return (
     <div>
       <header className="home-header">
@@ -227,8 +246,8 @@ const fetchedJob=getJobQuery.data;
                         placeholder="Select fields"
                         defaultSelectedKeys={fields}
                         variant={"bordered"}
+                        isDisabled={true}
 
-                        onSelectionChange={setFields}
                     >
                       {fieldValues.map((field) => (
                           <SelectItem key={field.key}>
@@ -372,9 +391,9 @@ const fetchedJob=getJobQuery.data;
 
                 </div>
 
-  <Button  disabled={!isValid || value=='' || fields.size==0} size={"md"} color={"primary"} onClick={handleJobEdit} className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 disabled:bg-gray-400" >Create job vacancy</Button>
+  <Button  disabled={!isValid || value=='' } size={"md"} color={"primary"} onClick={handleJobEdit} className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 disabled:bg-gray-400" >Edit job vacancy</Button>
 
-  <pre>{JSON.stringify(watch(), null, 2)}{fields}</pre>
+  {/*<pre>{JSON.stringify(watch(), null, 2)}{fields}</pre>*/}
   </>
       }
 

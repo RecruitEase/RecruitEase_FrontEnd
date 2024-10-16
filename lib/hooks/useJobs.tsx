@@ -93,7 +93,7 @@ export function useUpdateJobMutation(){
             }
         },
         onSuccess:()=>{
-            toast.success("Unpublished successfully!", {
+            toast.success("Updated successfully!", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
