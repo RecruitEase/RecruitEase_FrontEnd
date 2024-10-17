@@ -81,7 +81,7 @@ function Jobs() {
     console.log("recIdsFromuseQuery", recruiterIdList)
 
     //get recruiter details
-    const recruitersQuery = useRecruiters(recruiterIdList);
+    const recruitersQuery = useRecruiters(recruiterIdList,false);
     console.log("recruiterssQuery", recruitersQuery.data)
 
 

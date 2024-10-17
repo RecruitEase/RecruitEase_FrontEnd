@@ -12,6 +12,7 @@ import {Bounce, toast} from "react-toastify";
 export function useLiveJobs() {
     return useQuery<Job[]>({
         queryKey:['jobs'],
+        refetchOnWindowFocus:false,
         queryFn:()=>getAllLiveJobs(),
     })
 }
