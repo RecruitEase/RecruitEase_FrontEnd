@@ -122,6 +122,7 @@ declare interface CustomFormInputWithoutValidationProps{
   placeholder?:string,
   variant?:string,
   className?:string
+  onValChange?:(value:any)=>void
 }
 
 declare interface JobProps {
