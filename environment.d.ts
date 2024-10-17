@@ -8,6 +8,7 @@ declare global {
             AUTH_GOOGLE_ID: string;
             AUTH_GOOGLE_SECRET: string;
             NEXT_PUBLIC_API_URL: string;
+            NEXT_PUBLIC_S3_URL:string;
             NEXTAUTH_SECRET: string;
             // add more environment variables and their types here
         }
