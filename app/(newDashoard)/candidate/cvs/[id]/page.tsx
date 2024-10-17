@@ -6,11 +6,15 @@ import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import LoadingComponent from '@/components/LoadingComponent';
 import { CVProps } from '@/types';
 import { headers } from 'next/headers';
 import { useSession } from 'next-auth/react';
+import { CvUploadIcon } from '@/components/icons/CvIconUpload';
+import Swal from 'sweetalert2';
+import { Bounce, toast } from 'react-toastify';
+
 
 function View() {
   const [isLoading, setIsLoading] = React.useState(true)
@@ -26,6 +30,8 @@ function View() {
   // }
   const params = useParams<{id:string}>()
   const axios = useAxiosAuth()
+const router = useRouter();
+
   
   useEffect( () => {
     const fetchCvAndPdf = async () => {
@@ -52,45 +58,93 @@ function View() {
       setIsLoading(false)
     };
 
-    
       fetchCvAndPdf()
     }, [])
   
+//delete cv
 
 
 
-  return (
-    <div>
-      {isLoading? <LoadingComponent /> :
-      <>
-      <header className="home-header">
-        <HeaderBox
-          type="title"
-          title={"View CV : "+cv!.cvName}
-          subtext="View and edit your CV here."
-        />
-      </header>
-        <div className='w-full text-right mb-2'>
-          <p className='font-thin m-2'>Created Date: {cv!.createdAt}</p>
-        </div>
-        <div className=' flex justify-end m-2 gap-2'>
+  const handleDelete = () => {
+    Swal.fire({
+        title: "Do you want to delete the CV ?",
+        icon: "warning",
+        customClass: {
+            confirmButton: "bg-[#f31260]", // Custom class for confirm button
+            cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+        },
+        showCancelButton: true,
+        confirmButtonText: "Yes"
+    }).then(async(result)=>{
+      if(result.isConfirmed){
+      try{
+        const res = await axios.delete(`api/v1/cv/delete/${params.id}`);
+        console.log("Sucessfuly deleted the cv:" , res.data);
+      
+          toast.success("Deleted successfully!", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce
+          });
+
+          router.push('/candidate/cvs');
 
 
-          <Button className='bg-danger text-white'>
-            Delete
-          </Button>
-        </div>
+    }catch(error){
         
+          toast.error("Error ocurred!", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+              transition: Bounce
+          
+      });
+      }}
+    });
+};
+
+return (
+  <div>
+    {isLoading? <LoadingComponent /> :
+    <>
+    <header className="home-header">
+      <HeaderBox
+        type="title"
+        title={"View CV : "+cv!.cvName}
+        subtext="View and edit your CV here."
+      />
+    </header>
+      <div className='w-full text-right mb-2'>
+        <p className='font-thin m-2'>Created Date: {cv!.createdAt}</p>
+      </div>
+      <div className=' flex justify-end m-2 gap-2'>
+
+        <Button className='bg-danger text-white' onClick={handleDelete}>
+          Delete
+        </Button>
+      </div>
+      
 
 
-        <Worker workerUrl="/assets/pdf.worker.min.js">
-          <Viewer fileUrl={`${pdfData}`}  />
-        </Worker>
-      </>
-      }
+      <Worker workerUrl="/assets/pdf.worker.min.js">
+        <Viewer fileUrl={`${pdfData}`}  />
+      </Worker>
+    </>
+    }
 
-    </div>
-  )
+  </div>
+)
 }
 
 export default View
