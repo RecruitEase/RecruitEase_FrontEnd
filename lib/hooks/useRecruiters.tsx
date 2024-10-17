@@ -2,10 +2,11 @@ import { useQuery, useQueryClient} from '@tanstack/react-query';
 import {getRecruiter, getRecruiters} from "@/lib/api";
 import {RecruiterProp} from "@/types/users";
 
-export function useRecruiters(recruiterIds:string[]) {
+export function useRecruiters(recruiterIds:string[],refetchOnWindowFocus=true) {
 
     return useQuery<RecruiterProp[]>({
         queryKey:['recruiters'],
+        refetchOnWindowFocus:refetchOnWindowFocus,
         queryFn:()=>getRecruiters(recruiterIds),
         enabled: recruiterIds.length > 0
     })

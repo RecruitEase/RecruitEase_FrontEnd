@@ -10,6 +10,12 @@ export function capitalize(str: string) {
   }
 
 
+export const daysLeft = (targetDate) => {
+    const currentDate = new Date();
+    const diffTime = new Date(targetDate) - currentDate;
+    return `${Math.ceil(diffTime / (1000 * 60 * 60 * 24))} days left`;
+};
+
 export function formatDate(isoString:string) {
     const date = new Date(isoString);
 
