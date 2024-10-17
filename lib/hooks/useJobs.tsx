@@ -1,16 +1,20 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
-    createJob,
-    getApplication,
+    createJob, getAllLiveJobs,
     getJobById,
     getJobsByLoggedRecruiter,
     updateJob,
-    withdrawApplication
 } from "@/lib/api";
 import { Job } from '@/types/job';
 import {useRouter} from "next/navigation";
 import {Bounce, toast} from "react-toastify";
-import {ApplicationProp} from "@/types/applications";
+
+export function useLiveJobs() {
+    return useQuery<Job[]>({
+        queryKey:['jobs'],
+        queryFn:()=>getAllLiveJobs(),
+    })
+}
 
 export function useJobsByLoggedRecruiter() {
     return useQuery<Job[]>({
