@@ -55,6 +55,12 @@
     }
 }
 @layer utilities {
+    /*for readonly react obj */
+    .reactQuillReadOnlyBorderNone > div {
+        @apply border-none !important;
+        @apply text-[16px] !important;
+    }
+
     .header-box {
         @apply flex flex-col gap-1;
     }

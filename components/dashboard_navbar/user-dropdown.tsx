@@ -23,7 +23,7 @@ export const UserDropdown = () => {
 
   const user=session?.user;
  // console.log("cdcdfcfdcfdcfdcd",user)
-  const userProfilePic=(user?.roleDetails.profilePic!=null)?process.env.NEXT_PUBLIC_S3_URL+user?.roleDetails.profilePic : "/profileImages/noImage.png";
+  const userProfilePic=(user?.roleDetails.profilePic)?process.env.NEXT_PUBLIC_S3_URL+user?.roleDetails.profilePic : "/profileImages/noImage.png";
   const isLoggedIn=!!session?.user
   const avatarItems = isLoggedIn?[
     {label:"signin",url:`/`},

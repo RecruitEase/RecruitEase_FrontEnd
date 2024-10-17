@@ -194,6 +194,7 @@ function Jobs() {
                                 {jobQuery.data?.map((item) =>{
 
                                   const currentRecruiter=recruitersQuery.data!.find(r => r.recruiterId === item.recruiterId);
+                                    const userProfilePic=(currentRecruiter?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+currentRecruiter.profilePic : "/profileImages/noImage.png";
                                   return(
                                     <div
                                         className="mb-4"
@@ -207,7 +208,7 @@ function Jobs() {
                                                         alt="Job logo"
                                                         height={65}
                                                         radius="sm"
-                                                        src={currentRecruiter!.profilePic}
+                                                        src={userProfilePic}
                                                         width={65}
                                                     />
                                                 </div>
