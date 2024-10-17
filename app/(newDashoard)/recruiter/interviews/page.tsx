@@ -1,7 +1,6 @@
-"use client";
+// "use client";
 import React, {useEffect, useState} from 'react';
 import HeaderBox from "@/components/dashboard/HeaderBox";
-import InterviewListTable from "@/components/intereviewListRecRutiter/interviewListTable";
 import {
     Image,
     Modal,
@@ -16,14 +15,6 @@ import {
 import {Button} from "@nextui-org/button";
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
 import { useRouter } from 'next/navigation';
-import {useInterviews} from "@/lib/hooks/useInterviews";
-import {useApplicationsByList} from "@/lib/hooks/useApplications";
-import {useCandidates} from "@/lib/hooks/useCandidates";
-import LoadingComponent from "@/components/LoadingComponent";
-import ErrorComponent from "@/components/ErrorComponent";
-import {InterviewProp} from "@/types/interviews";
-import {CandidateProp} from "@/types/users";
-import {ApplicationProp} from "@/types/applications";
 
 type userDetails = {
     id: number,
@@ -336,6 +327,17 @@ const JobList = async () => {
     const axios = useAxiosAuth();
     const router = useRouter();
 
+    const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
+    const [text, setText] = useState("")
+    const [mode, setMode] = useState("")
+    const [modeName, setModeName] = useState("")
+    const [users, setUsers] = useState<userDetails[]>([]);
+    const applicationSet = new Set<string>();
+    const [selectedCard, setSelectedCard] = useState<userDetails>();
+    const [interviews,setInterviews] = useState([])
+    const [userDetails, setUserDetails] = useState<userDetails[]>([]);
+
+
     const editInterview = (interviewId: string | undefined) => {
         if (interviewId) {
             router.push(`/recruiter/interviews/editInterview/${interviewId}`)
@@ -344,75 +346,79 @@ const JobList = async () => {
         }
     }
 
-    // return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
-    //     .then(response => response.data.content)
-    //     .catch(error => {
-    //         console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
-    //         return null;
-    //     });
+    const fetchInterviewData = () => {
 
-    const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
-    const [text, setText] = useState("")
-    const [mode, setMode] = useState("")
-    const [modeName, setModeName] = useState("")
-    const [users, setUsers] = useState<userDetails[]>([]);
-    const applicationSet = new Set<string>();
-    const [selectedCard, setSelectedCard] = useState<userDetails>(null);
-    const [interviews,setInterviews] = useState([])
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
+            .then(response => {
+                const data = response.data.content;
+                if (!Array.isArray(data)) {
+                    console.error("Unexpected data format:", data);
+                    return [];
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error("Error fetching interview data:", error);
+                return [];
+            });
 
 
-    // const interviewQuery=useInterviews();
-    // const applicationIdList:string[] = [];
-    // const candidateIdList:string[] = [];
-    // interviewQuery.data?.map(interview => {
-    //     applicationIdList.push(interview.applicationId)
-    //     candidateIdList.push(interview.candidateId)
-    // });
+    };
 
-    // const applicationQuery=useApplicationsByList(applicationIdList)
-    // const candidateQuery=useCandidates(candidateIdList)
+    const fetchApplicationDetails = (applicationId:String) => {
 
-    // const applicationList:ApplicationProp[]=[]
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
+            .then(response => response.data.content)
+            .catch(error => {
+                console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
+                return null;
+            });
+    };
 
-    // applicationQuery.map(application => applicationList.push(application.data as ApplicationProp))
 
-    try {
-        const interviewResponse = await axios.get(`/api/v1/interviews/list`)
-        const interviews = interviewResponse.data.content;
+    useEffect(() => {
+        // Fetch interviews first
+        fetchInterviewData()
+            .then(interviews => {
+                // Fetch company details for each interview
+                const companyDetailsPromises = interviews.map((interview: any) =>
+                    fetchApplicationDetails(interview.applicationId).then(applicationDetails => ({
+                        interview,
+                        applicationDetails
+                    }))
+                );
 
-        setInterviews(interviews)
+                return Promise.all(companyDetailsPromises);
+            })
+            .then(results => {
+                const mergedData: userDetails[] = results
+                    .map(({ interview, applicationDetails }) => {
+                        if (applicationDetails) {
+                            return {
+                                companyName: applicationDetails.companyName,
+                                position: applicationDetails.position,
+                                imageUrl: applicationDetails.imageUrl,
+                                type: interview.type,
+                                location: interview.location,
+                                link: interview.link,
+                                date: interview.date,
+                                time: interview.time,
+                                dressCode: interview.dressCode,
+                                remainingDays: interview.remainingDays,
+                                description: interview.description,
+                            };
+                        } else {
+                            return null;
+                        }
+                    })
+                    .filter((data): data is userDetails => data !== null);
 
-        // const userDetailsPromises = interviews.map(async (interview,index) => {
-        //     const applicationResponse = await axios.get(`/api/v1/applications/${interview.applicationId}`);
-        //     const applicationData = applicationResponse.data;
-        //
-        //     // Map application data into the userDetails structure
-        //     return {
-        //         id: index,
-        //         interviewId: interview.applicationId,
-        //         // name: applicationData.name,
-        //         // role: applicationData.role,
-        //         // team: applicationData.team,
-        //         status: applicationData.status,
-        //         // avatar: applicationData.avatar,
-        //         // email: applicationData.email,
-        //         date: interview.date,
-        //         time: interview.time,
-        //         type: interview.type,
-        //         location: interview.location,
-        //         link: interview.link,
-        //         description: interview.description
-        //     };
-        // });
-        // const userDetailsList = await Promise.all(userDetailsPromises);
-        //
-        // // Print or use the final userDetailsList
-        // console.log(userDetailsList);
-        // return userDetailsList;
-    } catch (error) {
-        console.error(error);
-        return [];
-    }
+                setUserDetails(mergedData);
+            });
+    }, []);
+
+
+
 
 
     const setModes = (card: userDetails) => {
