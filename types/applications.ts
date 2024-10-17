@@ -1,12 +1,12 @@
 export interface ApplicationProp {
-    applicationId: string;
+    applicationId?: string;
     candidateId: string;
     jobId: string;
     cvId: string;
     recruiterId: string;
-    status: string;
+    status?: string;
     coverLetter: string;
-    score: number;
-    answers: string;
-    createdAt: string;
+    score?: number;
+    answers?: string;
+    createdAt?: string;
 }

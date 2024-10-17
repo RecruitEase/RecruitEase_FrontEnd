@@ -4,7 +4,7 @@ import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic'
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-const ReactQuillReadOnly = ({ content = '' }: ReactQuillReadOnlyProps) => {
+const ReactQuillReadOnly = ({ content = '',classNameProps='' }: ReactQuillReadOnlyProps) => {
 
 
 
@@ -22,7 +22,7 @@ const ReactQuillReadOnly = ({ content = '' }: ReactQuillReadOnlyProps) => {
 
 
     return (
-        <ReactQuill modules={modules} formats={formats} theme="snow" value={content} readOnly  />
+        <ReactQuill modules={modules} formats={formats} theme="snow" value={content} readOnly className={classNameProps}  />
         
     );
 };

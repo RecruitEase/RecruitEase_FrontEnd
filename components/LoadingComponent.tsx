@@ -1,11 +1,15 @@
-import React from 'react'
-import { bouncy } from 'ldrs'
+"use client";
+import { useEffect } from 'react'
 import Image from 'next/image';
-import { useTheme } from 'next-themes';
 
 const LoadingComponent = () => {
-bouncy.register()
-const {theme,setTheme}=useTheme();
+    useEffect(() => {
+        async function getLoader() {
+            const { bouncy } = await import('ldrs')
+            bouncy.register()
+        }
+        getLoader()
+    }, [])
 
 return (
       <div className="flex justify-center items-center w-full h-full m-10">

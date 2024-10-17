@@ -10,7 +10,10 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 };
 
 
-
+declare interface UploadFileProps{
+  file:File;
+  path:string
+}
 
 
 
@@ -23,6 +26,7 @@ declare interface HeaderBoxProps {
 
 declare interface ReactQuillReadOnlyProps {
   content?: string;
+  classNameProps?: string;
 }
 
 declare interface CoverLetterProps {
@@ -106,6 +110,7 @@ declare interface CustomFormInputProps{
   placeholder?:string,
   variant?:string,
   className?:string
+  defaultValue?:any
 }
 
 
@@ -143,8 +148,10 @@ declare interface CVProps{
   cvId: string,
   cvName: string,
   file: string,
-  modifiedDate: string,
-  type: string
+  cvImage: string,
+  cvData: string,
+  createdAt: string,
+  candidateId: string
 }
 
 

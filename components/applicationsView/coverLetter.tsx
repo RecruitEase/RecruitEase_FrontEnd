@@ -16,7 +16,7 @@ const CoverLetter:React.FC<CoverLetterProps> = ({application,recruiter,job}) => 
             </div>
             <div>
                 <div className={"mb-2 mt-4 text-2xl font-bold"}>Cover Letter</div>
-                <ReactQuillReadOnly content={application.coverLetter} />
+                <ReactQuillReadOnly classNameProps={"h-96"} content={application.coverLetter} />
 
             </div>
 

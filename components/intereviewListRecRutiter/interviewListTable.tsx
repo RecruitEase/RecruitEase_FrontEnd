@@ -22,11 +22,8 @@ import {
 } from "@nextui-org/react";
 
 import {columns, statusOptions} from "./data";
+// import { user} from "./data";
 import {ChevronDownIcon, SearchIcon} from "@nextui-org/shared-icons";
-import {ApplicationProp} from "@/types/applications";
-import {CandidateProp, RecruiterProp} from "@/types/users";
-import {InterviewProp} from "@/types/interviews";
-import {JobProps} from "@/types";
 
 
 const capitalize=(str: string) => {
@@ -39,21 +36,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
     hold: "warning",
 };
 
-function mapToInterviewsTableRowProps(applications:ApplicationProp[],interviews:InterviewProp[],candidates:CandidateProp[]) {
-    return interviews.map(interview => {
-        const application = applications.find(a => a.applicationId === interview.applicationId)|| null;
-        const candidate = candidates.find(c => c.candidateId == interviews.candidateId) || null; // Find matching job
-
-        return {
-            ...interviews,
-            application,
-            candidate
-        };
-    });
-}
-
-
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "date"];
+const INITIAL_VISIBLE_COLUMNS = ["name", "role", "date"];
 
 type userDetails = {
     id: number;
@@ -71,45 +54,59 @@ type userDetails = {
     description: string;
 };
 
+// type JobListTableProps={
+//     users:User[];
+// }
+
 interface JobListTableProps {
-    candidates:CandidateProp[],
-    applications:ApplicationProp[],
-    interviews:InterviewProp[];
+    users: userDetails[];
     popup: (user: userDetails) => void;
 }
 
-export default function InterviewListTable({candidates,applications,interviews, popup} : JobListTableProps) {
+export default function interviewListTable({users, popup} : JobListTableProps) {
 
-    const users = mapToInterviewsTableRowProps(applications,interviews,candidates)
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [filterValue, setFilterValue] = React.useState("");
+// eslint-disable-next-line react-hooks/rules-of-hooks
     const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
+// eslint-disable-next-line react-hooks/rules-of-hooks
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+// eslint-disable-next-line react-hooks/rules-of-hooks
     const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [rowsPerPage, setRowsPerPage] =useState(5);
+// eslint-disable-next-line react-hooks/rules-of-hooks
     const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-        column: "name",
+        column: "age",
         direction: "ascending",
     });
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const [page, setPage] = React.useState(1);
 
+
+
     const hasSearchFilter = Boolean(filterValue);
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const headerColumns = React.useMemo(() => {
         if (visibleColumns === "all") return columns;
 
         return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
     }, [visibleColumns]);
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const filteredItems = React.useMemo(() => {
         let filteredUsers = [...users];
 
         if (hasSearchFilter) {
             filteredUsers = filteredUsers.filter((user) =>
-                user.candidate?.firstName.toLowerCase().includes(filterValue.toLowerCase()),
+                user.name.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
         if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
             filteredUsers = filteredUsers.filter((user) =>
-                Array.from(statusFilter).includes(user.application?.status),
+                Array.from(statusFilter).includes(user.status),
             );
         }
 
@@ -118,6 +115,7 @@ export default function InterviewListTable({candidates,applications,interviews, 
 
     const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -125,32 +123,18 @@ export default function InterviewListTable({candidates,applications,interviews, 
         return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const sortedItems = React.useMemo(() => {
-        return [...items].sort((a: userDetails | null, b: userDetails | null) => {
-            // Handle null or undefined items
-            if (!a || !b) {
-                return 0;
-            }
+        return [...items].sort((a: userDetails, b: userDetails) => {
+            const first = a[sortDescriptor.column as keyof userDetails] as number;
+            const second = b[sortDescriptor.column as keyof userDetails] as number;
+            const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-            const firstValue = a[sortDescriptor.column as keyof userDetails];
-            const secondValue = b[sortDescriptor.column as keyof userDetails];
-
-            const first = typeof firstValue === 'string' ? firstValue.toLowerCase() : firstValue;
-            const second = typeof secondValue === 'string' ? secondValue.toLowerCase() : secondValue;
-
-            if (typeof first === 'number' && typeof second === 'number') {
-                const cmp = first < second ? -1 : first > second ? 1 : 0;
-                return sortDescriptor.direction === "descending" ? -cmp : cmp;
-            } else if (typeof first === 'string' && typeof second === 'string') {
-                const cmp = first.localeCompare(second);
-                return sortDescriptor.direction === "descending" ? -cmp : cmp;
-            } else {
-                return 0;
-            }
+            return sortDescriptor.direction === "descending" ? -cmp : cmp;
         });
     }, [sortDescriptor, items]);
 
-
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const renderCell = React.useCallback((user: userDetails, columnKey: React.Key) => {
         const cellValue = user[columnKey as keyof userDetails];
 
@@ -172,12 +156,12 @@ export default function InterviewListTable({candidates,applications,interviews, 
                         <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
                     </div>
                 );
-            case "status":
-                return (
-                    <Chip className="capitalize min-w-[100px] text-center" color={statusColorMap[user.status]} size="sm" variant="flat">
-                        {cellValue}
-                    </Chip>
-                );
+            // case "status":
+            //     return (
+            //         <Chip className="capitalize min-w-[100px] text-center" color={statusColorMap[user.status]} size="sm" variant="flat">
+            //             {cellValue}
+            //         </Chip>
+            //     );
             case "date":
                 return (
                     <div className="flex flex-col">
@@ -185,29 +169,48 @@ export default function InterviewListTable({candidates,applications,interviews, 
                         {/*<p className="text-bold text-tiny capitalize text-default-400">{user.date}</p>*/}
                     </div>
                 );
+            // case "actions":
+            //     return (
+            //         <div className="relative flex justify-end items-center gap-2">
+            //             <Dropdown>
+            //                 <DropdownTrigger>
+            //                     <Button isIconOnly size="sm" variant="light">
+            //                         <VerticalDotsIcon className="text-default-300" />
+            //                     </Button>
+            //                 </DropdownTrigger>
+            //                 <DropdownMenu>
+            //                     <DropdownItem>View</DropdownItem>
+            //                     <DropdownItem>Edit</DropdownItem>
+            //                     <DropdownItem>Delete</DropdownItem>
+            //                 </DropdownMenu>
+            //             </Dropdown>
+            //         </div>
+            //     );
             default:
                 return cellValue;
         }
     }, []);
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const onNextPage = React.useCallback(() => {
         if (page < pages) {
             setPage(page + 1);
         }
     }, [page, pages]);
-
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const onPreviousPage = React.useCallback(() => {
         if (page > 1) {
             setPage(page - 1);
         }
     }, [page]);
 
-
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setRowsPerPage(Number(e.target.value));
         setPage(1);
     }, []);
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const onSearchChange = React.useCallback((value?: string) => {
         if (value) {
             setFilterValue(value);
@@ -217,11 +220,13 @@ export default function InterviewListTable({candidates,applications,interviews, 
         }
     }, []);
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const onClear = React.useCallback(()=>{
         setFilterValue("")
         setPage(1)
     },[])
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
@@ -257,6 +262,30 @@ export default function InterviewListTable({candidates,applications,interviews, 
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
+                        {/*<Dropdown>*/}
+                        {/*    <DropdownTrigger className="hidden sm:flex">*/}
+                        {/*        <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">*/}
+                        {/*            Columns*/}
+                        {/*        </Button>*/}
+                        {/*    </DropdownTrigger>*/}
+                        {/*    <DropdownMenu*/}
+                        {/*        disallowEmptySelection*/}
+                        {/*        aria-label="Table Columns"*/}
+                        {/*        closeOnSelect={false}*/}
+                        {/*        selectedKeys={visibleColumns}*/}
+                        {/*        selectionMode="multiple"*/}
+                        {/*        onSelectionChange={setVisibleColumns}*/}
+                        {/*    >*/}
+                        {/*        {columns.map((column) => (*/}
+                        {/*            <DropdownItem key={column.uid} className="capitalize">*/}
+                        {/*                {capitalize(column.name)}*/}
+                        {/*            </DropdownItem>*/}
+                        {/*        ))}*/}
+                        {/*    </DropdownMenu>*/}
+                        {/*</Dropdown>*/}
+                        {/*<Button color="primary" endContent={<PlusIcon />}>*/}
+                        {/*    Add New*/}
+                        {/*</Button>*/}
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -285,6 +314,7 @@ export default function InterviewListTable({candidates,applications,interviews, 
         hasSearchFilter,
     ]);
 
+        // eslint-disable-next-line react-hooks/rules-of-hooks
     const bottomContent = React.useMemo(() => {
         return (
             <div className="py-2 px-2 flex justify-between items-center">
@@ -323,7 +353,8 @@ export default function InterviewListTable({candidates,applications,interviews, 
             classNames={{
                 wrapper: "max-h-[382px]",
             }}
-
+            // selectedKeys={selectedKeys}
+            // selectionMode="multiple"
             sortDescriptor={sortDescriptor}
             topContent={topContent}
             topContentPlacement="outside"
@@ -342,9 +373,9 @@ export default function InterviewListTable({candidates,applications,interviews, 
                 {(column) => (
                     <TableColumn
                         key={column.uid}
-                        align={column.uid === "status" ? "center" : "start"}
+                        // align={column.uid === "date" ? "center" : "start"}
                         allowsSorting={column.sortable}
-                        className={column.uid === "name" ?"":"w-[200px]"}
+                        className={column.uid === "date" ?"w-[100px]":""}
                     >
                         {column.name}
                     </TableColumn>

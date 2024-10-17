@@ -9,7 +9,6 @@ import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
-import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const position = "Software Engineer";
 const types = [
@@ -17,42 +16,25 @@ const types = [
     {key:"Onsite", label:"Onsite"}
 ]
 
-type DateObject = {
-    calendar: any;
-    era: string;
-    year: number;
-    month: number;
-    day: number;
-};
-
-export default function InterviewSchedule(){
+export default function interviewSchedule(){
 
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [location, setLocation] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [date, setDate] = useState<DateValue | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState<Time | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [description, setDescription] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffDate, setCutoffDate] = useState<DateValue | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffTime, setCutoffTime] = useState<Time | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [type,setType] = useState<Key | null>(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [dressCode, setDressCode] = useState("");
-    const [dateFormat, setDateFormat] = useState<Date | null>(null);
-
-    function formatDate(dateObj: DateObject): string {
-        const { year, month, day } = dateObj;
-        const formattedMonth = month.toString().padStart(2, '0'); // Ensure month is two digits
-        const formattedDay = day.toString().padStart(2, '0');     // Ensure day is two digits
-
-        return `${year}-${formattedMonth}-${formattedDay}`;
-    }
-
-    function formatTimeToAMPM(hours: number, minutes: number): string {
-        const period = hours >= 12 ? 'PM' : 'AM';
-        const formattedHours = hours % 12 || 12;
-        const formattedMinutes = minutes.toString().padStart(2, '0');
-        return `${formattedHours}:${formattedMinutes} ${period}`;
-    }
-
 
     const typeSet = (type:Key) => {
         setType(type);
@@ -65,19 +47,14 @@ export default function InterviewSchedule(){
     };
     const dateSet = (date: DateValue) => {
         if (date) {
-
-            // @ts-ignore
-            setDate(formatDate(date))
-
+            setDate(date);
         }else {
             setDate(null);
         }
     }
-    const timeSet = (time:Time) => {
+    const timeSet = (time: Time) => {
         if (time) {
-            const formattedTime = formatTimeToAMPM(time.hour, time.minute);;
-            // @ts-ignore
-            setTime(formattedTime);
+            setTime(time);
         }else {
             setTime(null);
         }
@@ -87,87 +64,33 @@ export default function InterviewSchedule(){
     };
     const cutoffDateSet = (cutoffDate: DateValue) => {
         if (cutoffDate) {
-            // @ts-ignore
-            setCutoffDate(formatDate(cutoffDate));
+            setCutoffDate(cutoffDate);
         }else {
             setCutoffDate(null);
         }
     };
-    const cutoffTimeSet = (cutoffTime:Time) => {
+    const cutoffTimeSet = (cutoffTime: Time) => {
         if (cutoffTime) {
-            const formattedTime = formatTimeToAMPM(cutoffTime.hour, cutoffTime.minute);
-            // @ts-ignore
-            setCutoffTime(formattedTime);
-            // const formattedTime = formatTimeToAMPM(cutoffTime);
+            setCutoffTime(cutoffTime);
         }else {
             setCutoffTime(null);
         }
     };
 
-    const axios=useAxiosAuth();
-
-
     const sendDetails = () => {
-
-        return axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/create`,{
-            applicationId:"d84ac88d-4aef-4f34-afe9-4f618c193738",
-            candidateId:"3b0334d9-4464-4e7d-9d05-a2859a5a583a",
+        const scheduleDetails = {
             type:type,
+            location:location,
             date:date,
             time:time,
-            location:location,
-            link:"",
-            dressCode:dressCode,
             description:description,
             cutoffDate:cutoffDate,
             cutoffTime:cutoffTime,
-        })
-            .then(response => {
-                if(response.status === 201){
-                    toast.success('Scheduled successfully!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored",
-                        transition: Bounce,
-                    });
-                    router.push("/recruiter/vacancy/abc1/applications");
+            dressCode:dressCode
 
+        }
 
-                }else{
-                    toast.error('Failed!', {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored",
-                        transition: Bounce,
-                    });
-                }
-            })
-            .catch(error => {
-                console.error(`Error fetching`, error);
-                toast.error('Failed!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-                return null;
-            });
-
+        console.log(scheduleDetails)
     };
     const router=useRouter();
 
@@ -185,11 +108,42 @@ export default function InterviewSchedule(){
             showCancelButton: true,
             confirmButtonText: "Yes",
 
-        }).then(() =>
+        }).then(() => {
             sendDetails()
-        );
-    }
+            const result = {
+                status: 200
+            }
+            if (result?.status == 200) {
+                toast.success('Scheduled successfully!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+                router.push("/recruiter/vacancy/abc1/applications");
 
+            } else {
+                //not logged in
+                //handle error here
+                toast.error('Delete failed!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+            }
+        });
+    }
 
     return (
         <div className={"flex flex-col gap-4 "}>
@@ -199,7 +153,6 @@ export default function InterviewSchedule(){
                     label="Interview type"
                     placeholder="Select a type of interview"
                     className="max-w-xs"
-                    // @ts-ignore
                     onSelectionChange={(key: React.Key) => typeSet(key)}
                 >
                     {(types) => <AutocompleteItem key={types.key}>{types.label}</AutocompleteItem>}
@@ -234,9 +187,7 @@ export default function InterviewSchedule(){
                             <ClockCircleLinearIcon/>
                         )}
                         fullWidth
-                        // @ts-ignore
                         onChange={timeSet}
-
                     />
                 </div>
             </div>
@@ -259,7 +210,7 @@ export default function InterviewSchedule(){
                         label="Position"
                         defaultValue={position}
                         className="w-full"
-                        onChange={(element) => locationSet(element.target.value)}
+                        // onChange={(element) => locationSet(element.target.value)}
                     />
                 </div>
             </div>
@@ -291,7 +242,6 @@ export default function InterviewSchedule(){
                         <ClockCircleLinearIcon/>
                     )}
                     className={"max-w-xs"}
-                    // @ts-ignore
                     onChange={cutoffTimeSet}
                 />
             </div>
@@ -303,3 +253,5 @@ export default function InterviewSchedule(){
         </div>
     );
 };
+
+// export default interviewSchedule;

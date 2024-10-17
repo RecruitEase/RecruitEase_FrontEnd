@@ -10,6 +10,9 @@ import { Card, CardBody } from "@nextui-org/react";
 import { MdOutlinePostAdd } from "react-icons/md";
 import Link from "next/link";
 import NextLink from "next/link";
+import {useJobsByLoggedRecruiter} from "@/lib/hooks/useJobs";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
 
 const RecruiterDashboard = () => {
   const { theme, setTheme } = useTheme();
@@ -28,6 +31,10 @@ const RecruiterDashboard = () => {
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
+
+  //fetching data
+  const jobQueryByLoggedRecruiter=useJobsByLoggedRecruiter();
+  console.log("logged user jobs",jobQueryByLoggedRecruiter.data)
 
   return (
     <div className="min-h-screen">
@@ -74,8 +81,20 @@ const RecruiterDashboard = () => {
                 View All
               </Link>
             </div>
+            {
+              (jobQueryByLoggedRecruiter.isFetching)?
+                  <LoadingComponent />
+                  :(jobQueryByLoggedRecruiter.isSuccess && jobQueryByLoggedRecruiter.data.length==0)?
+                      <div className="flex justify-center items-center h-96">
+                        You have not posted any vacancies!
+                      </div>
+                      :(jobQueryByLoggedRecruiter.isError)?
+                          < ErrorComponent />
+                          :<>
             <FilterBar onFilterChange={handleFilterChange} />
-            <VacancyTable filter={filter} />
+            <VacancyTable vacancies={jobQueryByLoggedRecruiter.data!} filter={filter} />
+                          </>
+            }
           </CardBody>
         </Card>
       </div>

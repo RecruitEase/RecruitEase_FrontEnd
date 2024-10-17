@@ -255,12 +255,12 @@ const users:userDetails[] = [
 const jobList = () =>{
 
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [selectedCard, setSelectedCard] = useState<userDetails | null>(null);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    
     const [text ,setText]=useState("")
 
     // Accept Button Handle-----------------------------------------------
