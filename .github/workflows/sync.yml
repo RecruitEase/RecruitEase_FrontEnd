@@ -1,4 +1,4 @@
-name: Sync main branch to another repo
+name: Push main to another repository
 
 on:
   push:
@@ -6,23 +6,32 @@ on:
       - main
 
 jobs:
-  sync:
+  push-to-other-repo:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout source repo
+      - name: Checkout source repository
         uses: actions/checkout@v2
         with:
-          token: '${{ secrets.DESTINATION_REPO_PAT }}'
+          fetch-depth: 0
 
-      - name: Set up Git for pushing
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-
-      - name: Push to destination repo
+      - name: Push to destination repository
         env:
-          DESTINATION_REPO_PAT: ${{ secrets.DESTINATION_REPO_PAT }}
+          API_TOKEN_GITHUB: ${{secrets.DESTINATION_REPO_PAT}}
         run: |
-          git remote add destination https://github.com/chathura226/RecruitEase_Vercel.git
-          git push destination main --force
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+          # Clone the destination repository
+          git clone https://${API_TOKEN_GITHUB}@github.com/chathura226/RecruitEase_Vercel.git RecruitEase_Vercel
+          
+          # Remove all files in the destination repository (except .git)
+          find RecruitEase_Vercel -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          
+          # Copy all files from source to destination (excluding .git)
+          rsync -av --exclude='.git' --exclude='.github' --exclude='RecruitEase_Vercel' ./ RecruitEase_Vercel/
+          
+          # Commit and push changes
+          cd RecruitEase_Vercel
+          git add .
+          git commit -m "Update from source repository"
+          git push origin main --force

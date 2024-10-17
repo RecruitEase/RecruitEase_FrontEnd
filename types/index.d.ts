@@ -110,6 +110,7 @@ declare interface CustomFormInputProps{
   placeholder?:string,
   variant?:string,
   className?:string
+  defaultValue?:any
 }
 
 

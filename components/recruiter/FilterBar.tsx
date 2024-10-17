@@ -24,28 +24,28 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
   return (
     <Card>
       <CardBody className="flex flex-row gap-4 flex-wrap">
-        <select
-          value={job}
-          onChange={(e) => setJob(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
-        >
-          <option value="All">Choose a job</option>
-          {vacancies.map((vacancy) => (
-            <option key={vacancy.id} value={vacancy.title}>
-              {vacancy.title}
-            </option>
-          ))}
-        </select>
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="border border-gray-300 rounded-md p-2"
-        >
-          <option value="All">Choose a type</option>
-          <option value="all">All</option>
-          <option value="full-time">Full Time</option>
-          <option value="part-time">Part Time</option>
-        </select>
+        {/*<select*/}
+        {/*  value={job}*/}
+        {/*  onChange={(e) => setJob(e.target.value)}*/}
+        {/*  className="border border-gray-300 rounded-md p-2"*/}
+        {/*>*/}
+        {/*  <option value="All">Choose a job</option>*/}
+        {/*  {vacancies.map((vacancy) => (*/}
+        {/*    <option key={vacancy.id} value={vacancy.title}>*/}
+        {/*      {vacancy.title}*/}
+        {/*    </option>*/}
+        {/*  ))}*/}
+        {/*</select>*/}
+        {/*<select*/}
+        {/*  value={type}*/}
+        {/*  onChange={(e) => setType(e.target.value)}*/}
+        {/*  className="border border-gray-300 rounded-md p-2"*/}
+        {/*>*/}
+        {/*  <option value="All">Choose a type</option>*/}
+        {/*  <option value="all">All</option>*/}
+        {/*  <option value="full-time">Full Time</option>*/}
+        {/*  <option value="part-time">Part Time</option>*/}
+        {/*</select>*/}
         <label>From:</label>
         <input
           type="date"
