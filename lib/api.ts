@@ -115,6 +115,15 @@ export const updateJob=async (data:Job)=>{
 }
 
 
+//cv apis
+export const getCvsByCandidateId=async (candidateId:string)=>{
+    return (await axiosInstance.get(`api/v1/cv/candidate/${candidateId}`)).data.content;
+}
+export const getCvById=async (cvId:string)=>{
+    return (await axiosInstance.get(`api/v1/cv/view/${cvId}`)).data.content;
+}
+
+
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);
 // }

@@ -87,10 +87,10 @@ const Management = () => {
       });
       console.log('Upload Successful:', res.data);
 
-      const { file, cvImage } = res.data.content;
+      const { path, cvImage } = res.data.content;
 
       const saveCvdata = {
-        file: file,
+        file: path,
         cvImage: cvImage,
         cvData: null,
         cvName: cvName,

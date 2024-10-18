@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   function middleware(req) {
-    console.log("token:jftvhbj ", req.nextauth.token);
+    // console.log("token:jftvhbj ", req.nextauth.token);
 
     if (req.nextUrl.pathname.startsWith("/recruiter") && req.nextauth.token?.role !== "recruiter")
       return  NextResponse.redirect(
