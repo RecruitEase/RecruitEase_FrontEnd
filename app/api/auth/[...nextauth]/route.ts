@@ -1,5 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import * as fs from "node:fs";
+import path from "node:path";
+import * as https from "node:https";
+import axios from "axios";
 
 const handler= NextAuth({
     providers: [
@@ -17,19 +21,47 @@ const handler= NextAuth({
             async authorize(credentials, req) {
                 // Add logic here to look up the user from the credentials supplied
                 // const user = { id: "1", name: "J Smith", email: "jsmith@example.com" }
+                try {
 
-                const res=await fetch(process.env.API_GATEWAY_LOGIN,{
-                    method:'POST',
-                    headers:{
-                        'Content-Type':'application/json'
-                    },
-                    body:JSON.stringify({
-                        email:credentials?.email,
-                        password:credentials?.password
-                    })
+
+// console.log("zzzzzzzzzzzzz,", path.join(process.cwd(), 'certs/gatewayKey.pem'));
+//                 // Load your self-signed certificate
+//                 const cert = fs.readFileSync(path.join(process.cwd(), 'certs/gatewayKey.pem'));
+
+                // Create an HTTPS agent that trusts the self-signed certificate
+                const agent = new https.Agent({
+                    rejectUnauthorized:false
                 });
+
+                // const res=await fetch(process.env.API_GATEWAY_LOGIN,{
+                //     method:'POST',
+                //     headers:{
+                //         'Content-Type':'application/json'
+                //     },
+                //     body:JSON.stringify({
+                //         email:credentials?.email,
+                //         password:credentials?.password
+                //     }),
+                //
+                // });
+                    const res = await axios.post(
+                        process.env.API_GATEWAY_LOGIN,
+                        {
+                            email: credentials?.email,
+                            password: credentials?.password
+                        },
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            httpsAgent:agent
+                        },
+                    );
+
+
                 // console.log(res)
-                const user=await res.json();
+                    const user = res.data;
+
 
                 if (user) {
                     console.log("user obj........................")
@@ -48,6 +80,9 @@ const handler= NextAuth({
                     throw new Error(JSON.stringify({error:user.errors,status:false}))
 
                     // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+                }
+                }catch (e){
+                    console.log(e)
                 }
             }
         })
