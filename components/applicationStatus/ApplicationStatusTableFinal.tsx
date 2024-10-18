@@ -32,6 +32,7 @@ import Link from "next/link";
 import {ApplicationProp} from "@/types/applications";
 import {RecruiterProp} from "@/types/users";
 import { useWithdrawApplication } from "@/lib/hooks/useApplications";
+import {Job} from "@/types/job";
 
 
 
@@ -86,21 +87,23 @@ const INITIAL_VISIBLE_COLUMNS = ["recruiter", "status", "actions","date","title"
 type User = ApplicationTableRowProp;
 interface ApplicationStatusTableProps {
   applications: ApplicationProp[];
-  jobs: JobProps[];
+  jobs: Job[];
   recruiters: RecruiterProp[];
 }
 
 
 interface ApplicationTableRowProp extends ApplicationProp {
   recruiter:RecruiterProp | null;
-  job:JobProps | null;
+  job:Job | null;
 }
 
 
-function mapToApplicationTableRowProps(applications:ApplicationProp[],jobs:JobProps[],recruiters:RecruiterProp[]): ApplicationTableRowProp[] {
+function mapToApplicationTableRowProps(applications:ApplicationProp[],jobs,recruiters:RecruiterProp[]): ApplicationTableRowProp[] {
+  console.log("jobbbbbbbbbbbbbbbs",jobs)
   return applications.map(application => {
     const recruiter = recruiters.find(r => r.recruiterId === application.recruiterId)|| null; // Find matching recruiter
-    const job = jobs.find(j => j.jobId == application.jobId) || null; // Find matching job
+    const job = jobs.find(j => j.data.jobId == application.jobId).data || null; // Find matching job
+    console.log("foundddddddddddddddd..",job)
 
     return {
       ...application,
@@ -192,12 +195,12 @@ export default function ApplicationStatusTableFinal({ applications,jobs,recruite
 
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
     const cellValue = user[columnKey as keyof User];
-
+    const profilePic=(user.recruiter?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+user.recruiter?.profilePic : "/profileImages/noImage.png";
     switch (columnKey) {
       case "recruiter":
         return (
           <User
-            avatarProps={{radius: "lg", src: user.recruiter?.profilePic}}
+            avatarProps={{radius: "lg", src: profilePic}}
             description={user.recruiter?.email}
             name={user.recruiter?.companyName}
           />
