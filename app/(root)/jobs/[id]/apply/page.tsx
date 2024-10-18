@@ -24,6 +24,12 @@ import {ApplicationProp} from "@/types/applications";
 import {useParams,useRouter} from "next/navigation";
 import {useCreateApplication} from "../../../../../lib/hooks/useApplications";
 import {Bounce, toast} from "react-toastify";
+import {useJob} from "@/lib/hooks/useJobs";
+import {useRecruiter} from "@/lib/hooks/useRecruiters";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import {educationLevelTypes, experienceLevelTypes, jobTypes, locations} from "@/components/recruiter/data";
+import {daysLeft, toTitleCase, truncateString} from "@/utils/stringUtils";
 const job =
     {
         recruiterId: "82a28181-3944-47ee-ba1a-9da0572e441a",
@@ -84,6 +90,7 @@ const job =
     };
 
 const Apply = () => {
+
     const [selectedCv, setSelectedCv] = useState('');
 
     //react-quill
@@ -127,6 +134,11 @@ const Apply = () => {
     //     console.log(selectedCv)
     // }, [selectedCv]);
     const params = useParams<{ id: string }>()
+    const jobQuery=useJob(params.id);
+
+    const recruitersQuery=useRecruiter(jobQuery.data?.recruiterId);
+
+
     const createApplicationMutation=useCreateApplication();
     const submitApplication=()=>{
         if(selectedCv!='' && params.id!=null && value!='') {
@@ -168,7 +180,9 @@ const Apply = () => {
                     title="Apply for this Job "
                     subtext="Please fill in your details below, then click &apos;Apply&apos; button to submit your application. Your application will be treated with absolute confidentiality."
                 />
-
+                        </div>
+                        </div>
+                </header>
                             <div className="flex w-full flex-wrap lg:flex-nowrap gap-4 pt-4 pb-4">
                                 <Input type="text" label="Full Name" placeholder="Enter your full name" value={user.roleDetails.firstName+" "+user.roleDetails.lastName} disabled />
                                 <Input type="email" label="Email" placeholder="Enter your email" value={user.email} disabled />
@@ -176,6 +190,13 @@ const Apply = () => {
 
                             <Divider />
 
+                            {
+                                (jobQuery.isFetching || recruitersQuery.isFetching)?
+                                    <LoadingComponent />
+                                    :(jobQuery.isError || recruitersQuery.isError)?
+                                        < ErrorComponent />
+                                        :
+                        <>
                             <div className='flex pt-4'>
                                 <div>
                                     <h1>CV*</h1>
@@ -335,6 +356,8 @@ const Apply = () => {
 
 
                             </div>
+                        </>
+                            }
 
                         </div>
                         {/* right */}
@@ -344,41 +367,39 @@ const Apply = () => {
                                     <CardHeader className="absolute z-10 top-1 flex-col !items-start">
                                         <div className='w-full h-[60px] items-center'>
                                             <Image
-                                                src={job.logo}
+                                                src={(recruitersQuery.data?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+recruitersQuery.data.profilePic : "/profileImages/noImage.png"}
                                                 alt="Job Image"
                                                 width={60}
                                                 height={60}
                                                 className='mb-2'
                                             />
                                         </div>
-                                        <span className=" font-medium pt-1">{job.title}</span>
-                                        <span className='text-sm'>{job.company}</span>
+                                        <span className=" font-medium pt-1">{truncateString(toTitleCase(jobQuery.data!.title!),25)}</span>
+                                        <span className='text-sm'>{toTitleCase(recruitersQuery.data!.companyName!)}</span>
                                         <div className='text-sm'>
                                             <div className="flex items-center mt-2 text-secondaryText">
                                                 <FiMapPin className="mr-2"/>
-                                                <p>{job.location}</p>
+                                                <p>{locations.find(x => x.key == jobQuery.data?.location)?.label}</p>
                                             </div>
                                             <div className="flex items-center mt-2 text-secondaryText">
                                             <FiClock className="mr-2"/>
-                                                <p>{job.daysLeft} days left</p>
+                                                <p>{daysLeft(jobQuery.data?.deadline)}</p>
                                             </div>
                                             <div className="flex items-center mt-2 text-secondaryText">
                                                 <FiBriefcase className="mr-2"/>
-                                                <p>{job.type}</p>
+                                                <p>{jobTypes.find(x => x.key == jobQuery.data?.type)?.label}</p>
                                             </div>
                                         </div>
                                         <Divider className="my-4"/>
                                         <div className="flex h-20 space-x-4 text-sm">
                                             <div>
                                                 <p className={"p-1"}>
-                                                    <strong>Education:</strong> {job.education}
+                                                    <strong>Education:</strong> {educationLevelTypes.find(x => x.key == jobQuery.data?.educationLevel)?.label}
                                                 </p>
                                                 <p className={"p-1"}>
-                                                    <strong>Experience:</strong> {job.experience}
+                                                    <strong>Experience:</strong> {experienceLevelTypes.find(x => x.key == jobQuery.data?.experienceLevel)?.label}
                                                 </p>
-                                                <p className={"p-1"}>
-                                                    <strong>Salary Range:</strong> Any
-                                                </p>
+
                                             </div>
                                         </div>
                                         <Divider className="my-4"/>
@@ -395,9 +416,7 @@ const Apply = () => {
 
                             </div>
                         </div>
-                    </div>
-                </header>
-            </div>
+
         </section>
     );
 };

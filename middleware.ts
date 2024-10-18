@@ -24,6 +24,14 @@ export default withAuth(
         return NextResponse.redirect(
           new URL("/?error_message=You Are Not Authorized!", req.url)
         );
+
+
+    // Handle /job/{id}/apply route
+      if (req.nextUrl.pathname.match(/^\/jobs\/.+\/apply(\/.*)?$/) && req.nextauth.token?.role !== "candidate") {
+        return NextResponse.redirect(
+            new URL("/?error_message=Only candidates can apply for jobs!", req.url)
+        );
+      }
   },
   {
     callbacks: {
@@ -33,5 +41,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: [ "/moderator/:path*","/admin/:path*","/recruiter/:path*","/candidate/:path*"],
+  matcher: [ "/moderator/:path*","/admin/:path*","/recruiter/:path*","/candidate/:path*","/jobs/:id/apply/:path*"],
 };
