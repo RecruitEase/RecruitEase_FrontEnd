@@ -5,9 +5,15 @@ import {Session} from "next-auth";
 import {JobProps, UploadFileProps} from "@/types";
 import {ApplicationProp} from "../types/applications";
 import {Job} from "@/types/job";
+import https from "node:https";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-const axiosInstance=axios.create({baseURL:BASE_URL});
+
+const agent = new https.Agent({//authorize self signed cert for now
+    rejectUnauthorized:false
+});
+
+const axiosInstance=axios.create({baseURL:BASE_URL,httpsAgent:agent});
 
 
 let sessionPromise: Promise<Session |null> | null = null;
