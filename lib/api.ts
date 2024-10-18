@@ -9,11 +9,8 @@ import https from "node:https";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const agent = new https.Agent({//authorize self signed cert for now
-    rejectUnauthorized:false
-});
 
-const axiosInstance=axios.create({baseURL:BASE_URL,httpsAgent:agent});
+const axiosInstance=axios.create({baseURL:BASE_URL});
 
 
 let sessionPromise: Promise<Session |null> | null = null;

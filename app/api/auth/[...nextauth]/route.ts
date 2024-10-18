@@ -29,9 +29,9 @@ const handler= NextAuth({
 //                 const cert = fs.readFileSync(path.join(process.cwd(), 'certs/gatewayKey.pem'));
 
                 // Create an HTTPS agent that trusts the self-signed certificate
-                const agent = new https.Agent({
-                    rejectUnauthorized:false
-                });
+                // const agent = new https.Agent({
+                //     rejectUnauthorized:false
+                // });
 
                 // const res=await fetch(process.env.API_GATEWAY_LOGIN,{
                 //     method:'POST',
@@ -53,8 +53,7 @@ const handler= NextAuth({
                         {
                             headers: {
                                 'Content-Type': 'application/json'
-                            },
-                            httpsAgent:agent
+                            }
                         },
                     );
 
