@@ -1,11 +1,12 @@
-// export { default } from "next-auth/middleware";
 import { withAuth } from "next-auth/middleware";
 import { NextRequest, NextResponse } from "next/server";
+
+// export { default } from "next-auth/middleware";
 
 export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   function middleware(req) {
-    console.log("token: ", req.nextauth.token);
+    console.log("token:jftvhbj ", req.nextauth.token);
 
     if (req.nextUrl.pathname.startsWith("/recruiter") && req.nextauth.token?.role !== "recruiter")
       return  NextResponse.redirect(
@@ -32,5 +33,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: [ "/moderator/:path*"],
+  matcher: [ "/moderator/:path*","/admin/:path*","/recruiter/:path*","/candidate/:path*"],
 };
