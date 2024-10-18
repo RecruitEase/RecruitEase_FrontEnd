@@ -9,7 +9,8 @@ const CustomInputWithoutValidation = ({
     required,
     type = "text",
     variant = "bordered",
-    placeholder = ""
+    placeholder = "",
+    onValChange
 }: CustomFormInputWithoutValidationProps) => {
 
     return (
@@ -24,6 +25,7 @@ const CustomInputWithoutValidation = ({
                 type={type}
                 variant={variant}
                 placeholder={placeholder}
+                onValueChange={onValChange}
             />
 
 
