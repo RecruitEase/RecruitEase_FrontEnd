@@ -65,7 +65,7 @@ interface JobListTableProps {
 
 export default function interviewListTable({users, popup} : JobListTableProps) {
 
-
+console.log(users)
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [filterValue, setFilterValue] = React.useState("");
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -79,7 +79,7 @@ export default function interviewListTable({users, popup} : JobListTableProps) {
     const [rowsPerPage, setRowsPerPage] =useState(5);
 // eslint-disable-next-line react-hooks/rules-of-hooks
     const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-        column: "age",
+        column: "date",
         direction: "ascending",
     });
         // eslint-disable-next-line react-hooks/rules-of-hooks
