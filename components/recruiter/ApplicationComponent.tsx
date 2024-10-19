@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, {Key, useEffect } from "react";
 import { Tabs, Tab, SelectItem, Select } from "@nextui-org/react";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 
@@ -10,7 +10,6 @@ import { Button } from "@nextui-org/button";
 import ApplicationTable from "@/components/recruiter/ApplicationTable";
 import ViewCvPopup from "./ViewCvPopup";
 import ViewAnswersPopup from "./ViewAnswersPopup";
-import { CVProps, ApplicationProps } from "@/types/index";
 import { MdOutlineQuiz } from "react-icons/md";
 import { FaPeopleArrows } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
@@ -18,27 +17,48 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaPaste } from "react-icons/fa";
 import { FaPenToSquare } from "react-icons/fa6";
-export default function ApplicationComponent() {
-  const applicant: ApplicationProps = {
-    name: "David Eliot",
-    city: "Colombo",
-    email: "davideliot@gmail.com",
-    status: "underReview",
-    appliedDate: "2024-10-10",
-    cv: {
-      cvId: "1",
-      cvName: "CV1",
-      file: "/assets/cv.pdf",
-      modifiedDate: "2021-09-01",
-      type: "uploaded",
-    },
-  };
+import {ApplicationProp} from "@/types/applications";
+import {CandidateProp, RecruiterProp} from "@/types/users";
+import {Job} from "@/types/job";
+import {toTitleCase} from "@/lib/utils";
+import {formatDate} from "@/utils/stringUtils";
+import {useApplicationStatusChange} from "@/lib/hooks/useApplications";
+import {applicationStatusChange} from "@/lib/api";
+
+declare interface ApplicationsPerJobComponentProps{
+  applications: ApplicationProp[];
+  job: Job;
+  candidates: CandidateProp[];
+}
+export default function ApplicationComponent({applications,candidates,job}:ApplicationsPerJobComponentProps) {
+
+  console.log("apps",applications)
+  console.log("cands",candidates)
+
+  // const applicant: ApplicationProps = {
+  //   name: "David Eliot",
+  //   city: "Colombo",
+  //   email: "davideliot@gmail.com",
+  //   status: "underReview",
+  //   appliedDate: "2024-10-10",
+  //   cv: {
+  //     cvId: "1",
+  //     cvName: "CV1",
+  //     file: "/assets/cv.pdf",
+  //     modifiedDate: "2021-09-01",
+  //     type: "uploaded",
+  //   },
+  // };
 
   //cv popup
   const [isOpenCV, setIsOpenCV] = React.useState(false);
   const [isOpenAnswers, setIsOpenAnswers] = React.useState(false);
   const [selectedApplicant, setSelectedApplicant] =
-    React.useState<ApplicationProps | null>(null);
+    React.useState<CandidateProp | null>(null);
+  const [selectedApplicantion, setSelectedApplicantion] =
+      React.useState<ApplicationProp | null>(null);
+
+
   const handleOpenChangeCV = (open) => {
     setIsOpenCV(open);
   };
@@ -47,19 +67,21 @@ export default function ApplicationComponent() {
     setIsOpenAnswers(open);
   };
 
-  const handleViewCvClick = (applicant: ApplicationProps) => {
-    setSelectedApplicant(applicant);
+  const handleViewCvClick = (applicant: ApplicationProp) => {
+    setSelectedApplicant(selectedApplicant);
     setIsOpenCV(true);
   };
 
-  const handleViewAnswersClick = (applicant: ApplicationProps) => {
-    setSelectedApplicant(applicant);
+  const handleViewAnswersClick = (applicant: ApplicationProp) => {
+    setSelectedApplicant(selectedApplicant);
     setIsOpenAnswers(true);
   };
 
   const [isVertical, setIsVertical] = React.useState(true);
 
   const isMiddleSize = useMediaQuery({ maxWidth: 768 });
+  const [selectedTab, setSelectedTab] = React.useState<Key>("all");
+  const [tabFilteredApplications, setTabFilteredApplications] = React.useState(applications);
 
   useEffect(() => {
     if (isMiddleSize) {
@@ -67,26 +89,35 @@ export default function ApplicationComponent() {
     } else {
       setIsVertical(true);
     }
-  }, [isMiddleSize, selectedApplicant]);
+    if(selectedTab=="all"){
+      setTabFilteredApplications(applications)
+    }else {
+      setTabFilteredApplications(applications.filter(app => app.status == selectedTab))
+    }
+     //set the candidate for the selected application
+    if(selectedApplicantion)setSelectedApplicant(candidates.find(x=>x.candidateId==selectedApplicantion?.candidateId)!)
+    else setSelectedApplicant(null)
+
+  }, [isMiddleSize, selectedApplicantion,selectedTab]);
 
   const tabList = [
+    {
+      key: "all",
+      title: "All",
+      color: "#6A1B9A",
+    }, // Light Purple,
     { key: "underReview", title: "Under Review", color: "#59cfa6" }, // Light Blue
     {
-      key: "preScreeningPassed",
-      title: "Pre-Screening Passed",
+      key: "shortlisted",
+      title: "Shortlisted",
       color: "#827717",
     }, // Light Green
     {
-      key: "preScreeningFailed",
-      title: "Pre-Screening Failed",
-      color: "#B71C1C",
-    }, // Light Red
-    { key: "shortlisted", title: "Shortlisted", color: "#F57F17" }, // Light Yellow
-    {
       key: "interviewScheduled",
       title: "Interview Scheduled",
-      color: "#6A1B9A",
-    }, // Light Purple
+      color: "#B71C1C",
+    }, // Light Red
+
     { key: "interviewed", title: "Interviewed", color: "#006064" }, // Light Teal
     { key: "offered", title: "Offered", color: "#E65100" }, // Light Orange
     { key: "hired", title: "Hired", color: "#2E7D32" }, // Light Lime
@@ -95,13 +126,29 @@ export default function ApplicationComponent() {
   ];
 
   const router=useRouter();
+  const statusChangeQuery=useApplicationStatusChange();
+
+  const handleSelectionChange=(keys)=>{
+    const newSeletedKey:string=Array.from(keys)[0]
+    console.log("new tab keys",newSeletedKey)
+    statusChangeQuery.mutate({applicationId:selectedApplicantion?.applicationId,status:newSeletedKey,jobId:selectedApplicantion?.jobId})
+    if(statusChangeQuery.isSuccess){
+      let copy= {
+        ...selectedApplicantion,
+        status:newSeletedKey
+      }
+
+      setSelectedApplicantion(copy)
+    }
+  }
 
   return (
     <div className="flex flex-col px-4 mb-[100px]">
       <ViewCvPopup
         isOpen={isOpenCV}
         onOpenChange={handleOpenChangeCV}
-        applicant={selectedApplicant}
+        candidate={selectedApplicant!}
+        cvID={selectedApplicantion?.cvId!}
       />
       <ViewAnswersPopup
         isOpen={isOpenAnswers}
@@ -114,6 +161,7 @@ export default function ApplicationComponent() {
           color={"primary"}
           aria-label="Options"
           isVertical={isVertical}
+          onSelectionChange={setSelectedTab}
         >
           {tabList.map((tab) => (
             <Tab
@@ -126,12 +174,13 @@ export default function ApplicationComponent() {
                 </>
               }
             >
-              <Card className={"w-full bg-transparent border"}>
+              <Card className={"w-full bg-transparent border h-[605px]"}>
                 <CardBody>
-                  <div className="grid grid-cols-12 gap-1 items-center justify-center">
-                    <div className="relative col-span-7 ">
-                      <ApplicationTable />
+                  <div className="grid grid-cols-12 gap-1 items-center justify-center h-full">
+                    <div className="relative col-span-7 self-start">
+                      <ApplicationTable applications={tabFilteredApplications} candidates={candidates} setSelectedApplication={setSelectedApplicantion} />
                     </div>
+                    {(selectedApplicantion && selectedApplicant)?
                     <div className="relative col-span-5  bg-transparent rounded-lg overflow-hidden shadow-lg ">
                       <div
                         className={
@@ -143,9 +192,11 @@ export default function ApplicationComponent() {
                           placeholder="Select a status"
                           className="max-w-xs col-span-6"
                           size={"sm"}
-                          defaultSelectedKeys={["underReview"]}
+                          selectedKeys={[selectedApplicantion!.status!]}
+                          selectionMode={"single"}
+                          onSelectionChange={handleSelectionChange}
                         >
-                          {tabList.map((tab) => (
+                          {tabList.filter(tab=>tab.key!="all").map((tab) => (
                             <SelectItem key={tab.key}>{tab.title}</SelectItem>
                           ))}
                         </Select>
@@ -153,15 +204,15 @@ export default function ApplicationComponent() {
                           <FaTag
                             style={{
                               fill: tabList.find(
-                                (obj) => obj.key == applicant.status
-                              ).color,
+                                (obj) => obj.key == selectedApplicantion!.status
+                              )!.color,
                               display: "unset",
                             }}
                           />
                           &nbsp;
                           <span className="text-sm font-semibold text-gray-800 dark:text-white">
                             {
-                              tabList.find((obj) => obj.key == applicant.status)
+                              tabList.find((obj) => obj.key == selectedApplicantion!.status)!
                                 .title
                             }
                           </span>
@@ -175,36 +226,36 @@ export default function ApplicationComponent() {
                         ></div>
                         <div className="text-center my-4">
                           <img
-                            className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto "
-                            src="/assets/temporary/girl.jpg"
-                            alt=""
+                              className="h-32 w-32 rounded-full border-4 border-primary dark:border-gray-800 mx-auto object-contain"
+                              src={(selectedApplicant?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+selectedApplicant.profilePic : "/profileImages/noImage.png"}
+                            alt={toTitleCase(selectedApplicant?.firstName +" "+ selectedApplicant?.lastName)}
                           />
                           <div>
                             <h3 className="font-bold text-2xl text-gray-800 dark:text-white mb-1">
-                              {applicant.name}
+                              {toTitleCase(selectedApplicant?.firstName +" "+ selectedApplicant?.lastName)}
                             </h3>
                             <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
                               <MdOutlineLocationOn />
                               &nbsp;
-                              {applicant.city}
+                              {toTitleCase(selectedApplicant?.city!)}
                             </div>
                             <br />
                             <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
                               <MdOutlineMail />
                               &nbsp;
-                              {applicant.email}
+                              {selectedApplicant?.email}
                             </div>
                           </div>
                         </div>
                         <div className="flex gap-2 px-2">
                           <button
-                            onClick={() => handleViewCvClick(applicant)}
+                            onClick={() => handleViewCvClick(selectedApplicantion!)}
                             className="flex-1 rounded-full bg-blue-600 dark:bg-blue-800 text-white dark:text-white antialiased font-bold hover:bg-blue-800 dark:hover:bg-blue-900 px-4 py-2"
                           >
                             View CV
                           </button>
                           <button onClick={()=>{
-                            router.push("/recruiter/chat")
+                            router.push("/recruiter/chat/candidate/"+selectedApplicant?.candidateId)
                           }} className="flex-1 rounded-full border-2 border-gray-400 dark:border-gray-700 font-semibold text-black hover:bg-blue-600 hover:text-white dark:text-white px-4 py-2">
                             Message
                           </button>
@@ -217,18 +268,23 @@ export default function ApplicationComponent() {
                               "w-1/2 flex flex-col justify-center items-start gap-2"
                             }
                           >
+                            {/*<Button*/}
+                            {/*  onClick={() => handleViewAnswersClick(selectedApplicant!)}*/}
+                            {/*  className={"w-full bg-gray-900 text-whiteText"}*/}
+                            {/*>*/}
+                            {/*  View Answers <MdOutlineQuiz />*/}
+                            {/*</Button>*/}
+
                             <Button
-                              onClick={() => handleViewAnswersClick(applicant)}
                               className={"w-full bg-gray-900 text-whiteText"}
                             >
-                              View Answers <MdOutlineQuiz />
+                              Notes <MdOutlineQuiz />
                             </Button>
-
                             <Button
                               color={"secondary"}
                               className={" w-full bg-gray-900 text-whiteText"}
                               as={Link}
-                              href="/recruiter/interviews/schedule"
+                              href={"/recruiter/interviews/schedule/"+selectedApplicantion?.applicationId}
                             >
                               Schedule Interview <FaPeopleArrows />
                             </Button>
@@ -267,7 +323,7 @@ export default function ApplicationComponent() {
                             <div className="flex items-center flex-col justify-center w-full">
                             <small>Application Date: </small>
                             <small>
-                              <b>{applicant.appliedDate}</b>
+                              <b>{formatDate(selectedApplicantion!.createdAt!)}</b>
                             </small>
                           </div>
                           </div>
@@ -275,6 +331,8 @@ export default function ApplicationComponent() {
                         </div>
                       </div>
                     </div>
+                        :<div className="relative col-span-5  bg-transparent rounded-lg overflow-hidden shadow-lg "></div>
+                    }
                   </div>
                 </CardBody>
               </Card>

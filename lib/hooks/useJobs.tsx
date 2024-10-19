@@ -1,4 +1,4 @@
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQueries, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
     createJob, getAllLiveJobs,
     getJobById,
@@ -14,6 +14,17 @@ export function useLiveJobs() {
         queryKey:['jobs'],
         refetchOnWindowFocus:false,
         queryFn:()=>getAllLiveJobs(),
+    })
+}
+
+export function useJobs(jobIds:(string | undefined)[]|undefined){
+    return useQueries({
+        queries:(jobIds??[]).map((jobId)=>{
+            return{
+                queryKey:['job', jobId],
+                queryFn:()=>getJobById(jobId!),
+            }
+        })
     })
 }
 

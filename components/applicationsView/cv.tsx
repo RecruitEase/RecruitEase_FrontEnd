@@ -7,7 +7,7 @@ type CVImageProps = {
 
 const CV: React.FC<CVImageProps> = ({ cvImage }) => {
     return (
-        <div className={"flex justify-end"}>
+        <div className={"flex justify-end w-full"}>
             <Image
                 src={cvImage}
             />

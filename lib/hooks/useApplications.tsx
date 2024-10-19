@@ -1,5 +1,12 @@
 import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, QueryClient, useQueryClient, useMutation } from '@tanstack/react-query';
-import {createApplication, getApplication, getApplications, withdrawApplication} from "@/lib/api";
+import {
+    applicationStatusChange,
+    createApplication,
+    getApplication,
+    getApplications,
+    getApplicationsByJobId,
+    withdrawApplication
+} from "@/lib/api";
 import {ApplicationProp} from "@/types/applications";
 import { Bounce, toast } from "react-toastify";
 import {useRouter} from "next/navigation";
@@ -12,14 +19,10 @@ export function useApplications(candidateId: string) {
     })
 }
 
-export function useApplicationsByList(applicationIds: (string|undefined)[]|undefined) {
-    return useQueries<ApplicationProp[]>({
-        queries:(applicationIds??[]).map((applicationId)=>{
-            return{
-                queryKey:['application',applicationId],
-                queryFn:()=>getApplication(applicationId!),
-            }
-        })
+export function useApplicationsByJob(jobId: string) {
+    return useQuery<ApplicationProp[]>({
+        queryKey:['applications-job',jobId],
+        queryFn:()=>getApplicationsByJobId(jobId),
     })
 }
 
@@ -137,4 +140,52 @@ export function useCreateApplication(){
             });
         }
     })
+}
+
+
+export function useApplicationStatusChange(){
+    const queryClient=useQueryClient();
+
+    return useMutation({
+        mutationFn:(data:ApplicationProp)=>applicationStatusChange(data),
+        onSettled:async (data,error,variables)=> {
+            //data : output on sucess
+            //error : output on error
+            //variables : input data
+            if (error) {
+                console.log(error)
+            } else {
+                await queryClient.invalidateQueries({queryKey: ['application',variables.applicationId]})
+                await queryClient.invalidateQueries({queryKey: ["applications-job", variables.jobId],
+                })
+            }
+        },
+        onSuccess:()=>{
+            toast.success("Updated successfully!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        },
+        onError:()=>{
+            toast.error("Status Change Failed!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        }
+    })
+
 }

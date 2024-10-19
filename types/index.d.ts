@@ -4,6 +4,7 @@ import {FieldErrors} from "react-hook-form/dist/types/errors";
 import {SVGProps} from "react";
 import { ApplicationProp } from "./applications";
 import { RecruiterProp } from "./users";
+import {Job} from "@/types/job";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
@@ -32,7 +33,7 @@ declare interface ReactQuillReadOnlyProps {
 declare interface CoverLetterProps {
   application: ApplicationProp;
   recruiter:RecruiterProp;
-  job:JobProps
+  job:Job
 }
 
 
@@ -123,6 +124,7 @@ declare interface CustomFormInputWithoutValidationProps{
   placeholder?:string,
   variant?:string,
   className?:string
+  onValChange?:(value:any)=>void
 }
 
 declare interface JobProps {

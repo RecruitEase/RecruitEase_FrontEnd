@@ -5,8 +5,11 @@ import {Session} from "next-auth";
 import {JobProps, UploadFileProps} from "@/types";
 import {ApplicationProp} from "../types/applications";
 import {Job} from "@/types/job";
+import https from "node:https";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+
 const axiosInstance=axios.create({baseURL:BASE_URL});
 
 
@@ -43,13 +46,13 @@ export const getRecruiters=async (recruiterIds:string[])=>{
     return (await axiosInstance.post(`user/recruiter-list`,{recruiterIdList:recruiterIds})).data.content.recruiterList;
 }
 export const getAdmins=async (adminIds:string[])=>{
-    return (await axiosInstance.post(`user/admin-list`,{adminIdList:adminIds})).data.content.adminIdList;
+    return (await axiosInstance.post(`user/admin-list`,{adminIdList:adminIds})).data.content.adminList;
 }
 export const getModerators=async (moderatorIds:string[])=>{
-    return (await axiosInstance.post(`user/moderator-list`,{moderatorIdList:moderatorIds})).data.content.moderatorIdList;
+    return (await axiosInstance.post(`user/moderator-list`,{moderatorIdList:moderatorIds})).data.content.moderatorList;
 }
 export const getCandidates=async (candidateIds:string[])=>{
-    return (await axiosInstance.post(`user/candidate-list`,{candidateIdList:candidateIds})).data.content.candidateIdList;
+    return (await axiosInstance.post(`user/candidate-list`,{candidateIdList:candidateIds})).data.content.candidateList;
 }
 export const getRecruiter=async (recruiterId:string)=>{
     return (await axiosInstance.get(`user/recruiter/${recruiterId}`)).data.content;
@@ -71,12 +74,19 @@ export const getModerator=async (moderatorId:string)=>{
 export const getApplications=async (candidateId:string)=>{
     return (await axiosInstance.get(`api/v1/applications/candidate/${candidateId}`)).data.content;
 }
+export const getApplicationsByJobId=async (jobId:string)=>{
+    return (await axiosInstance.get(`api/v1/applications/job/${jobId}`)).data.content;
+}
 export const getApplication=async (applicationId:string)=>{
     return (await axiosInstance.get(`api/v1/applications/view/${applicationId}`)).data.content;
 }
 
 export const withdrawApplication=async (applicationId:string)=>{
     return (await axiosInstance.put(`api/v1/applications/withdraw/${applicationId}`)).status;
+}
+
+export const applicationStatusChange=async (data:ApplicationProp)=>{
+    return (await axiosInstance.put(`api/v1/applications/update/${data.applicationId}`,data)).status;
 }
 
 export const createApplication=async (application:ApplicationProp)=>{
@@ -109,6 +119,15 @@ export const getJobById=async (jobId:string)=>{
 }
 export const updateJob=async (data:Job)=>{
     return (await axiosInstance.put('api/jobs/update-job',data));
+}
+
+
+//cv apis
+export const getCvsByCandidateId=async (candidateId:string)=>{
+    return (await axiosInstance.get(`api/v1/cv/candidate/${candidateId}`)).data.content;
+}
+export const getCvById=async (cvId:string)=>{
+    return (await axiosInstance.get(`api/v1/cv/view/${cvId}`)).data.content;
 }
 
 

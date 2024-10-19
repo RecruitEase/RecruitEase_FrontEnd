@@ -23,7 +23,7 @@ export const UserDropdown = () => {
 
   const user=session?.user;
  // console.log("cdcdfcfdcfdcfdcd",user)
-
+  const userProfilePic=(user?.roleDetails.profilePic)?process.env.NEXT_PUBLIC_S3_URL+user?.roleDetails.profilePic : "/profileImages/noImage.png";
   const isLoggedIn=!!session?.user
   const avatarItems = isLoggedIn?[
     {label:"signin",url:`/`},
@@ -56,9 +56,9 @@ export const UserDropdown = () => {
                   as="button"
                   className="transition-transform"
                   color="secondary"
-                  name="Jason Hughes"
+                  name={user?.roleDetails.firstName+" "+user?.roleDetails.lastName}
                   size="sm"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  src={userProfilePic}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">

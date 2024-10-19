@@ -7,6 +7,7 @@ import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {Button} from "@nextui-org/button";
 import {Bounce, toast} from "react-toastify";
 import {Link} from "@nextui-org/link";
+import { Spacer } from '@nextui-org/react';
 
 const MAX_STEPS = 4;
 
@@ -38,6 +39,8 @@ const RecruiterSignup: React.FC = () => {
         "firstName",
         "lastName",
         "address",
+        "city",
+        "gender",
         "mobileNumber",
         "companyName",
         "businessRegistrationNumber",
@@ -169,6 +172,7 @@ const RecruiterSignup: React.FC = () => {
                         {formStep >= 0 && (
                             <section className={formStep === 0 ? "block" : "hidden"}>
                                 <h2 className="font-semibold text-3xl mb-8">Account Information</h2>
+
                                 <div className={"m-1 p-2"}>
                                     <label htmlFor="email">Email</label>
                                     <Input
@@ -275,7 +279,26 @@ const RecruiterSignup: React.FC = () => {
                                         </p>
                                     )}
                                 </div>
-
+                                <div className={"m-1 p-2"}>
+                                    <label htmlFor="city">City</label>
+                                    <Input
+                                        placeholder={"Enter the city"}
+                                        type="text"
+                                        id="city"
+                                        variant="bordered"
+                                        {...register('city', {
+                                            required: {
+                                                value: true,
+                                                message: "Please enter the city",
+                                            }
+                                        })}
+                                    />
+                                    {errors.city && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors && errors.city ? errors.city?.message?.toString() : '\u00A0'}
+                                        </p>
+                                    )}
+                                </div>
 
 
                                 <div className={"m-1 p-2"}>
@@ -400,6 +423,37 @@ const RecruiterSignup: React.FC = () => {
                                     )}
                                 </div>
 
+                                <div className={"m-1 p-2"}>
+                                    <label>Gender</label><br/>
+                                    <div className={"flex"}>
+                                        <label htmlFor="male" className={"flex"}>
+                                            <input
+                                                {...register("gender")}
+                                                type="radio"
+                                                value="male"
+                                                id="male"
+                                            />
+                                            <Spacer x={2}/>
+                                            Male
+                                        </label>
+                                        <Spacer x={4}/>
+                                        <label htmlFor="female" className={"flex"}>
+                                            <input
+                                                {...register("gender")}
+                                                type="radio"
+                                                value="female"
+                                                id="female"
+                                            />
+                                            <Spacer x={2}/>
+                                            Female
+                                        </label>
+                                    </div>
+                                    {errors.gender && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors && errors.gender ? errors.gender?.message?.toString() : '\u00A0'}
+                                        </p>
+                                    )}
+                                </div>
 
 
                             </section>
