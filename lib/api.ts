@@ -85,6 +85,10 @@ export const withdrawApplication=async (applicationId:string)=>{
     return (await axiosInstance.put(`api/v1/applications/withdraw/${applicationId}`)).status;
 }
 
+export const applicationStatusChange=async (data:ApplicationProp)=>{
+    return (await axiosInstance.put(`api/v1/applications/update/${data.applicationId}`,data)).status;
+}
+
 export const createApplication=async (application:ApplicationProp)=>{
     return (await axiosInstance.post(`api/v1/applications/create`,application)).data.status;
 }

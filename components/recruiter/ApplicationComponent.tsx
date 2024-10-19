@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, {Key, useEffect } from "react";
 import { Tabs, Tab, SelectItem, Select } from "@nextui-org/react";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 
@@ -22,6 +22,8 @@ import {CandidateProp, RecruiterProp} from "@/types/users";
 import {Job} from "@/types/job";
 import {toTitleCase} from "@/lib/utils";
 import {formatDate} from "@/utils/stringUtils";
+import {useApplicationStatusChange} from "@/lib/hooks/useApplications";
+import {applicationStatusChange} from "@/lib/api";
 
 declare interface ApplicationsPerJobComponentProps{
   applications: ApplicationProp[];
@@ -78,6 +80,8 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
   const [isVertical, setIsVertical] = React.useState(true);
 
   const isMiddleSize = useMediaQuery({ maxWidth: 768 });
+  const [selectedTab, setSelectedTab] = React.useState<Key>("all");
+  const [tabFilteredApplications, setTabFilteredApplications] = React.useState(applications);
 
   useEffect(() => {
     if (isMiddleSize) {
@@ -85,32 +89,35 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
     } else {
       setIsVertical(true);
     }
-
-    console.log("dkjewwlkde,wd",selectedApplicantion)
-    //set the candidate for the selected application
+    if(selectedTab=="all"){
+      setTabFilteredApplications(applications)
+    }else {
+      setTabFilteredApplications(applications.filter(app => app.status == selectedTab))
+    }
+     //set the candidate for the selected application
     if(selectedApplicantion)setSelectedApplicant(candidates.find(x=>x.candidateId==selectedApplicantion?.candidateId)!)
     else setSelectedApplicant(null)
 
-  }, [isMiddleSize, selectedApplicantion]);
+  }, [isMiddleSize, selectedApplicantion,selectedTab]);
 
   const tabList = [
+    {
+      key: "all",
+      title: "All",
+      color: "#6A1B9A",
+    }, // Light Purple,
     { key: "underReview", title: "Under Review", color: "#59cfa6" }, // Light Blue
     {
-      key: "preScreeningPassed",
-      title: "Pre-Screening Passed",
+      key: "shortlisted",
+      title: "Shortlisted",
       color: "#827717",
     }, // Light Green
     {
-      key: "preScreeningFailed",
-      title: "Pre-Screening Failed",
-      color: "#B71C1C",
-    }, // Light Red
-    { key: "shortlisted", title: "Shortlisted", color: "#F57F17" }, // Light Yellow
-    {
       key: "interviewScheduled",
       title: "Interview Scheduled",
-      color: "#6A1B9A",
-    }, // Light Purple
+      color: "#B71C1C",
+    }, // Light Red
+
     { key: "interviewed", title: "Interviewed", color: "#006064" }, // Light Teal
     { key: "offered", title: "Offered", color: "#E65100" }, // Light Orange
     { key: "hired", title: "Hired", color: "#2E7D32" }, // Light Lime
@@ -119,6 +126,21 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
   ];
 
   const router=useRouter();
+  const statusChangeQuery=useApplicationStatusChange();
+
+  const handleSelectionChange=(keys)=>{
+    const newSeletedKey:string=Array.from(keys)[0]
+    console.log("new tab keys",newSeletedKey)
+    statusChangeQuery.mutate({applicationId:selectedApplicantion?.applicationId,status:newSeletedKey,jobId:selectedApplicantion?.jobId})
+    if(statusChangeQuery.isSuccess){
+      let copy= {
+        ...selectedApplicantion,
+        status:newSeletedKey
+      }
+
+      setSelectedApplicantion(copy)
+    }
+  }
 
   return (
     <div className="flex flex-col px-4 mb-[100px]">
@@ -139,6 +161,7 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
           color={"primary"}
           aria-label="Options"
           isVertical={isVertical}
+          onSelectionChange={setSelectedTab}
         >
           {tabList.map((tab) => (
             <Tab
@@ -151,11 +174,11 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                 </>
               }
             >
-              <Card className={"w-full bg-transparent border h-min-[650px]"}>
+              <Card className={"w-full bg-transparent border h-[605px]"}>
                 <CardBody>
-                  <div className="grid grid-cols-12 gap-1 items-center justify-center">
-                    <div className="relative col-span-7 ">
-                      <ApplicationTable applications={applications} candidates={candidates} setSelectedApplication={setSelectedApplicantion} />
+                  <div className="grid grid-cols-12 gap-1 items-center justify-center h-full">
+                    <div className="relative col-span-7 self-start">
+                      <ApplicationTable applications={tabFilteredApplications} candidates={candidates} setSelectedApplication={setSelectedApplicantion} />
                     </div>
                     {(selectedApplicantion && selectedApplicant)?
                     <div className="relative col-span-5  bg-transparent rounded-lg overflow-hidden shadow-lg ">
@@ -169,9 +192,11 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                           placeholder="Select a status"
                           className="max-w-xs col-span-6"
                           size={"sm"}
-                          defaultSelectedKeys={["underReview"]}
+                          selectedKeys={[selectedApplicantion!.status!]}
+                          selectionMode={"single"}
+                          onSelectionChange={handleSelectionChange}
                         >
-                          {tabList.map((tab) => (
+                          {tabList.filter(tab=>tab.key!="all").map((tab) => (
                             <SelectItem key={tab.key}>{tab.title}</SelectItem>
                           ))}
                         </Select>
@@ -201,7 +226,7 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                         ></div>
                         <div className="text-center my-4">
                           <img
-                              className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto object-contain"
+                              className="h-32 w-32 rounded-full border-4 border-primary dark:border-gray-800 mx-auto object-contain"
                               src={(selectedApplicant?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+selectedApplicant.profilePic : "/profileImages/noImage.png"}
                             alt={toTitleCase(selectedApplicant?.firstName +" "+ selectedApplicant?.lastName)}
                           />
@@ -250,6 +275,11 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                             {/*  View Answers <MdOutlineQuiz />*/}
                             {/*</Button>*/}
 
+                            <Button
+                              className={"w-full bg-gray-900 text-whiteText"}
+                            >
+                              Notes <MdOutlineQuiz />
+                            </Button>
                             <Button
                               color={"secondary"}
                               className={" w-full bg-gray-900 text-whiteText"}

@@ -1,5 +1,6 @@
 import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, QueryClient, useQueryClient, useMutation } from '@tanstack/react-query';
 import {
+    applicationStatusChange,
     createApplication,
     getApplication,
     getApplications,
@@ -139,4 +140,52 @@ export function useCreateApplication(){
             });
         }
     })
+}
+
+
+export function useApplicationStatusChange(){
+    const queryClient=useQueryClient();
+
+    return useMutation({
+        mutationFn:(data:ApplicationProp)=>applicationStatusChange(data),
+        onSettled:async (data,error,variables)=> {
+            //data : output on sucess
+            //error : output on error
+            //variables : input data
+            if (error) {
+                console.log(error)
+            } else {
+                await queryClient.invalidateQueries({queryKey: ['application',variables.applicationId]})
+                await queryClient.invalidateQueries({queryKey: ["applications-job", variables.jobId],
+                })
+            }
+        },
+        onSuccess:()=>{
+            toast.success("Updated successfully!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        },
+        onError:()=>{
+            toast.error("Status Change Failed!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce
+            });
+        }
+    })
+
 }
