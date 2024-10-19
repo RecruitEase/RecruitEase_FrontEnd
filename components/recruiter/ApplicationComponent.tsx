@@ -125,7 +125,8 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
       <ViewCvPopup
         isOpen={isOpenCV}
         onOpenChange={handleOpenChangeCV}
-        applicant={selectedApplicant}
+        candidate={selectedApplicant!}
+        cvID={selectedApplicantion?.cvId!}
       />
       <ViewAnswersPopup
         isOpen={isOpenAnswers}
@@ -150,7 +151,7 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                 </>
               }
             >
-              <Card className={"w-full bg-transparent border"}>
+              <Card className={"w-full bg-transparent border h-min-[650px]"}>
                 <CardBody>
                   <div className="grid grid-cols-12 gap-1 items-center justify-center">
                     <div className="relative col-span-7 ">

@@ -545,7 +545,7 @@ export default function ApplicationTable({applications,candidates,setSelectedApp
                     </TableColumn>
                 )}
             </TableHeader>
-            <TableBody emptyContent={"No users found"} items={sortedItems}>
+            <TableBody emptyContent={"No applications found"} items={sortedItems}>
                 {(item) => (
                     <TableRow key={item.applicationId}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
