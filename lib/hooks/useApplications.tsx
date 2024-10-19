@@ -1,5 +1,11 @@
 import { keepPreviousData, useInfiniteQuery, useQueries, useQuery, QueryClient, useQueryClient, useMutation } from '@tanstack/react-query';
-import {createApplication, getApplication, getApplications, withdrawApplication} from "@/lib/api";
+import {
+    createApplication,
+    getApplication,
+    getApplications,
+    getApplicationsByJobId,
+    withdrawApplication
+} from "@/lib/api";
 import {ApplicationProp} from "@/types/applications";
 import { Bounce, toast } from "react-toastify";
 import {useRouter} from "next/navigation";
@@ -9,6 +15,13 @@ export function useApplications(candidateId: string) {
     return useQuery<ApplicationProp[]>({
         queryKey:['applications'],
         queryFn:()=>getApplications(candidateId),
+    })
+}
+
+export function useApplicationsByJob(jobId: string) {
+    return useQuery<ApplicationProp[]>({
+        queryKey:['applications-job',jobId],
+        queryFn:()=>getApplicationsByJobId(jobId),
     })
 }
 

@@ -10,7 +10,6 @@ import { Button } from "@nextui-org/button";
 import ApplicationTable from "@/components/recruiter/ApplicationTable";
 import ViewCvPopup from "./ViewCvPopup";
 import ViewAnswersPopup from "./ViewAnswersPopup";
-import { CVProps, ApplicationProps } from "@/types/index";
 import { MdOutlineQuiz } from "react-icons/md";
 import { FaPeopleArrows } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
@@ -18,27 +17,46 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FaPaste } from "react-icons/fa";
 import { FaPenToSquare } from "react-icons/fa6";
-export default function ApplicationComponent() {
-  const applicant: ApplicationProps = {
-    name: "David Eliot",
-    city: "Colombo",
-    email: "davideliot@gmail.com",
-    status: "underReview",
-    appliedDate: "2024-10-10",
-    cv: {
-      cvId: "1",
-      cvName: "CV1",
-      file: "/assets/cv.pdf",
-      modifiedDate: "2021-09-01",
-      type: "uploaded",
-    },
-  };
+import {ApplicationProp} from "@/types/applications";
+import {CandidateProp, RecruiterProp} from "@/types/users";
+import {Job} from "@/types/job";
+import {toTitleCase} from "@/lib/utils";
+import {formatDate} from "@/utils/stringUtils";
+
+declare interface ApplicationsPerJobComponentProps{
+  applications: ApplicationProp[];
+  job: Job;
+  candidates: CandidateProp[];
+}
+export default function ApplicationComponent({applications,candidates,job}:ApplicationsPerJobComponentProps) {
+
+  console.log("apps",applications)
+  console.log("cands",candidates)
+
+  // const applicant: ApplicationProps = {
+  //   name: "David Eliot",
+  //   city: "Colombo",
+  //   email: "davideliot@gmail.com",
+  //   status: "underReview",
+  //   appliedDate: "2024-10-10",
+  //   cv: {
+  //     cvId: "1",
+  //     cvName: "CV1",
+  //     file: "/assets/cv.pdf",
+  //     modifiedDate: "2021-09-01",
+  //     type: "uploaded",
+  //   },
+  // };
 
   //cv popup
   const [isOpenCV, setIsOpenCV] = React.useState(false);
   const [isOpenAnswers, setIsOpenAnswers] = React.useState(false);
   const [selectedApplicant, setSelectedApplicant] =
-    React.useState<ApplicationProps | null>(null);
+    React.useState<CandidateProp | null>(null);
+  const [selectedApplicantion, setSelectedApplicantion] =
+      React.useState<ApplicationProp | null>(null);
+
+
   const handleOpenChangeCV = (open) => {
     setIsOpenCV(open);
   };
@@ -47,13 +65,13 @@ export default function ApplicationComponent() {
     setIsOpenAnswers(open);
   };
 
-  const handleViewCvClick = (applicant: ApplicationProps) => {
-    setSelectedApplicant(applicant);
+  const handleViewCvClick = (applicant: ApplicationProp) => {
+    setSelectedApplicant(selectedApplicant);
     setIsOpenCV(true);
   };
 
-  const handleViewAnswersClick = (applicant: ApplicationProps) => {
-    setSelectedApplicant(applicant);
+  const handleViewAnswersClick = (applicant: ApplicationProp) => {
+    setSelectedApplicant(selectedApplicant);
     setIsOpenAnswers(true);
   };
 
@@ -67,7 +85,13 @@ export default function ApplicationComponent() {
     } else {
       setIsVertical(true);
     }
-  }, [isMiddleSize, selectedApplicant]);
+
+    console.log("dkjewwlkde,wd",selectedApplicantion)
+    //set the candidate for the selected application
+    if(selectedApplicantion)setSelectedApplicant(candidates.find(x=>x.candidateId==selectedApplicantion?.candidateId)!)
+    else setSelectedApplicant(null)
+
+  }, [isMiddleSize, selectedApplicantion]);
 
   const tabList = [
     { key: "underReview", title: "Under Review", color: "#59cfa6" }, // Light Blue
@@ -130,8 +154,9 @@ export default function ApplicationComponent() {
                 <CardBody>
                   <div className="grid grid-cols-12 gap-1 items-center justify-center">
                     <div className="relative col-span-7 ">
-                      <ApplicationTable />
+                      <ApplicationTable applications={applications} candidates={candidates} setSelectedApplication={setSelectedApplicantion} />
                     </div>
+                    {(selectedApplicantion && selectedApplicant)?
                     <div className="relative col-span-5  bg-transparent rounded-lg overflow-hidden shadow-lg ">
                       <div
                         className={
@@ -153,15 +178,15 @@ export default function ApplicationComponent() {
                           <FaTag
                             style={{
                               fill: tabList.find(
-                                (obj) => obj.key == applicant.status
-                              ).color,
+                                (obj) => obj.key == selectedApplicantion!.status
+                              )!.color,
                               display: "unset",
                             }}
                           />
                           &nbsp;
                           <span className="text-sm font-semibold text-gray-800 dark:text-white">
                             {
-                              tabList.find((obj) => obj.key == applicant.status)
+                              tabList.find((obj) => obj.key == selectedApplicantion!.status)!
                                 .title
                             }
                           </span>
@@ -175,36 +200,36 @@ export default function ApplicationComponent() {
                         ></div>
                         <div className="text-center my-4">
                           <img
-                            className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto "
-                            src="/assets/temporary/girl.jpg"
-                            alt=""
+                              className="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto object-contain"
+                              src={(selectedApplicant?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+selectedApplicant.profilePic : "/profileImages/noImage.png"}
+                            alt={toTitleCase(selectedApplicant?.firstName +" "+ selectedApplicant?.lastName)}
                           />
                           <div>
                             <h3 className="font-bold text-2xl text-gray-800 dark:text-white mb-1">
-                              {applicant.name}
+                              {toTitleCase(selectedApplicant?.firstName +" "+ selectedApplicant?.lastName)}
                             </h3>
                             <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
                               <MdOutlineLocationOn />
                               &nbsp;
-                              {applicant.city}
+                              {toTitleCase(selectedApplicant?.city!)}
                             </div>
                             <br />
                             <div className="inline-flex text-gray-700 dark:text-gray-300 items-center">
                               <MdOutlineMail />
                               &nbsp;
-                              {applicant.email}
+                              {selectedApplicant?.email}
                             </div>
                           </div>
                         </div>
                         <div className="flex gap-2 px-2">
                           <button
-                            onClick={() => handleViewCvClick(applicant)}
+                            onClick={() => handleViewCvClick(selectedApplicantion!)}
                             className="flex-1 rounded-full bg-blue-600 dark:bg-blue-800 text-white dark:text-white antialiased font-bold hover:bg-blue-800 dark:hover:bg-blue-900 px-4 py-2"
                           >
                             View CV
                           </button>
                           <button onClick={()=>{
-                            router.push("/recruiter/chat")
+                            router.push("/recruiter/chat/candidate/"+selectedApplicant?.candidateId)
                           }} className="flex-1 rounded-full border-2 border-gray-400 dark:border-gray-700 font-semibold text-black hover:bg-blue-600 hover:text-white dark:text-white px-4 py-2">
                             Message
                           </button>
@@ -217,18 +242,18 @@ export default function ApplicationComponent() {
                               "w-1/2 flex flex-col justify-center items-start gap-2"
                             }
                           >
-                            <Button
-                              onClick={() => handleViewAnswersClick(applicant)}
-                              className={"w-full bg-gray-900 text-whiteText"}
-                            >
-                              View Answers <MdOutlineQuiz />
-                            </Button>
+                            {/*<Button*/}
+                            {/*  onClick={() => handleViewAnswersClick(selectedApplicant!)}*/}
+                            {/*  className={"w-full bg-gray-900 text-whiteText"}*/}
+                            {/*>*/}
+                            {/*  View Answers <MdOutlineQuiz />*/}
+                            {/*</Button>*/}
 
                             <Button
                               color={"secondary"}
                               className={" w-full bg-gray-900 text-whiteText"}
                               as={Link}
-                              href="/recruiter/interviews/schedule"
+                              href={"/recruiter/interviews/schedule/"+selectedApplicantion?.applicationId}
                             >
                               Schedule Interview <FaPeopleArrows />
                             </Button>
@@ -267,7 +292,7 @@ export default function ApplicationComponent() {
                             <div className="flex items-center flex-col justify-center w-full">
                             <small>Application Date: </small>
                             <small>
-                              <b>{applicant.appliedDate}</b>
+                              <b>{formatDate(selectedApplicantion!.createdAt!)}</b>
                             </small>
                           </div>
                           </div>
@@ -275,6 +300,8 @@ export default function ApplicationComponent() {
                         </div>
                       </div>
                     </div>
+                        :<div className="relative col-span-5  bg-transparent rounded-lg overflow-hidden shadow-lg "></div>
+                    }
                   </div>
                 </CardBody>
               </Card>
