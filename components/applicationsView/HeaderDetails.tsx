@@ -18,6 +18,7 @@ const statusColorMap: Record<Status, string> = {
 
 
 const HeaderDetails:React.FC<CoverLetterProps> = ({recruiter,application,job}) => {
+    const userProfilePic=(recruiter?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+recruiter.profilePic : "/profileImages/noImage.png";
     // @ts-ignore
     return (
         <div className={"mb-4 flex flex-wrap w-full"}>
@@ -36,7 +37,7 @@ const HeaderDetails:React.FC<CoverLetterProps> = ({recruiter,application,job}) =
 
             <div className={"w-full"}>
                 <User
-                    avatarProps={{radius: "lg", src: recruiter.profilePic}}
+                    avatarProps={{radius: "lg", src: userProfilePic}}
                     description={recruiter.companyName}
                     name={recruiter.companyName + " - " + job.title}
                 >
