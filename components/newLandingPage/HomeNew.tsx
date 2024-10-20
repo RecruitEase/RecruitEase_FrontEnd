@@ -28,6 +28,10 @@ import AnimatedCounter from "@/components/AnimatedCounter";
 import { motion, useScroll } from "framer-motion";
 import man from '@/public/assets/man.png';
 import searchIcon from '@/public/assets/search.png';
+import {useLiveJobs} from "@/lib/hooks/useJobs";
+import {useRecruiters} from "@/lib/hooks/useRecruiters";
+import LoadingComponent from "../LoadingComponent";
+import ErrorComponent from "../ErrorComponent";
 
 const wrapper = {
   hidden:{
@@ -57,78 +61,78 @@ const list = {
       transition:{duration:0.5 , ease:[0.455, 0.03, 0.515, 0.955], delay:1}
   }
 }
-const jobs: JobProps[] = [
-  {
-    key: 1,
-    id: "mdwlmdwmmom",
-    logo: "/assets/landing/1.jpg",
-    title: "Officer - Customer Verification",
-    company: "Dialog Finance PLC",
-    location: "Colombo, Western Province",
-    type: "Full-Time",
-    daysLeft: "7",
-  },
-  {
-    key: 2,
-    id: "mdwlmdwmmom",
-    logo: "/assets/landing/2.gif",
-    title: "Field Audit Assistant",
-    company: "Lanka Canneries (Pvt) Ltd",
-    location: "Colombo, Western Province",
-    type: "Full-Time",
-    daysLeft: "14",
-  },
-  {
-    key: 3,
-    id: "mdwlmdwmmom",
-    logo: "/assets/landing/3.jpg",
-    title: "Recovery Officers / Trainees",
-    company: "Asia Asset Finance PLC",
-    location: "Colombo, Western Province",
-    type: "Full-Time",
-    daysLeft: "14",
-  },
-  {
-    key: 4,
-    id: "mdwlmdwmmom",
-    logo: "/assets/landing/4.jpg",
-    title: "Finance & Admin Executive",
-    company: "Kelly Felder",
-    location: "Colombo, Western Province",
-    type: "Full-Time",
-    daysLeft: "4",
-  },
-  {
-    key: 5,
-    id: "mdwlmdwmmom",
-    logo: "/assets/landing/5.jpg",
-    title: "Executive - Maintenance",
-    company: "PizzaHut Sri Lanka",
-    location: "Colombo, Western Province",
-    type: "Full-Time",
-    daysLeft: "10",
-  },
-  {
-    key: 6,
-    id: "mdwlmdwmmom",
-    logo: "/assets/landing/6.jpg",
-    title: "Shift Manager",
-    company: "Fab",
-    location: "Kandy, Central Province",
-    type: "Full-Time",
-    daysLeft: "4",
-  },
-  {
-    key: 7,
-    id: "mdwlmdwmmom",
-    logo: "/assets/landing/7.jpg",
-    title: "Senior Manager",
-    company: "LOLC Holdings",
-    location: "Colombo, Western Province",
-    type: "Full-Time",
-    daysLeft: "4",
-  },
-];
+// const jobs: JobProps[] = [
+//   {
+//     key: 1,
+//     id: "mdwlmdwmmom",
+//     logo: "/assets/landing/1.jpg",
+//     title: "Officer - Customer Verification",
+//     company: "Dialog Finance PLC",
+//     location: "Colombo, Western Province",
+//     type: "Full-Time",
+//     daysLeft: "7",
+//   },
+//   {
+//     key: 2,
+//     id: "mdwlmdwmmom",
+//     logo: "/assets/landing/2.gif",
+//     title: "Field Audit Assistant",
+//     company: "Lanka Canneries (Pvt) Ltd",
+//     location: "Colombo, Western Province",
+//     type: "Full-Time",
+//     daysLeft: "14",
+//   },
+//   {
+//     key: 3,
+//     id: "mdwlmdwmmom",
+//     logo: "/assets/landing/3.jpg",
+//     title: "Recovery Officers / Trainees",
+//     company: "Asia Asset Finance PLC",
+//     location: "Colombo, Western Province",
+//     type: "Full-Time",
+//     daysLeft: "14",
+//   },
+//   {
+//     key: 4,
+//     id: "mdwlmdwmmom",
+//     logo: "/assets/landing/4.jpg",
+//     title: "Finance & Admin Executive",
+//     company: "Kelly Felder",
+//     location: "Colombo, Western Province",
+//     type: "Full-Time",
+//     daysLeft: "4",
+//   },
+//   {
+//     key: 5,
+//     id: "mdwlmdwmmom",
+//     logo: "/assets/landing/5.jpg",
+//     title: "Executive - Maintenance",
+//     company: "PizzaHut Sri Lanka",
+//     location: "Colombo, Western Province",
+//     type: "Full-Time",
+//     daysLeft: "10",
+//   },
+//   {
+//     key: 6,
+//     id: "mdwlmdwmmom",
+//     logo: "/assets/landing/6.jpg",
+//     title: "Shift Manager",
+//     company: "Fab",
+//     location: "Kandy, Central Province",
+//     type: "Full-Time",
+//     daysLeft: "4",
+//   },
+//   {
+//     key: 7,
+//     id: "mdwlmdwmmom",
+//     logo: "/assets/landing/7.jpg",
+//     title: "Senior Manager",
+//     company: "LOLC Holdings",
+//     location: "Colombo, Western Province",
+//     type: "Full-Time",
+//     daysLeft: "4",
+//   },
+// ];
 const fieldValues: FieldProps[] = [
   { key: 1, label: "Account & Finance", id: "1", nJobs: 144 },
   { key: 2, label: "Administration / Secretarial", id: "2", nJobs: 25 },
@@ -205,11 +209,21 @@ const fieldValues: FieldProps[] = [
   { key: 54, label: "Travel/Ticketing/Airline/Shipping", id: "54", nJobs: 28 },
 ];
 const HomeNew = () => {
+  const jobQuery=useLiveJobs();
+  const recruiterIdList:string[] = [];
+
+  jobQuery.data?.map(app => {
+    if (recruiterIdList.indexOf(app.recruiterId!) === -1) {
+      recruiterIdList.push(app.recruiterId!)
+    }
+  });
+  const recruiterQuery=useRecruiters(recruiterIdList)
+
   const { scrollYProgress } = useScroll();
   //carousel
   const OPTIONS: EmblaOptionsType = { dragFree: true, loop: true };
   const SLIDE_COUNT = 10;
-  const SLIDES = jobs;
+  const SLIDES = jobQuery.data;
   const SLIDES_CATEGORIES = fieldValues;
 
   const { data: session } = useSession();
@@ -224,23 +238,26 @@ const HomeNew = () => {
   };
 
   const notify = () => toast("Wow so easy!");
+
+
+
   return (
     <div className={"relative"}>
       <div className={"max-w-screen-2xl mx-auto overflow-hidden shadow-none "}>
         <div className="px-10 flex justify-center h-[600px] bg-recruitBlue text-white">
           <div className="w-[1400px] flex items-center">
             <div className="flex flex-col gap-[30px]">
-              <motion.h1   initial='hidden' animate='visible' variants={wrapper} className="text-[50px]">
+              <motion.h1 initial='hidden' animate='visible' variants={wrapper} className="text-[50px]">
                 Find the perfect <i className="font-light"> job opportunities </i> for your career growth
               </motion.h1>
               <div className="flex items-center justify-between bg-white rounded-md">
                 <div className="flex items-center w-full gap-[10px]">
                   <img src="/assets/search.png" alt="search image" className="w-[20px] h-[20px] m-[10px]"/>
                   <input
-            type="text"
-            placeholder='Try "software developer"'
-            className="text-black border-none outline-none w-full"
-          />
+                      type="text"
+                      placeholder='Try "software developer"'
+                      className="text-black border-none outline-none w-full"
+                  />
                 </div>
                 <button
                     className="w-[120px] h-[50px] bg-success text-white border-none rounded-tr-md rounded-br-md cursor-pointer">
@@ -249,65 +266,76 @@ const HomeNew = () => {
               </div>
               <div className="flex items-center gap-[10px]">
                 <span>Popular: </span>
-                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Software Engineer</button>
-                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">FrontEnd Dev</button>
-                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Sales Executive</button>
-                <button className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Project Manager</button>
+                <button
+                    className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Software
+                  Engineer
+                </button>
+                <button
+                    className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">FrontEnd
+                  Dev
+                </button>
+                <button
+                    className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Sales
+                  Executive
+                </button>
+                <button
+                    className="text-white bg-transparent border border-white px-[10px] py-[5px] rounded-full text-[14px] cursor-pointer hover:bg-white hover:text-primaryText">Project
+                  Manager
+                </button>
               </div>
               <motion.ul initial='hidden' animate='visible' variants={wrapper} className='text-white space-y-2'>
-                        <motion.li variants={list} className='flex gap-3'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                 className="fill-current h-5 shrink-0 mt-0.5">
-                                <path
-                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
-                            </svg>
-                            <span>Apply for jobs with ease</span>
-                        </motion.li>
-                        <motion.li variants={list} className='flex gap-3 '>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                 className="fill-current h-5 shrink-0 mt-0.5">
-                                <path
-                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
-                            </svg>
-                            <span>Receive personalized job recommendations</span>
-                        </motion.li>
-                        <motion.li variants={list} className='flex gap-3'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                 className="fill-current h-5 shrink-0 mt-0.5">
-                                <path
-                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
-                            </svg>
-                            <span>Create and manage your CV and portfolio</span>
-                        </motion.li>
-                        <motion.li variants={list} className='flex gap-3'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                 className="fill-current h-5 shrink-0 mt-0.5">
-                                <path
-                                    d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
-                            </svg>
-                            <span>Participate in online interviews through the platform </span>
-                        </motion.li>
-                    </motion.ul>
-                    <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 1.5}}
-                                className=' flex flex-col items-center sm:flex-row gap-3'>
-                            <Button color={"success"} href={"/jobs"} as={Link} >
-                                Get Started
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
-                                     className="fill-current h-3.5 ">
-                                    <path
-                                        d="M429.8 273l17-17-17-17L276.2 85.4l-17-17-33.9 33.9 17 17L354.9 232 24 232 0 232l0 48 24 0 330.8 0L242.2 392.6l-17 17 33.9 33.9 17-17L429.8 273z"></path>
-                                </svg>
-                            </Button>
+                <motion.li variants={list} className='flex gap-3'>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                       className="fill-current h-5 shrink-0 mt-0.5">
+                    <path
+                        d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                  </svg>
+                  <span>Apply for jobs with ease</span>
+                </motion.li>
+                <motion.li variants={list} className='flex gap-3 '>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                       className="fill-current h-5 shrink-0 mt-0.5">
+                    <path
+                        d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                  </svg>
+                  <span>Receive personalized job recommendations</span>
+                </motion.li>
+                <motion.li variants={list} className='flex gap-3'>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                       className="fill-current h-5 shrink-0 mt-0.5">
+                    <path
+                        d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                  </svg>
+                  <span>Create and manage your CV and portfolio</span>
+                </motion.li>
+                <motion.li variants={list} className='flex gap-3'>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                       className="fill-current h-5 shrink-0 mt-0.5">
+                    <path
+                        d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 203.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L224 297.4l-52.7-52.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l64 64c6.2 6.2 16.4 6.2 22.6 0l128-128z"></path>
+                  </svg>
+                  <span>Participate in online interviews through the platform </span>
+                </motion.li>
+              </motion.ul>
+              <motion.div initial={{opacity: 0}} animate={{opacity: 1}} transition={{duration: 0.3, delay: 1.5}}
+                          className=' flex flex-col items-center sm:flex-row gap-3'>
+                <Button color={"success"} href={"/jobs"} as={Link}>
+                  Get Started
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                       className="fill-current h-3.5 ">
+                    <path
+                        d="M429.8 273l17-17-17-17L276.2 85.4l-17-17-33.9 33.9 17 17L354.9 232 24 232 0 232l0 48 24 0 330.8 0L242.2 392.6l-17 17 33.9 33.9 17-17L429.8 273z"></path>
+                  </svg>
+                </Button>
 
-                    </motion.div>
+              </motion.div>
             </div>
             <motion.div initial={{opacity: 0, x: -300}} animate={{opacity: 1, x: 0}}
-                                transition={{duration: 0.5, delay: 1.5}} className='h-full lg:block hidden'>
+                        transition={{duration: 0.5, delay: 1.5}} className='h-full lg:block hidden'>
               <img src="/assets/woman-bg.png" alt="man image" className="h-full max-w-max"/>
-              </motion.div>
+            </motion.div>
           </div>
         </div>
-
 
 
         {/* <Card className="w-full h-fit mt-3 shadow-none">
@@ -315,11 +343,15 @@ const HomeNew = () => {
             <Hero/>
           </CardBody>
         </Card> */}
-        
         <h1 className="header-box-title mt-5">Recent Jobs</h1>
-        <EmblaCarouselJobs slides={SLIDES} options={OPTIONS}/>
-        <h1 className="mt-6 header-box-title">Job Fields</h1>
-        <EmblaCarouselCategories slides={SLIDES_CATEGORIES} options={OPTIONS}/>
+        {(jobQuery.isFetching || recruiterQuery.isFetching) ?
+            <LoadingComponent/> : (jobQuery.isError || recruiterQuery.isError) ? <ErrorComponent/> :
+                <>
+                  <EmblaCarouselJobs slides={SLIDES!} options={OPTIONS} recruiters={recruiterQuery.data!}/>
+                  <h1 className="mt-6 header-box-title">Job Fields</h1>
+                  <EmblaCarouselCategories slides={SLIDES_CATEGORIES} options={OPTIONS}/>
+                </>
+        }
 
         <Apps/>
 
