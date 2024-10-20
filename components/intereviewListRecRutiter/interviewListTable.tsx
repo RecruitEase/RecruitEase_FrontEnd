@@ -13,16 +13,14 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
-    Chip,
     User,
     Pagination,
     Selection,
     ChipProps,
-    SortDescriptor, useDisclosure, Modal, ModalContent, ModalHeader, Image, ModalBody, Textarea, ModalFooter
+    SortDescriptor
 } from "@nextui-org/react";
 
 import {columns, statusOptions} from "./data";
-// import { user} from "./data";
 import {ChevronDownIcon, SearchIcon} from "@nextui-org/shared-icons";
 
 
@@ -54,10 +52,6 @@ type userDetails = {
     description: string;
 };
 
-// type JobListTableProps={
-//     users:User[];
-// }
-
 interface JobListTableProps {
     users: userDetails[];
     popup: (user: userDetails) => void;
@@ -65,7 +59,7 @@ interface JobListTableProps {
 
 export default function interviewListTable({users, popup} : JobListTableProps) {
 
-console.log(users)
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [filterValue, setFilterValue] = React.useState("");
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -156,12 +150,6 @@ console.log(users)
                         <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
                     </div>
                 );
-            // case "status":
-            //     return (
-            //         <Chip className="capitalize min-w-[100px] text-center" color={statusColorMap[user.status]} size="sm" variant="flat">
-            //             {cellValue}
-            //         </Chip>
-            //     );
             case "date":
                 return (
                     <div className="flex flex-col">
@@ -169,23 +157,6 @@ console.log(users)
                         {/*<p className="text-bold text-tiny capitalize text-default-400">{user.date}</p>*/}
                     </div>
                 );
-            // case "actions":
-            //     return (
-            //         <div className="relative flex justify-end items-center gap-2">
-            //             <Dropdown>
-            //                 <DropdownTrigger>
-            //                     <Button isIconOnly size="sm" variant="light">
-            //                         <VerticalDotsIcon className="text-default-300" />
-            //                     </Button>
-            //                 </DropdownTrigger>
-            //                 <DropdownMenu>
-            //                     <DropdownItem>View</DropdownItem>
-            //                     <DropdownItem>Edit</DropdownItem>
-            //                     <DropdownItem>Delete</DropdownItem>
-            //                 </DropdownMenu>
-            //             </Dropdown>
-            //         </div>
-            //     );
             default:
                 return cellValue;
         }
@@ -262,30 +233,6 @@ console.log(users)
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        {/*<Dropdown>*/}
-                        {/*    <DropdownTrigger className="hidden sm:flex">*/}
-                        {/*        <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">*/}
-                        {/*            Columns*/}
-                        {/*        </Button>*/}
-                        {/*    </DropdownTrigger>*/}
-                        {/*    <DropdownMenu*/}
-                        {/*        disallowEmptySelection*/}
-                        {/*        aria-label="Table Columns"*/}
-                        {/*        closeOnSelect={false}*/}
-                        {/*        selectedKeys={visibleColumns}*/}
-                        {/*        selectionMode="multiple"*/}
-                        {/*        onSelectionChange={setVisibleColumns}*/}
-                        {/*    >*/}
-                        {/*        {columns.map((column) => (*/}
-                        {/*            <DropdownItem key={column.uid} className="capitalize">*/}
-                        {/*                {capitalize(column.name)}*/}
-                        {/*            </DropdownItem>*/}
-                        {/*        ))}*/}
-                        {/*    </DropdownMenu>*/}
-                        {/*</Dropdown>*/}
-                        {/*<Button color="primary" endContent={<PlusIcon />}>*/}
-                        {/*    Add New*/}
-                        {/*</Button>*/}
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -353,8 +300,6 @@ console.log(users)
             classNames={{
                 wrapper: "max-h-[382px]",
             }}
-            // selectedKeys={selectedKeys}
-            // selectionMode="multiple"
             sortDescriptor={sortDescriptor}
             topContent={topContent}
             topContentPlacement="outside"
@@ -373,7 +318,6 @@ console.log(users)
                 {(column) => (
                     <TableColumn
                         key={column.uid}
-                        // align={column.uid === "date" ? "center" : "start"}
                         allowsSorting={column.sortable}
                         className={column.uid === "date" ?"w-[100px]":""}
                     >

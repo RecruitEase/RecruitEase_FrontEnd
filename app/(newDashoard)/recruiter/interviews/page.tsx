@@ -9,15 +9,17 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    Textarea,
     useDisclosure
 } from "@nextui-org/react";
 
 import {Button} from "@nextui-org/button";
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
+import {useRouter} from "next/navigation";
+import LoadingComponent from "@/components/LoadingComponent";
 
 type userDetails = {
     id: number,
+    interviewId:string,
     name: string,
     role:string,
     team:string,
@@ -44,10 +46,17 @@ const JobList = () =>{
     const [users, setUsers] = useState<userDetails[]>([]);
 
 
+    const router = useRouter();
+    const handleEdit = (interviewId:any) => {
+        console.log("handleEdit", interviewId);
+        router.push(`interviews/editInterview/${interviewId}`);
+    }
+
     const fetchInterviewData = () => {
         return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
             .then(response => {
                 const data = response.data.content;
+                console.log(data)
                 if (!Array.isArray(data)) {
                     console.error("Unexpected data format:", data);
                     return [];
@@ -67,7 +76,6 @@ const JobList = () =>{
         return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
             .then(response => {
                 const data =response.data.content
-                console.log(data)
                 return data;
             })
             .catch(error => {
@@ -79,7 +87,6 @@ const JobList = () =>{
         return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/view/${jobId}`)
             .then(response => {
                 const data =response.data.content
-                console.log(data)
                 return data;
             })
             .catch(error => {
@@ -91,7 +98,6 @@ const JobList = () =>{
         return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/candidate/${candidateId}`)
             .then(response => {
                 const data =response.data.content
-                console.log(data)
                 return data;
             })
             .catch(error => {
@@ -138,14 +144,15 @@ const JobList = () =>{
                     role:any,
                     avatar:any,
                     name:any,
-                    email:any
+                    email:any,
+                    interviewId:any
                 } | null)[] = results
                     .map(({ interview, companyDetails,jobDetails,candidateDetails},index) => {
                         if (companyDetails) {
-                            console.log(candidateDetails.profilePic)
                             return {
 
                                 id: index+1,
+                                interviewId:interview.id,
                                 team: companyDetails.position,
                                 imageUrl: companyDetails.imageUrl,
                                 status:companyDetails.status,
@@ -228,7 +235,7 @@ const JobList = () =>{
 
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary">
+                            <Button color="primary" onPress={()=>{handleEdit(selectedCard?.interviewId)}}>
                                 Edit
                             </Button>
                             <Button startContent={"<>"} color="danger" variant="light" onPress={onClose}>
@@ -246,8 +253,13 @@ const JobList = () =>{
             <header className="home-header">
                 <HeaderBox type="title" title="Interview Schedule List" subtext="Current interview list is here."/>
             </header>
+            {users ? (
+                <InterviewListTable users={users} popup={popupview}/>
+            ) : (
+                <LoadingComponent/>
+            )}
 
-            <InterviewListTable users={users} popup={popupview}/>
+
         </div>
     )
 }

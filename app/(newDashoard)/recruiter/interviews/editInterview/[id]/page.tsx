@@ -4,6 +4,7 @@ import HeaderBox from "@/components/dashboard/HeaderBox";
 import { useParams } from 'next/navigation';
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import EditeInterviewForm from "@/components/editInterview/EditeInterviewForm";
+import LoadingComponent from "@/components/LoadingComponent";
 
 type interviewObj={
     id:string,
@@ -73,7 +74,7 @@ const EditInterview = () =>{
             {data ? (
                 <EditeInterviewForm currentData={data} />
             ) : (
-                <p>Loading...</p>
+                <LoadingComponent/>
             )}
         </div>
     )

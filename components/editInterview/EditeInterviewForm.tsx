@@ -138,7 +138,8 @@ export default function EditeInterviewForm({currentData}){
             cutoffTime:cutoffTime,
         })
             .then(response => {
-                if(response.status === 200){
+                console.log(response.status)
+                if(response.status == 201){
                     toast.success('Update scheduled successfully!', {
                         position: "top-right",
                         autoClose: 5000,
@@ -150,7 +151,7 @@ export default function EditeInterviewForm({currentData}){
                         theme: "colored",
                         transition: Bounce,
                     });
-                    router.push("/recruiter/vacancy/abc1/applications");
+                    router.push("/recruiter/interviews");
 
 
                 }else{
