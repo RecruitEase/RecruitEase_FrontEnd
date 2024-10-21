@@ -38,6 +38,33 @@ export function truncateString(str:string, limit:number) {
     }
 }
 
+
+export function formattedDateAndTime(localDateTimeString:string){
+
+// Create a Date object from the string
+    const date = new Date(localDateTimeString);
+
+// Function to format the date and time in "MM/dd/yyyy hh:mm AM/PM" format
+    function formatDateTimeWithAmPm(date) {
+        const months = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1
+        const days = String(date.getDate()).padStart(2, '0');
+        const year = date.getFullYear();
+
+        let hours = date.getHours();
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12; // Convert 24-hour format to 12-hour format
+        const formattedHours = String(hours).padStart(2, '0');
+
+        return `${months}/${days}/${year} ${formattedHours}:${minutes}:${seconds} ${ampm}`;
+    }
+
+    return  formatDateTimeWithAmPm(date);
+
+}
+
 // Convert date and time objects into a LocalDateTime compatible string
 export function dateAndTimeToLocalDateTimeString(dateObj:DateValue, timeObj:TimeValue) {
     const year = dateObj.year;
@@ -49,4 +76,39 @@ export function dateAndTimeToLocalDateTimeString(dateObj:DateValue, timeObj:Time
 
 // Create the string in the "yyyy-MM-ddTHH:mm:ss" format
     return `${year}-${month}-${day}T${hour}:${minute}:${second}`;
+}
+
+
+//reverseof above funcrtion
+export function localDateTimeStringToDateValueAndTimeValueObjs(localDateTimeString:string){
+    // const localDateTimeString = "2024-10-22T03:03:00";
+
+// Split the string into date and time parts
+    const [datePart, timePart] = localDateTimeString.split('T');
+
+// Extract year, month, and day from the date part
+    const [year, month, day] = datePart.split('-').map(Number);
+
+// Extract hour, minute, and second from the time part
+    const [hour, minute, second] = timePart.split(':').map(Number);
+
+// Create the dateObj and timeObj
+    const dateObj = {
+        calendar: {
+            identifier: "gregory"
+        },
+        era: "AD",
+        year: year,
+        month: month,
+        day: day
+    };
+
+    const timeObj = {
+        hour: hour,
+        minute: minute,
+        second: second,
+        millisecond: 0
+    };
+
+    return {dateObj,timeObj}
 }

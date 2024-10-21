@@ -24,7 +24,7 @@ import {
 // import { user} from "./data";
 import {ChevronDownIcon, DeleteIcon, SearchIcon} from "@nextui-org/shared-icons";
 import {Job} from "@/types/job";
-import {OfferProps} from "@/types/offers";
+import {JobListTableProps, OfferProps, RowProp, statusColorMap, statusOptions} from "@/types/offers";
 import {CandidateProp, RecruiterProp} from "@/types/users";
 import {ApplicationProp} from "@/types/applications";
 import { toTitleCase } from "@/lib/utils";
@@ -33,6 +33,7 @@ import { VerticalDotsIcon } from "../recruiter/VerticalDotsIcon";
 import { EyeIcon } from "../icons/settings/eyeIcon";
 import { EditIcon } from "../icons/settings/editIcon";
 import {IoNewspaperSharp} from "react-icons/io5";
+import {MdOutlineGroupWork} from "react-icons/md";
 
 const columns = [
     {name: "ID", uid: "id", sortable: true},
@@ -45,58 +46,16 @@ const columns = [
 
 ];
 
-const statusOptions = [
-    {name: "Pending", uid: "PENDING"},
-    {name: "Accepted", uid: "ACCEPTED"},
-    {name: "Rejected", uid: "REJECTED"},
-    {name: "Expired", uid: "EXPIRED"},
-    {name: "Canceled", uid: "CANCELED"},
-];
-
-
 const capitalize=(str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
-
-
-const statusColorMap: Record<string, string> = {
-    PENDING: "#D7F8FE",
-    CANCELED: "#C9A9E9",
-    EXPIRED: "#fbdba7",
-    ACCEPTED: "#a2e9c1",         // Same color as "Offered"
-    REJECTED: "#FAA0BF",
-};
 const INITIAL_VISIBLE_COLUMNS = ["name", "title", "status", "offeredDate","actions"];
 
-type userDetails = {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-    team: string;
-    status: string;
-    date: string;
-    avatar: string;
-    candidateNote:string;
-};
 
 // type JobListTableProps={
 //     users:User[];
 // }
 
-interface JobListTableProps {
-    users: userDetails[];
-    popup: (user: userDetails) => void;
-    jobs:Job [];
-    offers:OfferProps[];
-    candidates:CandidateProp[];
-}
-interface RowProp extends OfferProps {
-    candidate:CandidateProp | null;
-    job:Job | null;
-    name:string | null;
-}
 
 
 function mapToOfferTableRowProps(jobs,candidates:CandidateProp[],offers:OfferProps[]):RowProp[] {
@@ -191,8 +150,8 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
 
         const profilePic=(user.candidate?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+user.candidate?.profilePic : "/profileImages/noImage.png";
 
-        function handleView(offerId: string) {
-            return undefined;
+        function handleView(data: RowProp) {
+            popup(data)
         }
 
         function handleEdit(offerId: string) {
@@ -251,7 +210,7 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
 
                         <Tooltip content="View the offer">
                             <div className="flex gap-4 items-center">
-                                <Button  onClick={handleView(user.offerId)} size={"md"} color="primary" aria-label="Like">
+                                <Button  onPress={()=>handleView(user)} size={"md"} color="primary" aria-label="Like">
                                     <EyeIcon/> View
                                 </Button>
 
@@ -259,7 +218,7 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
                         </Tooltip>
                         <Tooltip content="Withdraw the offer">
                             <div className="flex gap-4 items-center">
-                                <Button  onClick={handleEdit(user.offerId)} size={"md"} color="primary" aria-label="Like">
+                                <Button  onClick={()=>handleEdit(user)} size={"md"} color="primary" aria-label="Like">
                                     <EditIcon/> Withdraw
                                 </Button>
 
@@ -271,6 +230,16 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
                                     (location.href = `/recruiter/vacancy/${user.job?.jobId}/applications?applicationId=${user.application.applicationId}`)
                                 } size={"md"} color="primary" aria-label="Like">
                                     <IoNewspaperSharp/> Application
+                                </Button>
+
+                            </div>
+                        </Tooltip>
+                        <Tooltip content="View Job Vacancy">
+                            <div className="flex gap-4 items-center">
+                                <Button onClick={() =>
+                                    (location.href = `/jobs/${user.job?.jobId}`)
+                                } size={"md"} color="primary" aria-label="Like">
+                                    <MdOutlineGroupWork /> Vacancy
                                 </Button>
 
                             </div>
@@ -451,13 +420,7 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
             topContentPlacement="outside"
             onSelectionChange={setSelectedKeys}
             onSortChange={setSortDescriptor}
-            onRowAction={(key) => {
-                const user = sortedItems.find(item => item.id.toString() === key.toString());
-                console.log(user);
-                if (user) {
-                    popup(user);
-                }
-            }}
+
 
         >
             <TableHeader columns={headerColumns}>
@@ -474,7 +437,7 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
             </TableHeader>
             <TableBody emptyContent={"No users found"} items={sortedItems}>
                 {(item) => (
-                    <TableRow key={item.offerId} className={"hover:cursor-pointer hover:bg-gray-100"}>
+                    <TableRow key={item.offerId} >
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                     </TableRow>
                 )}
