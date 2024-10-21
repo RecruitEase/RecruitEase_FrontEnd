@@ -16,7 +16,7 @@ export interface OfferProps {
 }
 
 export interface OfferCreationProps {
-    applicationId?: string;
+    applicationId: string;
     jobId: string;
     candidateId: string;
     recruiterId: string;

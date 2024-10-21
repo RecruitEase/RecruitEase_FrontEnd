@@ -35,11 +35,13 @@ export function useJobsByLoggedRecruiter() {
     })
 }
 
-export function useJob(jobId: string) {
+export function useJob(jobId: string|undefined) {
     const queryClient=useQueryClient();
     return useQuery<Job>({
         queryKey:['job',jobId],
         queryFn:()=>getJobById(jobId!),
+        enabled:!!jobId,
+
     })
 }
 

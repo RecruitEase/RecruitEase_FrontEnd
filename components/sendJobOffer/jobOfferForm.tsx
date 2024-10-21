@@ -8,19 +8,32 @@ import { DateValue } from "@internationalized/date";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import { useRouter } from 'next/navigation';
+import {Job} from "@/types/job";
+import {CandidateProp} from "@/types/users";
+import {ApplicationProp} from "@/types/applications";
+import {toTitleCase} from "@/lib/utils";
+import {OfferCreationProps} from "@/types/offers";
+import {TimeValue} from "@react-types/datepicker";
+import {dateAndTimeToLocalDateTimeString} from "@/utils/stringUtils";
+import {useCreateOffer} from "@/lib/hooks/useOffers";
 
-const position = "Software Engineer";
 
-const JobOfferForm = () => {
+export interface JobOfferFormProps{
+    job:Job;
+    candidate:CandidateProp;
+    application:ApplicationProp;
+}
+
+const JobOfferForm = ({job,candidate,application}:JobOfferFormProps) => {
 
     const router=useRouter();
 
     const [location, setLocation] = useState("");
     const [date, setDate] = useState<DateValue | null>(null);
-    const [time, setTime] = useState<Time | null>(null);
+    const [time, setTime] = useState<TimeValue | null>(null);
     const [description, setDescription] = useState("");
     const [cutoffDate, setCutoffDate] = useState<DateValue | null>(null);
-    const [cutoffTime, setCutoffTime] = useState<Time | null>(null);
+    const [cutoffTime, setCutoffTime] = useState<TimeValue | null>(null);
 
     const locationSet = (location: string) => {
         setLocation(location);
@@ -32,7 +45,7 @@ const JobOfferForm = () => {
             setDate(null);
         }
     }
-    const timeSet = (time: Time) => {
+    const timeSet = (time: TimeValue) => {
         if (time) {
             setTime(time);
         }else {
@@ -40,7 +53,7 @@ const JobOfferForm = () => {
         }
     };
     const descriptionSet = (description: string) => {
-        setLocation(description);
+        setDescription(description);
     };
     const cutoffDateSet = (cutoffDate: DateValue) => {
         if (cutoffDate) {
@@ -49,7 +62,7 @@ const JobOfferForm = () => {
             setCutoffDate(null);
         }
     };
-    const cutoffTimeSet = (cutoffTime: Time) => {
+    const cutoffTimeSet = (cutoffTime: TimeValue) => {
         if (cutoffTime) {
             setCutoffTime(cutoffTime);
         }else {
@@ -57,69 +70,59 @@ const JobOfferForm = () => {
         }
     };
 
+    const createOfferQuery=useCreateOffer()
     const sendDetails = () => {
-        const jobDetails = {
+        const jobDetails:OfferCreationProps = {
             location:location,
-            date:date,
-            time:time,
             description:description,
-            cutoffDate:cutoffDate,
-            cutoffTime:cutoffTime,
-
+            jobId:application.jobId,
+            candidateId:application.candidateId,
+            applicationId:application.applicationId,
+            recruiterId:application.recruiterId,
+            finalAcceptanceDateTime:dateAndTimeToLocalDateTimeString(cutoffDate!,cutoffTime!),
+            startDateTime:dateAndTimeToLocalDateTimeString(date!,time!)
         }
 
-        console.log(jobDetails)
+        createOfferQuery.mutate(jobDetails)
+
     };
 
     const conformationPop = () =>{
+        console.log(cutoffTime)
+        console.log(cutoffDate)
+        console.log(time)
+        console.log(date)
+        console.log(description)
+        console.log(location)
+        if(cutoffTime==null || cutoffDate==null || time==null || date==null || description=="" || location==""){
+            toast.error('Please fill all the required fields!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+        }else {
 
-        Swal.fire({
-            title: "Are you sure about sending job?",
-            icon:"info",
-            customClass: {
-                confirmButton: 'bg-primary', // Custom class for confirm button
-                cancelButton: 'bg-[#a1a1aa]'   // Custom class for cancel button
-            },
+            Swal.fire({
+                title: "Are you sure about sending the job offer?",
+                icon: "info",
+                customClass: {
+                    confirmButton: 'bg-primary', // Custom class for confirm button
+                    cancelButton: 'bg-[#a1a1aa]'   // Custom class for cancel button
+                },
 
-            showCancelButton: true,
-            confirmButtonText: "Yes",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
 
-        }).then(() => {
-            sendDetails()
-            const result = {
-                status: 200
-            }
-            if (result?.status == 200) {
-                toast.success('Job Offer Created successfully!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-
-                router.push("/recruiter/vacancy/abc1/applications");
-
-            } else {
-                //not logged in
-                //handle error here
-                toast.error('Job Offer creation failed!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-            }
-        });
+            }).then(() => {
+                sendDetails()
+            });
+        }
     }
 
     return (
@@ -128,8 +131,18 @@ const JobOfferForm = () => {
                 <Input
                     isDisabled
                     type="text"
-                    label="Position"
-                    defaultValue={position}
+                    label="Job Title"
+                    defaultValue={toTitleCase(job.title)}
+                    className="max-w-xs"
+                    // onChange={(element) => locationSet(element.target.value)}
+                />
+            </div>
+            <div>
+                <Input
+                    isDisabled
+                    type="text"
+                    label="Candidate Name"
+                    defaultValue={toTitleCase(candidate.firstName+" "+candidate.lastName)}
                     className="max-w-xs"
                     // onChange={(element) => locationSet(element.target.value)}
                 />
@@ -139,6 +152,7 @@ const JobOfferForm = () => {
                     <Input
                         type="text"
                         label="Location"
+                        isRequired
                         placeholder="Enter location"
                         onChange={(element) => locationSet(element.target.value)}
                     />
@@ -155,10 +169,10 @@ const JobOfferForm = () => {
                 <div className={"col-span-12 sm:col-span-2 w-full"}>
                     <TimeInput
                         label="Event Time"
-                        defaultValue={new Time(11, 59)}
                         endContent={(
-                            <ClockCircleLinearIcon />
+                            <ClockCircleLinearIcon/>
                         )}
+                        isRequired
                         fullWidth
                         onChange={timeSet}
                     />
@@ -170,6 +184,7 @@ const JobOfferForm = () => {
                     placeholder="Enter your description"
                     className="w-full "
                     fullWidth
+                    isRequired
                     onChange={(element) => descriptionSet(element.target.value)}
                 />
             </div>
@@ -185,10 +200,10 @@ const JobOfferForm = () => {
             <div className={"w-full"}>
                 <TimeInput
                     label="CutOff Time"
-                    defaultValue={new Time(11, 59)}
                     endContent={(
-                        <ClockCircleLinearIcon />
+                        <ClockCircleLinearIcon/>
                     )}
+                    isRequired
                     className={"max-w-xs"}
                     onChange={cutoffTimeSet}
                 />

@@ -1,4 +1,7 @@
 // utils/stringUtils.js
+import {TimeValue} from "@react-types/datepicker";
+import {DateValue} from "@internationalized/date";
+
 export const toTitleCase = (str:String) => {
     return str.replace(/\w\S*/g, (txt) => {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -33,4 +36,17 @@ export function truncateString(str:string, limit:number) {
     } else {
         return str;
     }
+}
+
+// Convert date and time objects into a LocalDateTime compatible string
+export function dateAndTimeToLocalDateTimeString(dateObj:DateValue, timeObj:TimeValue) {
+    const year = dateObj.year;
+    const month = String(dateObj.month).padStart(2, '0'); // pad single digit months
+    const day = String(dateObj.day).padStart(2, '0');     // pad single digit days
+    const hour = String(timeObj.hour).padStart(2, '0');
+    const minute = String(timeObj.minute).padStart(2, '0');
+    const second = String(timeObj.second).padStart(2, '0');
+
+// Create the string in the "yyyy-MM-ddTHH:mm:ss" format
+    return `${year}-${month}-${day}T${hour}:${minute}:${second}`;
 }

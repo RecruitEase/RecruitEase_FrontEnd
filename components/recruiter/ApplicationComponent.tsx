@@ -292,7 +292,7 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                               color={"secondary"}
                               className={" w-full bg-gray-900 text-whiteText"}
                               as={Link}
-                              href="/recruiter/joboffers/create"
+                              href={`/recruiter/joboffers/create/${selectedApplicantion?.applicationId}`}
                             >
                               Create Job Offer <FaPenToSquare />
                             </Button>

@@ -125,22 +125,22 @@ export const updateJob=async (data:Job)=>{
 
 //offer apis
 export const getOffersByCandidate=async (candidateId:string)=>{
-    return (await axiosInstance.get(`api/offers/candidate/${candidateId}`)).data.content;
+    return (await axiosInstance.get(`api/v1/offers/candidate/${candidateId}`)).data.content;
 }
 export const getOffersByRecruiter=async (recruiterId:string)=>{
-    return (await axiosInstance.get(`api/offers/recruiter/${recruiterId}`)).data.content;
+    return (await axiosInstance.get(`api/v1/offers/recruiter/${recruiterId}`)).data.content;
 }
 export const getOffersByJob=async (jobId:string)=>{
-    return (await axiosInstance.get(`api/offers/job/${jobId}`)).data.content;
+    return (await axiosInstance.get(`api/v1/offers/job/${jobId}`)).data.content;
 }
 export const getOfferById=async (offerId:string)=>{
-    return (await axiosInstance.get(`api/offers/view/${offerId}`)).data.content;
+    return (await axiosInstance.get(`api/v1/offers/view/${offerId}`)).data.content;
 }
 export const createOffer=async (offer:OfferCreationProps)=>{
-    return (await axiosInstance.post(`api/offers/create`,offer)).data.status;
+    return (await axiosInstance.post(`api/v1/offers/create`,offer)).data.status;
 }
 export const updateOffer=async (data:OfferUpdateProps)=>{
-    return (await axiosInstance.put(`api/offers/update/${data.offerId}`,data));
+    return (await axiosInstance.put(`api/v1/offers/update/${data.offerId}`,data));
 }
 
 
