@@ -77,7 +77,7 @@ const JobOfferForm = ({job,candidate,application}:JobOfferFormProps) => {
             description:description,
             jobId:application.jobId,
             candidateId:application.candidateId,
-            applicationId:application.applicationId,
+            applicationId:application.applicationId!,
             recruiterId:application.recruiterId,
             finalAcceptanceDateTime:dateAndTimeToLocalDateTimeString(cutoffDate!,cutoffTime!),
             startDateTime:dateAndTimeToLocalDateTimeString(date!,time!)
@@ -119,8 +119,13 @@ const JobOfferForm = ({job,candidate,application}:JobOfferFormProps) => {
                 showCancelButton: true,
                 confirmButtonText: "Yes",
 
-            }).then(() => {
-                sendDetails()
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+
+                    sendDetails()
+
+
+                }
             });
         }
     }

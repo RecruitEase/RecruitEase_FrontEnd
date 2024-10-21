@@ -68,6 +68,7 @@ export interface OfferUpdateQueryProps {
 //for offer tables
 export interface JobListTableProps {
     popup: (rowItem:RowProp) => void;
+    updateOffer: (rowItem:RowProp) => void;
     jobs:Job [];
     offers:OfferProps[];
     candidates:CandidateProp[];

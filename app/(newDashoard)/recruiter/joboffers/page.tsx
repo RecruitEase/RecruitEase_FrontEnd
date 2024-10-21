@@ -17,14 +17,14 @@ import {
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import {Button} from "@nextui-org/button";
-import {useOffersByRecruiter} from "@/lib/hooks/useOffers";
+import {useOffersByRecruiter, useUpdateOfferMutation} from "@/lib/hooks/useOffers";
 import {useSession} from "next-auth/react";
 import {useCandidates} from "@/lib/hooks/useCandidates";
 import {useJobs} from "@/lib/hooks/useJobs";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import JobOfferForm from "@/components/sendJobOffer/jobOfferForm";
-import {RowProp, statusColorMap, statusOptions} from "@/types/offers";
+import {OfferUpdateProps, OfferUpdateQueryProps, RowProp, statusColorMap, statusOptions} from "@/types/offers";
 import JobOfferFormDisabled, {JobOfferFormDisabledProps} from "@/components/sendJobOffer/jobOfferFormDisabled";
 
 type userDetails = {
@@ -308,6 +308,22 @@ const jobList = () =>{
         onClose()
     }
 
+    const offerUpdateQuery=useUpdateOfferMutation();
+
+    const updateOffer=(data:RowProp)=>{
+        const updateObj:OfferUpdateProps={
+        offerId:data.offerId!,
+        status:"CANCELED",
+        statusChangeNote:"Offer Withdrew by the recruiter!"
+    }
+
+    const reqObj:OfferUpdateQueryProps={
+        updateReq:updateObj,
+        candidateId:data.candidate?.candidateId,
+        recruiterId:data.recruiterId
+    }
+    offerUpdateQuery.mutate(reqObj)
+    }
     const confomationPoup = (massage:string,icon:string) =>{
 
         Swal.fire({
@@ -423,7 +439,7 @@ const jobList = () =>{
                     : (offersByRecruiterQuery.isError || candidateBatchQuery.isError || jobBatchQuery.some(query => query.isError)) ?
                         < ErrorComponent/>
                         :
-                        <JobListTable offers={offersByRecruiterQuery.data!} candidates={candidateBatchQuery.data!} jobs={jobBatchQuery} popup={popupview}/>
+                        <JobListTable updateOffer={updateOffer} offers={offersByRecruiterQuery.data!} candidates={candidateBatchQuery.data!} jobs={jobBatchQuery} popup={popupview}/>
             }
         </div>
     )

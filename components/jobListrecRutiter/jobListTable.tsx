@@ -24,7 +24,14 @@ import {
 // import { user} from "./data";
 import {ChevronDownIcon, DeleteIcon, SearchIcon} from "@nextui-org/shared-icons";
 import {Job} from "@/types/job";
-import {JobListTableProps, OfferProps, RowProp, statusColorMap, statusOptions} from "@/types/offers";
+import {
+    JobListTableProps,
+    OfferProps, OfferUpdateProps,
+    OfferUpdateQueryProps,
+    RowProp,
+    statusColorMap,
+    statusOptions
+} from "@/types/offers";
 import {CandidateProp, RecruiterProp} from "@/types/users";
 import {ApplicationProp} from "@/types/applications";
 import { toTitleCase } from "@/lib/utils";
@@ -34,6 +41,8 @@ import { EyeIcon } from "../icons/settings/eyeIcon";
 import { EditIcon } from "../icons/settings/editIcon";
 import {IoNewspaperSharp} from "react-icons/io5";
 import {MdOutlineGroupWork} from "react-icons/md";
+import Swal from "sweetalert2";
+import {useUpdateOfferMutation} from "@/lib/hooks/useOffers";
 
 const columns = [
     {name: "ID", uid: "id", sortable: true},
@@ -74,7 +83,7 @@ function mapToOfferTableRowProps(jobs,candidates:CandidateProp[],offers:OfferPro
 }
 type User = RowProp;
 
-export default function jobListTable({offers,candidates,jobs, popup} : JobListTableProps) {
+export default function jobListTable({offers,candidates,jobs, popup,updateOffer} : JobListTableProps) {
     const users=mapToOfferTableRowProps(jobs,candidates,offers);
     
     const [filterValue, setFilterValue] = React.useState("");
@@ -154,8 +163,25 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
             popup(data)
         }
 
-        function handleEdit(offerId: string) {
-            return undefined;
+
+        function handleEdit(data:RowProp) {
+            Swal.fire({
+                title: "Do you want to withdraw the job offer?",
+                icon: "warning",
+                customClass: {
+                    confirmButton: "bg-[#f31260]", // Custom class for confirm button
+                    cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+                },
+                showCancelButton: true,
+                confirmButtonText: "Unpublish"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+
+                    updateOffer(data)
+
+
+                }
+            });
         }
 
         switch (columnKey) {
@@ -216,6 +242,7 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
 
                             </div>
                         </Tooltip>
+                        {user.status=="PENDING" &&
                         <Tooltip content="Withdraw the offer">
                             <div className="flex gap-4 items-center">
                                 <Button  onClick={()=>handleEdit(user)} size={"md"} color="primary" aria-label="Like">
@@ -224,6 +251,7 @@ export default function jobListTable({offers,candidates,jobs, popup} : JobListTa
 
                             </div>
                         </Tooltip>
+                        }
                         <Tooltip content="View Application">
                             <div className="flex gap-4 items-center">
                                 <Button onClick={() =>
