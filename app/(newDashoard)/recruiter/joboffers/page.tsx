@@ -15,6 +15,13 @@ import {
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import {Button} from "@nextui-org/button";
+import {useOffersByRecruiter} from "@/lib/hooks/useOffers";
+import {useSession} from "next-auth/react";
+import {useCandidates} from "@/lib/hooks/useCandidates";
+import {useJobs} from "@/lib/hooks/useJobs";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import JobOfferForm from "@/components/sendJobOffer/jobOfferForm";
 
 type userDetails = {
     id: number,
@@ -255,7 +262,30 @@ const users:userDetails[] = [
 const jobList = () =>{
 
 
-    
+    //for user session state
+    const { data: session } = useSession();
+    console.log({ session });
+
+    const user=session?.user;
+
+    const offersByRecruiterQuery=useOffersByRecruiter(user?.roleDetails.recruiterId)
+
+    // Extract recruiterIds and get unique ids
+    const candidateIdList: string[] = [];
+    const jobIdList: string[] = [];
+
+    offersByRecruiterQuery.data?.map(job => {
+        if (candidateIdList.indexOf(job.candidateId!) === -1) {
+            candidateIdList.push(job.candidateId!)
+        }
+        if (jobIdList.indexOf(job.jobId!) === -1) {
+            jobIdList.push(job.jobId!)
+        }
+    });
+
+    const candidateBatchQuery=useCandidates(candidateIdList)
+    const jobBatchQuery=useJobs(jobIdList)
+
     const [selectedCard, setSelectedCard] = useState<userDetails | null>(null);
 
     
@@ -408,8 +438,14 @@ const jobList = () =>{
             <header className="home-header">
                 <HeaderBox type="title" title="Job Offer List" subtext="Current job offers list is here."/>
             </header>
-
-            <JobListTable users={users} popup={popupview}/>
+            {
+                (offersByRecruiterQuery.isFetching || candidateBatchQuery.isFetching || jobBatchQuery.some(query => query.isFetching)) ?
+                    <LoadingComponent/>
+                    : (offersByRecruiterQuery.isError || candidateBatchQuery.isError || jobBatchQuery.some(query => query.isError)) ?
+                        < ErrorComponent/>
+                        :
+                        <JobListTable offers={offersByRecruiterQuery.data!} candidates={candidateBatchQuery.data!} jobs={jobBatchQuery} popup={popupview}/>
+            }
         </div>
     )
 }
