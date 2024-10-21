@@ -8,6 +8,14 @@ import { Button, } from "@nextui-org/button";
 import {Image } from "@nextui-org/react";
 import {Bounce, toast} from "react-toastify";
 import Swal from 'sweetalert2';
+import {useOffersByCandidate} from "@/lib/hooks/useOffers";
+import {useSession} from "next-auth/react";
+import {useCandidates} from "@/lib/hooks/useCandidates";
+import {useJobs} from "@/lib/hooks/useJobs";
+import {useRecruiters} from "@/lib/hooks/useRecruiters";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import JobListTable from "@/components/jobListrecRutiter/jobListTable";
 
 type InterviewOfferCard = {
     companyName: string;
@@ -61,6 +69,29 @@ const data: InterviewOfferCard[] = [
 ];
 
 const InterviewsOffers = () => {
+    //for user session state
+    const { data: session } = useSession();
+
+    const user=session!.user;
+   const offerForCandidateQuery=useOffersByCandidate(user.roleDetails.candidateId)
+
+
+    // Extract recruiterIds and get unique ids
+    const recruiterIdList: string[] = [];
+    const jobIdList: string[] = [];
+
+    offerForCandidateQuery.data?.map(job => {
+        if (recruiterIdList.indexOf(job.recruiterId!) === -1) {
+            recruiterIdList.push(job.recruiterId!)
+        }
+        if (jobIdList.indexOf(job.jobId!) === -1) {
+            jobIdList.push(job.jobId!)
+        }
+    });
+
+    const recruiterBatchQuery=useRecruiters(recruiterIdList)
+    const jobBatchQuery=useJobs(jobIdList)
+
 
     const [selectedCard, setSelectedCard] = useState<InterviewOfferCard | null>(null);
 
@@ -216,11 +247,26 @@ const InterviewsOffers = () => {
 
             {/*<Button onPress={popupview}> ll</Button>*/}
 
-            <div>
-                {data && data.map((item, index) => (
-                    <InterviewsOffersCard key={index} card={item}  popup={() => popupview(item)} />
-                ))}
-            </div>
+            {
+                (offerForCandidateQuery.isFetching || recruiterBatchQuery.isFetching || jobBatchQuery.some(query => query.isFetching)) ?
+                    <LoadingComponent/>
+                    : (offerForCandidateQuery.isError || recruiterBatchQuery.isError || jobBatchQuery.some(query => query.isError)) ?
+                        < ErrorComponent/>
+                        :(offerForCandidateQuery.data!.length>0)?
+                        <div>
+                            {offerForCandidateQuery.data!.map((item, index) => {
+                                const recruiter=recruiterBatchQuery.data!.find(i=>i.recruiterId==item.recruiterId);
+                                const job=jobBatchQuery.find(x=>x.data.jobId==item.jobId)!.data!;
+                                return(
+                                    <InterviewsOffersCard key={index} offer={item} recruiter={recruiter!} job={job!}
+                                                          popup={() => popupview(item)}/>
+                                )
+                            })}
+                        </div>
+                        :<div> You have no job offers yet!
+                            </div>
+            }
+
         </div>
     );
 };
