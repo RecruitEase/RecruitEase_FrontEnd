@@ -173,7 +173,7 @@ export default function jobListTable({offers,candidates,jobs, popup,updateOffer}
                     cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
                 },
                 showCancelButton: true,
-                confirmButtonText: "Unpublish"
+                confirmButtonText: "Withdarw"
             }).then(async (result) => {
                 if (result.isConfirmed) {
 

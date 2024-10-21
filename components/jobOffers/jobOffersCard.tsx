@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, Image } from "@nextui-org/react";
 import {Button} from "@chakra-ui/react";
-import {OfferProps} from "@/types/offers";
+import {OfferPopUpProps, OfferProps} from "@/types/offers";
 import {RecruiterProp} from "@/types/users";
 import {Job} from "@/types/job";
 import {daysLeft, formatDate, formattedDateAndTime, toTitleCase} from '@/utils/stringUtils';
@@ -24,7 +24,7 @@ interface InterviewOfferCardProps {
     offer:OfferProps;
     recruiter:RecruiterProp;
     job:Job
-    popup: () => void;
+    popup: (obj:OfferPopUpProps) => void;
 }
 
 export const InterviewsOffersCard = ({ offer,recruiter,job, popup }: InterviewOfferCardProps) => {
@@ -32,7 +32,7 @@ export const InterviewsOffersCard = ({ offer,recruiter,job, popup }: InterviewOf
     return (
         <div>
             <Card className="main w-full grid grid-cols-12 gap-4 p-2 hover:bg-gray-200 cursor-pointer mb-4 h-24"   isPressable
-                  onPress={popup} >
+                  onPress={()=>popup({offer:offer,job:job,recruiter:recruiter})} >
                 <div className="col-span-12 sm:col-span-8">
                     <CardHeader className="flex gap-3">
                         <Image

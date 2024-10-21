@@ -78,3 +78,11 @@ export interface RowProp extends OfferProps {
     job:Job | null;
     name:string | null;
 }
+
+
+//candidate view
+export interface OfferPopUpProps{
+    offer:OfferProps;
+    job:Job;
+    recruiter:RecruiterProp;
+}
