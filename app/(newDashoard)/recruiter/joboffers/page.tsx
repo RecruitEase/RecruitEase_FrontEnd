@@ -3,18 +3,29 @@ import React, {useState} from 'react';
 import HeaderBox from "@/components/dashboard/HeaderBox";
 import JobListTable from "@/components/jobListrecRutiter/jobListTable";
 import {
+    Chip,
     Image,
     Modal,
     ModalBody,
     ModalContent,
     ModalFooter,
     ModalHeader,
+    Spacer,
     Textarea,
     useDisclosure
 } from "@nextui-org/react";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import {Button} from "@nextui-org/button";
+import {useOffersByRecruiter, useUpdateOfferMutation} from "@/lib/hooks/useOffers";
+import {useSession} from "next-auth/react";
+import {useCandidates} from "@/lib/hooks/useCandidates";
+import {useJobs} from "@/lib/hooks/useJobs";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import JobOfferForm from "@/components/sendJobOffer/jobOfferForm";
+import {OfferUpdateProps, OfferUpdateQueryProps, RowProp, statusColorMap, statusOptions} from "@/types/offers";
+import JobOfferFormDisabled, {JobOfferFormDisabledProps} from "@/components/sendJobOffer/jobOfferFormDisabled";
 
 type userDetails = {
     id: number,
@@ -255,8 +266,31 @@ const users:userDetails[] = [
 const jobList = () =>{
 
 
-    
-    const [selectedCard, setSelectedCard] = useState<userDetails | null>(null);
+    //for user session state
+    const { data: session } = useSession();
+    console.log({ session });
+
+    const user=session?.user;
+
+    const offersByRecruiterQuery=useOffersByRecruiter(user?.roleDetails.recruiterId)
+
+    // Extract recruiterIds and get unique ids
+    const candidateIdList: string[] = [];
+    const jobIdList: string[] = [];
+
+    offersByRecruiterQuery.data?.map(job => {
+        if (candidateIdList.indexOf(job.candidateId!) === -1) {
+            candidateIdList.push(job.candidateId!)
+        }
+        if (jobIdList.indexOf(job.jobId!) === -1) {
+            jobIdList.push(job.jobId!)
+        }
+    });
+
+    const candidateBatchQuery=useCandidates(candidateIdList)
+    const jobBatchQuery=useJobs(jobIdList)
+
+    const [selectedCard, setSelectedCard] = useState<RowProp | null>(null);
 
     
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -274,6 +308,22 @@ const jobList = () =>{
         onClose()
     }
 
+    const offerUpdateQuery=useUpdateOfferMutation();
+
+    const updateOffer=(data:RowProp)=>{
+        const updateObj:OfferUpdateProps={
+        offerId:data.offerId!,
+        status:"CANCELED",
+        statusChangeNote:"Offer Withdrew by the recruiter!"
+    }
+
+    const reqObj:OfferUpdateQueryProps={
+        updateReq:updateObj,
+        candidateId:data.candidate?.candidateId,
+        recruiterId:data.recruiterId
+    }
+    offerUpdateQuery.mutate(reqObj)
+    }
     const confomationPoup = (massage:string,icon:string) =>{
 
         Swal.fire({
@@ -327,9 +377,8 @@ const jobList = () =>{
 
 
 
-    const popupview = (card: userDetails) => {
-        console.log("Card clicked:", card);
-        setSelectedCard(card);
+    const popupview = (data: RowProp) => {
+        setSelectedCard(data);
         onOpen();
     };
 
@@ -344,7 +393,7 @@ const jobList = () =>{
                                     alt="company logo"
                                     height={30}
                                     radius="sm"
-                                    src={selectedCard?.avatar}
+                                    src={(selectedCard?.candidate?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+selectedCard?.candidate?.profilePic : "/profileImages/noImage.png"}
                                     width={30}
                                 />
                             </div>
@@ -352,42 +401,18 @@ const jobList = () =>{
 
                         </ModalHeader>
                         <ModalBody className={"gap-0"}>
-                            {/* eslint-disable-next-line react/no-unescaped-entities */}
-                            <div className={"gap-2 text-md font-bold  flex justify-start"}>Candidate's Note</div>
-                            <div>{selectedCard?.candidateNote}</div>
-                            {/*<div className={"mb-4 text-warningText"}><p>This job offer is accept or decline on or before {selectedCard?.cutoffTime} {selectedCard?.cutoffDate}</p></div>*/}
-                            {/*<div className={"flex gap-4"}>*/}
-                            {/*    <div className={"flex flex-col mb-4 text-sm font-bold text-gray-600"}>*/}
-                            {/*        <div><p>Date:</p></div>*/}
-                            {/*        <div><p>Time:</p></div>*/}
-                            {/*        <div><p>Dress Code:</p></div>*/}
-                            {/*        <div><p>Location:</p></div>*/}
-                            {/*    </div>*/}
-                            {/*    <div className={"flex flex-col mb-4 text-sm font-bold text-gray-600"}>*/}
-                            {/*        <div><p>{selectedCard?.date}</p></div>*/}
-                            {/*        /!*<div><p>{selectedCard?.time}</p></div>*!/*/}
-                            {/*        /!*<div><p>{selectedCard?.dressCode}</p></div>*!/*/}
-                            {/*        /!*<div><p>{selectedCard?.location}</p></div>*!/*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                            {/*<div className={"mb-4"}><p>{selectedCard?.description}</p></div>*/}
-
-                            {/*<div className={"flex flex-col gap-2"}>*/}
-
-                                {/*<div className={"gap-2 text-md font-bold  flex justify-start"}><p>Add Note</p></div>*/}
-                                {/*<div className={"ml-0"}>*/}
-                                {/*    <Textarea*/}
-                                {/*        className={"w-full ml-0"}*/}
-                                {/*        name={"overview"}*/}
-                                {/*        label={""}*/}
-                                {/*        value={text}*/}
-                                {/*        onChange={(element)=>setText(element.target.value)}*/}
-                                {/*        placeholder={"Enter some note"}*/}
-                                {/*        required={false}*/}
-                                {/*    />*/}
-                                {/*</div>*/}
-                            {/*</div>*/}
-
+                            <JobOfferFormDisabled job={selectedCard?.job!} candidate={selectedCard?.candidate!} offer={selectedCard!} />
+                            <Spacer y={5}/>
+                            <div className={"gap-2 text-md font-bold  flex justify-start"}>Status</div>
+                            <div><Chip className="capitalize min-w-32 text-center "
+                                       style={{ backgroundColor: statusColorMap[selectedCard?.status!], color:"#000000"}}
+                                       size="md"
+                                       variant="flat">
+                                {statusOptions.find(s=>s.uid==selectedCard?.status!)!.name}
+                            </Chip></div>
+                            <Spacer y={5}/>
+                            <div className={"gap-2 text-md font-bold  flex justify-start"}>Note</div>
+                            <div>{selectedCard?.statusChangeNote || "No note yet!"}</div>
                         </ModalBody>
                         <ModalFooter>
 
@@ -408,8 +433,14 @@ const jobList = () =>{
             <header className="home-header">
                 <HeaderBox type="title" title="Job Offer List" subtext="Current job offers list is here."/>
             </header>
-
-            <JobListTable users={users} popup={popupview}/>
+            {
+                (offersByRecruiterQuery.isFetching || candidateBatchQuery.isFetching || jobBatchQuery.some(query => query.isFetching)) ?
+                    <LoadingComponent/>
+                    : (offersByRecruiterQuery.isError || candidateBatchQuery.isError || jobBatchQuery.some(query => query.isError)) ?
+                        < ErrorComponent/>
+                        :
+                        <JobListTable updateOffer={updateOffer} offers={offersByRecruiterQuery.data!} candidates={candidateBatchQuery.data!} jobs={jobBatchQuery} popup={popupview}/>
+            }
         </div>
     )
 }

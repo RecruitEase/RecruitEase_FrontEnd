@@ -1,58 +1,56 @@
-import {useMutation, useQueries, useQuery, useQueryClient} from '@tanstack/react-query';
-import {
-    createJob, getAllLiveJobs,
-    getJobById,
-    getJobsByLoggedRecruiter,
-    updateJob,
-} from "@/lib/api";
-import { Job } from '@/types/job';
+import {useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { Bounce, toast } from "react-toastify";
 import {useRouter} from "next/navigation";
-import {Bounce, toast} from "react-toastify";
+import {OfferCreationProps, OfferProps, OfferUpdateQueryProps} from '@/types/offers';
+import {Job} from "@/types/job";
+import {
+    createOffer,
+    getOfferById,
+    getOffersByCandidate,
+    getOffersByJob,
+    getOffersByRecruiter,
+    updateOffer
+} from "@/lib/api";
 
-export function useLiveJobs() {
-    return useQuery<Job[]>({
-        queryKey:['jobs'],
-        refetchOnWindowFocus:false,
-        queryFn:()=>getAllLiveJobs(),
+
+export function useOffersByCandidate(candidateId: string) {
+    return useQuery<OfferProps[]>({
+        queryKey:['offers-candidate',candidateId],
+        queryFn:()=>getOffersByCandidate(candidateId),
     })
 }
 
-export function useJobs(jobIds:(string | undefined)[]|undefined){
-    return useQueries({
-        queries:(jobIds??[]).map((jobId)=>{
-            return{
-                queryKey:['job', jobId],
-                queryFn:()=>getJobById(jobId!),
-            }
-        })
+export function useOffersByRecruiter(recruiterId: string) {
+    return useQuery<OfferProps[]>({
+        queryKey:['offers-recruiter',recruiterId],
+        queryFn:()=>getOffersByRecruiter(recruiterId),
     })
 }
 
-export function useJobsByLoggedRecruiter() {
-    return useQuery<Job[]>({
-        queryKey:['myjobs'],
-        queryFn:()=>getJobsByLoggedRecruiter(),
+export function useOffersByJob(jobId: string) {
+    return useQuery<OfferProps[]>({
+        queryKey:['offers-job',jobId],
+        queryFn:()=>getOffersByJob(jobId),
     })
 }
 
-export function useJob(jobId: string|undefined) {
-    const queryClient=useQueryClient();
+export function useOffer(offerId: string) {
     return useQuery<Job>({
-        queryKey:['job',jobId],
-        queryFn:()=>getJobById(jobId!),
-        enabled:!!jobId,
-
+        queryKey:['offer',offerId],
+        queryFn:()=>getOfferById(offerId!),
     })
 }
 
-//mutations.............................
-export function useCreateJob(){
+
+// mutations...................................
+
+export function useCreateOffer(){
 
     const queryClient=useQueryClient();
     const router=useRouter();
 
     return useMutation({
-        mutationFn:(data:Job)=> createJob(data),
+        mutationFn:(data:OfferCreationProps)=> createOffer(data),
         onSettled:async (data,error,variables)=>{//what to run after the mutation whether its a sucess or error
             //data : output on sucess
             //error : output on error
@@ -61,7 +59,7 @@ export function useCreateJob(){
 
         },
         onSuccess:()=>{
-            toast.success("Job created successfully!", {
+            toast.success("Offer created successfully!", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -72,7 +70,7 @@ export function useCreateJob(){
                 theme: "colored",
                 transition: Bounce
             });
-            router.push('/recruiter/vacancy');
+            router.push('/recruiter/joboffers');
         },
         onError:(error)=>{
             let msg="Error Occurred!"
@@ -93,11 +91,11 @@ export function useCreateJob(){
 }
 
 
-export function useUpdateJobMutation(){
+export function useUpdateOfferMutation(){
     const queryClient=useQueryClient();
 
     return useMutation({
-        mutationFn:(updateReq:Job)=>updateJob(updateReq),
+        mutationFn:(req:OfferUpdateQueryProps)=>updateOffer(req.updateReq),
         onSettled:async (data,error,variables)=> {
             //data : output on sucess
             //error : output on error
@@ -105,8 +103,9 @@ export function useUpdateJobMutation(){
             if (error) {
                 console.log(error)
             } else {
-                await queryClient.invalidateQueries({queryKey: ['myjobs']})
-                await queryClient.invalidateQueries({queryKey: ["jobs", variables.jobId],
+                await queryClient.invalidateQueries({queryKey: ['offers-candidate',variables.candidateId]})
+                await queryClient.invalidateQueries({queryKey: ['offers-recruiter',variables.recruiterId]})
+                await queryClient.invalidateQueries({queryKey: ["offer", variables.updateReq.offerId],
                 })
             }
         },
@@ -139,5 +138,3 @@ export function useUpdateJobMutation(){
     })
 
 }
-
-
