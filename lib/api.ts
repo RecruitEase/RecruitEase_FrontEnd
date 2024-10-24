@@ -152,6 +152,10 @@ export const getCvById=async (cvId:string)=>{
     return (await axiosInstance.get(`api/v1/cv/view/${cvId}`)).data.content;
 }
 
+//imterviews............
+export const getInterviewById=async (interviewId:string)=>{
+    return (await axiosInstance.get(`api/v1/interviews/${interviewId}`)).data.content;
+}
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);
