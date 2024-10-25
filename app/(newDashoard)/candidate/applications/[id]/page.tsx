@@ -15,73 +15,8 @@ import LoadingComponent from "@/components/LoadingComponent";
 import {useJob} from "@/lib/hooks/useJobs";
 import {useCv} from "@/lib/hooks/useCvs";
 import ErrorComponent from "@/components/ErrorComponent";
-
-// const data = {
-//     coverLetter: {
-//         avatar: "/assets/companyLogos/IFS.jpg",
-//         companyName: "IFS",
-//         position: "Software Engineer",
-//         date: "2024/08/20",
-//         status: "Submitted",
-//         letter:
-//             "I am writing to express my interest in the [Job Title] position at [Company Name] as advertised on [Where You Found the Job Posting]. With my background in [Your Field or Major], I am confident in my ability to contribute effectively to your team.\n" +
-//             "I have [Number] years of experience in [Your Industry or Field], where I have developed skills in [Key Skills or Competencies]. In my previous role at [Previous Company], I successfully [Brief Description of a Key Achievement or Responsibility]. My ability to [Relevant Skill or Competency] has prepared me well for the challenges of the [Job Title] position.\n" +
-//             "I am particularly drawn to [Company Name] because of [Specific Reason Related to the Company]. I am excited about the opportunity to bring my unique skills to your team and contribute to [Specific Project or Goal of the Company].\n" +
-//             "Thank you for considering my application. I look forward to the opportunity to discuss how my background, skills, and certifications will be a perfect fit for the [Job Title] position at [Company Name]. Please feel free to contact me at [Your Phone Number] or [Your Email Address] to schedule an interview.\n"
-//     },
-//     cvImage: "https://th.bing.com/th/id/OIP.gG3HC4XzyF9gMXoL9dM4lQHaKe?rs=1&pid=ImgDetMain"
-// };
-
-const questions: Question[] = [
-    {
-        id: 1,
-        type: "single", // type can be 'single' or 'multiple'
-        text: "Which of the following is a version control system?",
-        options: [
-            {id: "a", text: "Git"},
-            {id: "b", text: "JIRA"},
-            {id: "c", text: "Confluence"},
-            {id: "d", text: "Slack"},
-        ],
-        userAnswers: ["b"],
-    },
-    {
-        id: 2,
-        type: "multiple", // type can be 'single' or 'multiple'
-        text: "Select the front-end frameworks/libraries you have experience with:",
-        options: [
-            {id: "a", text: "React"},
-            {id: "b", text: "Angular"},
-            {id: "c", text: "Vue"},
-            {id: "d", text: "Django"},
-        ],
-        userAnswers: ["a", "d"],
-    },
-    {
-        id: 3,
-        type: "single", // type can be 'single' or 'multiple'
-        text: "Which language is primarily used for Android app development?",
-        options: [
-            {id: "a", text: "Swift"},
-            {id: "b", text: "Kotlin"},
-            {id: "c", text: "JavaScript"},
-            {id: "d", text: "Python"},
-        ],
-        userAnswers: ["b"],
-    },
-    {
-        id: 4,
-        type: "multiple", // type can be 'single' or 'multiple'
-        text: "Which of the following are database management systems?",
-        options: [
-            {id: "a", text: "MySQL"},
-            {id: "b", text: "MongoDB"},
-            {id: "c", text: "PostgreSQL"},
-            {id: "d", text: "Docker"},
-        ],
-        userAnswers: ["a", "b", "d"],
-    },
-];
+import ShowAnswers from "@/components/Jobs/ShowAnswers";
+import ShowAnswersForCandidate from "@/components/Jobs/ShowAnswersForCandidate";
 
 interface Option {
     id: string;
@@ -97,15 +32,6 @@ interface Question {
 }
 
 
-// const job = {
-//     jobId: "001",
-//     logo: "https://example.com/logo1.png",
-//     title: "Software Engineer",
-//     company: "Tech Innovations Inc.",
-//     location: "New York, NY",
-//     type: "Full-time",
-//     daysLeft: "10 days left",
-// };
 const ApplicationView: React.FC = () => {
 
     const params = useParams<{ id: string }>()
@@ -133,7 +59,7 @@ const ApplicationView: React.FC = () => {
     const applicationQuery = useApplication(params.id)
     const recruiterQuery = useRecruiter(applicationQuery.data?.recruiterId)
     const jobQuery=useJob(applicationQuery.data?.jobId!)
-    const cvQuery=useCv(applicationQuery.data?.cvId)
+    const cvQuery=useCv(applicationQuery.data?.cvId!)
 
 
     return (
@@ -155,7 +81,7 @@ const ApplicationView: React.FC = () => {
                     </div>
                         <div className={"w-full grid grid-cols-12 gap-8"}>
                             <div className={"col-span-12 sm:col-span-8"}>
-                                <CoverLetter job={jobQuery.data} application={applicationQuery.data!}
+                                <CoverLetter job={jobQuery.data!} application={applicationQuery.data!}
                                              recruiter={recruiterQuery.data!}/>
                             </div>
                             <div
@@ -191,12 +117,16 @@ const ApplicationView: React.FC = () => {
                             {/*</div>*/}
                         </div>
 
-                        {/*<div>*/}
-                        {/*    /!*todo:questions*!/*/}
-                        {/*    <Questions questions={questions}>*/}
 
-                        {/*    </Questions>*/}
-                        {/*</div>*/}
+                        {applicationQuery.data!.answers && jobQuery.data!.questions &&
+                            <div>
+                                <div className={"mb-2 mt-4 text-2xl font-bold"}>Your answers for the quiz: </div>
+                                <ShowAnswersForCandidate questions={JSON.parse(jobQuery.data!.questions)}
+                                             userAnswers={JSON.parse(applicationQuery.data!.answers)}
+                                            />
+
+                            </div>
+                        }
 
                     </>
             }
