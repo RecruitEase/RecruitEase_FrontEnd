@@ -1,3 +1,5 @@
+import {ApplicationProps} from "@/types/index";
+
 export interface Job {
     jobId?: string;
     title: string;
@@ -30,6 +32,14 @@ export interface MCQProp {
 
 export interface UserAnswers {
     [index: number]: number;
+}
+
+export interface QuizReviewPopUpProps {
+    isOpen: boolean;
+    onOpenChange: (isOpen: boolean) => void;
+    questions: MCQProp[];
+    userAnswers: UserAnswers;
+    applicant: ApplicationProps;
 }
 
 export interface QuizReviewProps {

@@ -10,6 +10,8 @@ import {
 } from "@nextui-org/react";
 
 import { ApplicationProps } from "@/types";
+import {QuizReviewPopUpProps} from "@/types/job";
+import ShowAnswers from "@/components/Jobs/ShowAnswers";
 type viewCvPopupProps = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
@@ -74,8 +76,10 @@ const questions = [
 function ViewAnswersPopup({
   isOpen,
   onOpenChange,
-  applicant,
-}: viewCvPopupProps) {
+  questions,
+  userAnswers,
+  applicant
+}: QuizReviewPopUpProps) {
   const chosenAnswer = "A";
 
   return (
@@ -92,109 +96,7 @@ function ViewAnswersPopup({
               View Answers of {applicant.name}
             </ModalHeader>
             <ModalBody>
-              <div className="space-y-4">
-                {questions.map((question) => (
-                  <div
-                    key={question.id}
-                    className="p-4 border rounded shadow-sm"
-                  >
-                    <div className="mb-2 font-bold">{question.text}</div>
-                    <div className="space-y-2">
-                      {question.options.map((option) => {
-                        const isCorrect = question.correctAnswers.includes(
-                          option.id
-                        );
-                        const isUserAnswer = question.userAnswers.includes(
-                          option.id
-                        );
-
-                        return (
-                          <div
-                            key={option.id}
-                            className={`p-2 rounded ${
-                              isUserAnswer
-                                ? isCorrect
-                                  ? "bg-green-100 border border-green-400"
-                                  : "bg-red-100 border border-red-400"
-                                : ""
-                            }`}
-                          >
-                            <span
-                              className={`font-semibold ${
-                                isCorrect ? "text-green-600" : ""
-                              }`}
-                            >
-                              {option.text}
-                            </span>
-                            {isUserAnswer && (
-                              <span
-                                className={`ml-2 text-sm ${
-                                  isCorrect ? "text-green-600" : "text-red-600"
-                                }`}
-                              >
-                                {isCorrect ? "(Correct)" : "(Your choice)"}
-                              </span>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                    {question.type === "multiple" &&
-                      question.userAnswers.some(
-                        (answer) => !question.correctAnswers.includes(answer)
-                      ) && (
-                        <div className="mt-2 text-sm text-gray-600">
-                        <span className="font-semibold">
-                          Correct answers:{" "}
-                        </span>
-                        {question.correctAnswers.map((correctAnswerId) => (
-                          <span
-                            key={correctAnswerId}
-                            className="text-green-600"
-                          >
-                            {
-                              question.options.find(
-                                (option) => option.id === correctAnswerId
-                              ).text
-                            }
-                            {correctAnswerId !==
-                              question.correctAnswers[
-                                question.correctAnswers.length - 1
-                              ] && ", "}
-                          </span>
-                          
-                        ))}
-                      </div>
-                      )}
-                    {question.type === "single" &&
-                      question.userAnswers[0] !==
-                        question.correctAnswers[0] && (
-                        <div className="mt-2 text-sm text-gray-600">
-                          <span className="font-semibold">
-                            Correct answer:{" "}
-                          </span>
-                          <span className="text-green-600">
-                            {
-                              question.options.find(
-                                (option) =>
-                                  option.id === question.correctAnswers[0]
-                              ).text
-                            }
-                          </span>
-                        </div>
-                      )}
-
-<div className="text-right mt-2 text-sm text-gray-600">
-                          <span className="font-semibold">
-                            Score:{" "}
-                          </span>
-                            <span>
-                              5/10
-                            </span>
-                        </div>
-                  </div>
-                ))}
-              </div>
+              <ShowAnswers  questions={questions} userAnswers={userAnswers}/>
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="light" onPress={onClose}>
