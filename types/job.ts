@@ -9,6 +9,7 @@ export interface Job {
     description: string;
     overview: string;
     deadline: string;
+    questions?:string | null;
     status?: "FILLED" | "LIVE" | "UNPUBLISHED" | "ARCHIVED"; // Enum types for job status
     recruiterId?: string;
     imageUrl?: string;
@@ -18,4 +19,10 @@ export interface Job {
 export interface Field{
   key:number;
   label:string
+}
+
+export interface MCQProp{
+    question:string;
+    options:string[];
+    correctAnswer:number
 }
