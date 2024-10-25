@@ -21,8 +21,24 @@ export interface Field{
   label:string
 }
 
-export interface MCQProp{
-    question:string;
-    options:string[];
-    correctAnswer:number
+
+export interface MCQProp {
+    question: string;
+    options: string[];
+    correctAnswer: number;
+}
+
+export interface UserAnswers {
+    [index: number]: number;
+}
+
+export interface QuizReviewProps {
+    questions: MCQProp[];
+    userAnswers: UserAnswers;
+}
+
+export interface QuestionStatistics {
+    totalCorrect: number;
+    totalQuestions: number;
+    score: number;
 }
