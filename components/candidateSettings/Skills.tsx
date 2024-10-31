@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Input, Textarea } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import {
@@ -11,25 +11,58 @@ import {
   Link,
   Image,
 } from "@nextui-org/react";
+import {useSession} from "next-auth/react";
+import {useCandidate, useUpdateCandidate} from "@/lib/hooks/useCandidates";
+import {Bounce, toast} from "react-toastify";
+import {toTitleCase} from "@/lib/utils";
 
 const Skills: React.FC = () => {
   const [skill, setSkill] = useState("");
-  const [skills, setSkills] = useState<string[]>([
-    "English",
-    "Engineering",
-    "Communication",
-    "Project Management",
-    "Research Skills",
-    "Presentations",
-    "Strategy",
-    "Leadership",
-    "Microsoft Excel",
-    "Customer Service",
-  ]);
+  const [skills, setSkills] = useState<string[]>([]);
+
+
+  const {data:session}=useSession();
+
+  const candidateQuery=useCandidate(session?.user.roleDetails.candidateId)
+
+  useEffect(() => {
+    if(candidateQuery.isSuccess && candidateQuery.data!.skills!=null) {
+      try {
+        const arr:string[]=JSON.parse(candidateQuery.data!.skills||"")
+        if(arr.length>0) setSkills(arr)
+      }catch (e){
+        toast.error('Error Occurred!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+      }
+
+    }
+  }, [candidateQuery.data]);
+
+  const useUpdateCandidateQuery=useUpdateCandidate();
+
+
+  const handleSave=()=>{
+    console.log(skills)
+    useUpdateCandidateQuery.mutate({
+      req:{
+        skills:JSON.stringify(skills)
+      },
+      candidateId:session?.user.roleDetails.candidateId
+    })
+  }
 
   const handleAddSkill = () => {
     if (skill && !skills.includes(skill)) {
-      setSkills([...skills, skill]);
+      setSkills([...skills, toTitleCase(skill)]);
       setSkill("");
     }
   };
@@ -47,11 +80,12 @@ const Skills: React.FC = () => {
             <div className="mb-4">
               <div className="flex flex-row items-center justify-between gap-4">
                 <Input
-                  isRequired
-                  type="text"
-                  label="Add Skill"
-                  className="max-w-xs"
-                  onChange={(e) => setSkill(e.target.value)}
+                    isRequired
+                    type="text"
+                    label="Add Skill"
+                    className="max-w-xs"
+                    value={skill}
+                    onValueChange={setSkill}
                 />
 
                 <Button color="primary" onClick={handleAddSkill}>
@@ -66,20 +100,20 @@ const Skills: React.FC = () => {
                     <p className="text-md">My Skills</p>
                   </div>
                 </CardHeader>
-                <Divider />
+                <Divider/>
                 <CardBody>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {skills.map((skill, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-800"
-                      >
-                        {skill}
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveSkill(skill)}
-                          className="ml-2 text-gray-500 hover:text-gray-700"
+                        <span
+                            key={index}
+                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-800"
                         >
+                        {skill}
+                          <button
+                              type="button"
+                              onClick={() => handleRemoveSkill(skill)}
+                              className="ml-2 text-gray-500 hover:text-gray-700"
+                          >
                           &times;
                         </button>
                       </span>
@@ -88,6 +122,12 @@ const Skills: React.FC = () => {
                 </CardBody>
               </Card>
             </div>
+            <button
+                onClick={handleSave}
+                className="text-white mt-5 bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>
