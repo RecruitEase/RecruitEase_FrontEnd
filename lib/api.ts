@@ -7,6 +7,7 @@ import {ApplicationProp} from "../types/applications";
 import {Job} from "@/types/job";
 import https from "node:https";
 import {OfferCreationProps, OfferUpdateProps} from "@/types/offers";
+import {CandidateProp, CandidateUpdateProp} from "@/types/users";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -70,6 +71,12 @@ export const getAdmin=async (adminId:string)=>{
 export const getModerator=async (moderatorId:string)=>{
     return (await axiosInstance.get(`user/moderator/${moderatorId}`)).data.content;
 }
+
+
+export const updateCandidate=async (data:CandidateUpdateProp)=>{
+    return (await axiosInstance.put('user/update-candidate',data));
+}
+
 
 // application detail apis.............................................................................................................................................................................
 export const getApplications=async (candidateId:string)=>{

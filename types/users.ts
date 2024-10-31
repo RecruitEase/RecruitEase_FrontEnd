@@ -29,13 +29,35 @@ export interface CandidateProp {
     firstName: string;
     lastName: string;
     profilePic: string;
+    address: string;
     city: string;
     gender: string;
     profileStatus: string;
+    skills?: string;
+    education?: string;
+    experience?: string;
+    aboutMe?: string;
+}
+
+export interface CandidateUpdateProp{
+    isActive?: string;
+    firstName?: string;
+    lastName?: string;
+    profilePic?: string;
+    address?: string;
+    city?: string;
+    profileStatus?: string;
+    skills?: string;
+    education?: string;
+    experience?: string;
+    aboutMe?: string;
 }
 
 
-
+export interface CandidateUpdateReqProp{
+    req:CandidateUpdateProp;
+    candidateId:string;
+}
 
 export interface ModeratorProp {
     id: string;
