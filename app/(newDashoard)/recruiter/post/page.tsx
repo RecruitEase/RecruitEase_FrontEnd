@@ -6,7 +6,7 @@ import {useSession} from "next-auth/react";
 import {Input} from "@nextui-org/input";
 import {useForm} from "react-hook-form";
 import CustomInput from "@/components/form_inputs/CustomInput";
-import { Select, SelectItem, Switch,Link} from "@nextui-org/react";
+import {Select, SelectItem, Switch, Link} from "@nextui-org/react";
 import {toTitleCase} from "@/utils/stringUtils";
 import CustomTextArea from "@/components/form_inputs/CustomTextArea";
 import {Button} from "@nextui-org/button";
@@ -18,20 +18,21 @@ import {useCreateApplication} from "@/lib/hooks/useApplications";
 import {useCreateJob} from "@/lib/hooks/useJobs";
 import {ApplicationProp} from "@/types/applications";
 import {Job} from "@/types/job";
-import {educationLevelTypes, experienceLevelTypes, fieldValues, jobTypes, locations } from '@/components/recruiter/data';
+import {educationLevelTypes, experienceLevelTypes, fieldValues, jobTypes, locations} from '@/components/recruiter/data';
+import {QuestionCreator} from "@/components/Jobs/QuestionComponent";
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), {ssr: false});
 
 const JobPost = () => {
-    const router=useRouter();
+    const router = useRouter();
     //react-quill
     const [value, setValue] = useState('');
 
 
     const modules = {
         toolbar: [
-            [{ 'header': [1, 2, false] }],
-            ['bold', 'italic', 'underline','strike', 'blockquote'],
+            [{'header': [1, 2, false]}],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
             [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
             ['link', 'image'],
             ['clean']
@@ -63,8 +64,6 @@ const JobPost = () => {
     ]
 
 
-
-
     const {
         register,
         watch,
@@ -84,40 +83,42 @@ const JobPost = () => {
     const [fields, setFields] = React.useState(new Set([]));
 
 
-    const [qType, setQType] = useState(1);
-    const handleQuestionType = (event) => {
-        //check the question type selected and render accordingly
-        console.log(event.target.value)
-        setQType(event.target.value)
-    }
-
-    const handleSingleChoiceAnswer = () => {
-        //Todo
-    }
-    const handleMultipleChoiceAnswer = () => {
-        //Todo
-    }
-    const handleOpenAnswer = () => {
-        //Todo
-    }
+    //quiz
+    const [questions, setQuestions] = useState([]);
 
 
-    const createJobMutation=useCreateJob();
+    const createJobMutation = useCreateJob();
 
-    const handleCreateJob=()=>{
-        const newJob: Job = {
-            title:watch().title,
-            type:watch().type,
-            experienceLevel:Number(watch().experienceLevel),
-            educationLevel:Number(watch().educationLevel),
-            overview:watch().overview,
-            deadline:watch().deadline,
-            location:watch().location,
-            description:value,
-            fields:Array.from(fields,Number)
-        };
-        console.log("newjob",newJob)
-        createJobMutation.mutate(newJob);
+    const handleCreateJob = () => {
+            // console.log("newjobquiz", questions)
+        if(isQuizCreationEnabled && questions.length==0){
+            toast.error('If quiz is enabled, add at least one question! ', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+        }else {
+            const newJob: Job = {
+                title: watch().title,
+                type: watch().type,
+                experienceLevel: Number(watch().experienceLevel),
+                educationLevel: Number(watch().educationLevel),
+                overview: watch().overview,
+                deadline: watch().deadline,
+                location: watch().location,
+                description: value,
+                questions:JSON.stringify(questions),
+                fields: Array.from(fields, Number)
+            };
+            console.log("newjob", newJob)
+            createJobMutation.mutate(newJob);
+        }
 
     }
 
@@ -205,26 +206,26 @@ const JobPost = () => {
              </span>
 
 
-        {/*            <Select*/}
+                    {/*            <Select*/}
 
-        {/*                name="location"*/}
-        {/*                selectionMode="single"*/}
-        {/*                placeholder="Select the location"*/}
-        {/*                selectedKeys={values}*/}
-        {/*                variant={"bordered"}*/}
+                    {/*                name="location"*/}
+                    {/*                selectionMode="single"*/}
+                    {/*                placeholder="Select the location"*/}
+                    {/*                selectedKeys={values}*/}
+                    {/*                variant={"bordered"}*/}
 
-        {/*                onSelectionChange={setValues}*/}
-        {/*            >*/}
-        {/*                {locations.map((location) => (*/}
-        {/*                    <SelectItem key={location.key}>*/}
-        {/*                        {location.label}*/}
-        {/*                    </SelectItem>*/}
-        {/*                ))}*/}
-        {/*            </Select>*/}
+                    {/*                onSelectionChange={setValues}*/}
+                    {/*            >*/}
+                    {/*                {locations.map((location) => (*/}
+                    {/*                    <SelectItem key={location.key}>*/}
+                    {/*                        {location.label}*/}
+                    {/*                    </SelectItem>*/}
+                    {/*                ))}*/}
+                    {/*            </Select>*/}
 
-        {/*            <span className="mt-3 text-danger text-sm">*/}
-        {/*{errors && errors["location"] ? errors["location"]?.message?.toString() : '\u00A0'}*/}
-        {/*     </span>*/}
+                    {/*            <span className="mt-3 text-danger text-sm">*/}
+                    {/*{errors && errors["location"] ? errors["location"]?.message?.toString() : '\u00A0'}*/}
+                    {/*     </span>*/}
                 </div>
 
                 <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>
@@ -248,7 +249,7 @@ const JobPost = () => {
                             </SelectItem>
                         ))}
                     </Select>
-                    <p className="text-small text-default-500">Selected: {fields.size === 0 ? "None" : Array.from(fields).map(key => toTitleCase(fieldValues[key-1].label)).join(", ")}</p>
+                    <p className="text-small text-default-500">Selected: {fields.size === 0 ? "None" : Array.from(fields).map(key => toTitleCase(fieldValues[key - 1].label)).join(", ")}</p>
 
                     <span className="mt-3 text-danger text-sm">
         {errors && errors["fields"] ? errors["fields"]?.message?.toString() : '\u00A0'}
@@ -274,7 +275,8 @@ const JobPost = () => {
                             }
                         })}
                     >
-                        {(experienceLevelType) => <SelectItem key={experienceLevelType.key}>{experienceLevelType.label}</SelectItem>}
+                        {(experienceLevelType) => <SelectItem
+                            key={experienceLevelType.key}>{experienceLevelType.label}</SelectItem>}
                     </Select>
                     <span className="mt-3 text-danger text-sm">
         {errors && errors["experienceLevel"] ? errors["experienceLevel"]?.message?.toString() : '\u00A0'}
@@ -299,7 +301,8 @@ const JobPost = () => {
                             }
                         })}
                     >
-                        {(educationLevelType) => <SelectItem key={educationLevelType.key}>{educationLevelType.label}</SelectItem>}
+                        {(educationLevelType) => <SelectItem
+                            key={educationLevelType.key}>{educationLevelType.label}</SelectItem>}
                     </Select>
                     <span className="mt-3 text-danger text-sm">
         {errors && errors["educationLevel"] ? errors["educationLevel"]?.message?.toString() : '\u00A0'}
@@ -328,7 +331,8 @@ const JobPost = () => {
                         Description <small>( Format options are available)</small>
                         <span className={"text-danger"}> * </span>
                     </label>
-                    <ReactQuill modules={modules} formats={formats} theme="snow" value={value} onChange={setValue} className='h-96 ' />
+                    <ReactQuill modules={modules} formats={formats} theme="snow" value={value} onChange={setValue}
+                                className='h-96 '/>
 
                     <span className="mt-3 text-danger text-sm">
         {'\u00A0'}
@@ -357,127 +361,38 @@ const JobPost = () => {
                 </div>
 
                 {/*todo: image and quiz*/}
-        {/*        <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>*/}
-        {/*            <label htmlFor={"image"}>*/}
-        {/*                Image <small>Description or poster</small>*/}
-        {/*                <span className={"text-danger"}> * </span>*/}
-        {/*            </label>*/}
-        {/*            <Input*/}
-        {/*                id="image"*/}
-        {/*                variant="bordered"*/}
-        {/*                type={"file"}*/}
+                {/*        <div className={"mb-1 mx-2 lg:w-[45%] w-full"}>*/}
+                {/*            <label htmlFor={"image"}>*/}
+                {/*                Image <small>Description or poster</small>*/}
+                {/*                <span className={"text-danger"}> * </span>*/}
+                {/*            </label>*/}
+                {/*            <Input*/}
+                {/*                id="image"*/}
+                {/*                variant="bordered"*/}
+                {/*                type={"file"}*/}
 
-        {/*            />*/}
+                {/*            />*/}
 
-        {/*            <span className="mt-3 text-danger text-sm">*/}
-        {/*{errors && errors["image"] ? errors["image"]?.message?.toString() : '\u00A0'}*/}
-        {/*     </span>*/}
-        {/*        </div>*/}
-
-
-        {/*        <Switch onChange={handleSwitchChange}>*/}
-        {/*            Pre-Screening Quiz*/}
-        {/*        </Switch>*/}
-
+                {/*            <span className="mt-3 text-danger text-sm">*/}
+                {/*{errors && errors["image"] ? errors["image"]?.message?.toString() : '\u00A0'}*/}
+                {/*     </span>*/}
+                {/*        </div>*/}
 
             </div>
-            <div
-                className={isQuizCreationEnabled ? 'flex flex-col lg:flex-row w-full flex-wrap m-1 border-1 rounded-md p-3' : 'hidden'}>
-                <div className={"mb-1 mx-2 lg:w-[45%] w-[90%]"}>
-                    <label htmlFor={"questionType"}>
-                        Question Type
-                        <span className={"text-danger"}> * </span>
-                    </label>
-                    <Select
-                        id={"questionType"}
-                        name={"questionType"}
-                        items={questionTypes}
-                        placeholder="Select the question type"
-                        variant={"bordered"}
-                        onChange={handleQuestionType}
-                        defaultSelectedKeys={[1]}
-                    >
-                        {(questionType) => <SelectItem>{questionType.label}</SelectItem>}
-                    </Select>
+            <div className={"flex flex-col"}>
+            <Switch className={"mb-2"} onChange={handleSwitchChange}>
+                Pre-Screening Quiz
+            </Switch>
 
 
-                </div>
-
-                <div className={"mb-1 mx-2 lg:w-[45%] w-[90%]"}>
-                    <label htmlFor={"question"}>
-                        Question
-                        <span className={"text-danger"}> * </span>
-                    </label>
-                    <Input
-                        id={"question"}
-                        name={"question"}
-                        type={"text"}
-                        variant={"bordered"}
-                        placeholder={"Enter the question"}
-                    />
-                </div>
-
-
-                {qType == 1 && <div className={"w-full flex-col"}>
-                    <div>
-                        <label htmlFor={"answers"}>
-                            Answers:
-                            <span className={"text-danger"}> * </span>
-                        </label>
-                        <div>
-
-                        </div>
-                    </div>
-                    <div className={"mb-1 mx-2 lg:w-[45%] w-[90%] flex gap-2  items-center"}>
-                        <label htmlFor={"answer"}>
-                            Answer
-                        </label>
-                        <Input
-                            id={"answer"}
-                            name={"answer"}
-                            type={"text"}
-                            variant={"bordered"}
-                            placeholder={"Enter the answer"}
-                        />
-                        <Button onClick={handleSingleChoiceAnswer} size={"sm"} color={"success"}>Add</Button>
-                    </div>
-
-                </div>}
-                {qType == 2 && <div className={"w-full flex-col"}>
-                    <div>
-                        <label htmlFor={"answers"}>
-                            Answers:
-                            <span className={"text-danger"}> * </span>
-                        </label>
-                        <div>
-
-                        </div>
-                    </div>
-                    <div className={"mb-1 mx-2 lg:w-[45%] w-[90%] flex gap-2  items-center"}>
-                        <label htmlFor={"answer"}>
-                            Answer
-                        </label>
-                        <Input
-                            id={"answer"}
-                            name={"answer"}
-                            type={"text"}
-                            variant={"bordered"}
-                            placeholder={"Enter the answer"}
-                        />
-                        <Button onClick={handleMultipleChoiceAnswer} size={"sm"} color={"success"}>Add</Button>
-                    </div>
-
-                </div>}
-                {qType == 3 && <div className={"w-full flex-col"}>
-
-                    <div className={"mb-1 mx-2 lg:w-[45%] w-[90%] flex gap-2  items-center"}>
-                        <Button onClick={handleOpenAnswer} size={"sm"} color={"success"}>Add</Button>
-                    </div>
-
-                </div>}
+            {isQuizCreationEnabled && <QuestionCreator draftQuestions={questions}
+                                                       setDraftQuestions={setQuestions}/>
+            }
+            <Button disabled={!isValid || value == '' || fields.size == 0} size={"md"} color={"primary"}
+                    onClick={handleCreateJob}
+                    className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 disabled:bg-gray-400">Create job
+                vacancy</Button>
             </div>
-            <Button  disabled={!isValid || value=='' || fields.size==0} size={"md"} color={"primary"} onClick={handleCreateJob} className="mt-6 bg-recruitBlue text-white rounded px-8 py-6 disabled:bg-gray-400" >Create job vacancy</Button>
-
             {/*<pre>{JSON.stringify(watch(), null, 2)}</pre>*/}
 
         </div>

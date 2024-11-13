@@ -6,6 +6,7 @@ import {JobProps, UploadFileProps} from "@/types";
 import {ApplicationProp} from "../types/applications";
 import {Job} from "@/types/job";
 import https from "node:https";
+import {OfferCreationProps, OfferUpdateProps} from "@/types/offers";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -122,6 +123,27 @@ export const updateJob=async (data:Job)=>{
 }
 
 
+//offer apis
+export const getOffersByCandidate=async (candidateId:string)=>{
+    return (await axiosInstance.get(`api/v1/offers/candidate/${candidateId}`)).data.content;
+}
+export const getOffersByRecruiter=async (recruiterId:string)=>{
+    return (await axiosInstance.get(`api/v1/offers/recruiter/${recruiterId}`)).data.content;
+}
+export const getOffersByJob=async (jobId:string)=>{
+    return (await axiosInstance.get(`api/v1/offers/job/${jobId}`)).data.content;
+}
+export const getOfferById=async (offerId:string)=>{
+    return (await axiosInstance.get(`api/v1/offers/view/${offerId}`)).data.content;
+}
+export const createOffer=async (offer:OfferCreationProps)=>{
+    return (await axiosInstance.post(`api/v1/offers/create`,offer)).data.status;
+}
+export const updateOffer=async (data:OfferUpdateProps)=>{
+    return (await axiosInstance.put(`api/v1/offers/update/${data.offerId}`,data));
+}
+
+
 //cv apis
 export const getCvsByCandidateId=async (candidateId:string)=>{
     return (await axiosInstance.get(`api/v1/cv/candidate/${candidateId}`)).data.content;
@@ -130,6 +152,10 @@ export const getCvById=async (cvId:string)=>{
     return (await axiosInstance.get(`api/v1/cv/view/${cvId}`)).data.content;
 }
 
+//imterviews............
+export const getInterviewById=async (interviewId:string)=>{
+    return (await axiosInstance.get(`api/v1/interviews/${interviewId}`)).data.content;
+}
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);

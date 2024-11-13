@@ -1,3 +1,5 @@
+import {ApplicationProps} from "@/types/index";
+
 export interface Job {
     jobId?: string;
     title: string;
@@ -9,6 +11,7 @@ export interface Job {
     description: string;
     overview: string;
     deadline: string;
+    questions?:string | null;
     status?: "FILLED" | "LIVE" | "UNPUBLISHED" | "ARCHIVED"; // Enum types for job status
     recruiterId?: string;
     imageUrl?: string;
@@ -18,4 +21,34 @@ export interface Job {
 export interface Field{
   key:number;
   label:string
+}
+
+
+export interface MCQProp {
+    question: string;
+    options: string[];
+    correctAnswer: number;
+}
+
+export interface UserAnswers {
+    [index: number]: number;
+}
+
+export interface QuizReviewPopUpProps {
+    isOpen: boolean;
+    onOpenChange: (isOpen: boolean) => void;
+    questions: MCQProp[];
+    userAnswers: UserAnswers;
+    applicant: ApplicationProps;
+}
+
+export interface QuizReviewProps {
+    questions: MCQProp[];
+    userAnswers: UserAnswers;
+}
+
+export interface QuestionStatistics {
+    totalCorrect: number;
+    totalQuestions: number;
+    score: number;
 }

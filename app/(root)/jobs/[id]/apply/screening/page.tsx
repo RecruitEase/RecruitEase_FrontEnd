@@ -1,4 +1,5 @@
 "use client"
+
 import React from 'react';
 import { Button, Card, CardHeader, CardBody, CardFooter, Image, RadioGroup, Radio, Switch, Textarea, Divider } from "@nextui-org/react";
 import {FiBriefcase, FiClock, FiMapPin} from "react-icons/fi";

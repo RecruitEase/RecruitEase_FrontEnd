@@ -72,8 +72,7 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
     setIsOpenCV(true);
   };
 
-  const handleViewAnswersClick = (applicant: ApplicationProp) => {
-    setSelectedApplicant(selectedApplicant);
+  const handleViewAnswersClick = () => {
     setIsOpenAnswers(true);
   };
 
@@ -143,18 +142,22 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
   }
 
   return (
-    <div className="flex flex-col px-4 mb-[100px]">
+    <div className="flex flex-col px-4 mb-[200px]">
       <ViewCvPopup
         isOpen={isOpenCV}
         onOpenChange={handleOpenChangeCV}
         candidate={selectedApplicant!}
         cvID={selectedApplicantion?.cvId!}
       />
+      {job.questions && selectedApplicantion &&
       <ViewAnswersPopup
         isOpen={isOpenAnswers}
         onOpenChange={handleOpenChangeAnswers}
         applicant={selectedApplicant}
+        questions={JSON.parse(job.questions!)}
+        userAnswers={JSON.parse(selectedApplicantion?.answers!)}
       />
+      }
       <div className="flex w-full flex-col">
         <Tabs
           className={"mb-5"}
@@ -174,7 +177,7 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                 </>
               }
             >
-              <Card className={"w-full bg-transparent border h-[605px]"}>
+              <Card className={"w-full bg-transparent border h-[655px]"}>
                 <CardBody>
                   <div className="grid grid-cols-12 gap-1 items-center justify-center h-full">
                     <div className="relative col-span-7 self-start">
@@ -268,12 +271,13 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                               "w-1/2 flex flex-col justify-center items-start gap-2"
                             }
                           >
-                            {/*<Button*/}
-                            {/*  onClick={() => handleViewAnswersClick(selectedApplicant!)}*/}
-                            {/*  className={"w-full bg-gray-900 text-whiteText"}*/}
-                            {/*>*/}
-                            {/*  View Answers <MdOutlineQuiz />*/}
-                            {/*</Button>*/}
+                            <Button
+                                isDisabled={!job.questions}
+                              onClick={() => handleViewAnswersClick()}
+                              className={"w-full bg-gray-900 text-whiteText"}
+                            >
+                              View Answers <MdOutlineQuiz />
+                            </Button>
 
                             <Button
                               className={"w-full bg-gray-900 text-whiteText"}
@@ -288,14 +292,7 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                             >
                               Schedule Interview <FaPeopleArrows />
                             </Button>
-                            <Button
-                              color={"secondary"}
-                              className={" w-full bg-gray-900 text-whiteText"}
-                              as={Link}
-                              href="/recruiter/joboffers/create"
-                            >
-                              Create Job Offer <FaPenToSquare />
-                            </Button>
+
 
                           </div>
                           <div
@@ -303,7 +300,14 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                               "w-1/2 flex flex-col justify-center items-start gap-2"
                             }
                           >
-                            
+                            <Button
+                                color={"secondary"}
+                                className={" w-full bg-gray-900 text-whiteText"}
+                                as={Link}
+                                href={`/recruiter/joboffers/create/${selectedApplicantion?.applicationId}`}
+                            >
+                              Create Job Offer <FaPenToSquare />
+                            </Button>
                             <Button
                               color={"secondary"}
                               className={"w-full bg-gray-900 text-whiteText"}

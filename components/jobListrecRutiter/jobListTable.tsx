@@ -18,49 +18,73 @@ import {
     Pagination,
     Selection,
     ChipProps,
-    SortDescriptor, useDisclosure, Modal, ModalContent, ModalHeader, Image, ModalBody, Textarea, ModalFooter
+    SortDescriptor, useDisclosure, Modal, ModalContent, ModalHeader, Image, ModalBody, Textarea, ModalFooter, Tooltip
 } from "@nextui-org/react";
 
-import {columns, statusOptions} from "./data";
 // import { user} from "./data";
-import {ChevronDownIcon, SearchIcon} from "@nextui-org/shared-icons";
+import {ChevronDownIcon, DeleteIcon, SearchIcon} from "@nextui-org/shared-icons";
+import {Job} from "@/types/job";
+import {
+    JobListTableProps,
+    OfferProps, OfferUpdateProps,
+    OfferUpdateQueryProps,
+    RowProp,
+    statusColorMap,
+    statusOptions
+} from "@/types/offers";
+import {CandidateProp, RecruiterProp} from "@/types/users";
+import {ApplicationProp} from "@/types/applications";
+import { toTitleCase } from "@/lib/utils";
+import {formatDate, truncateString} from "@/utils/stringUtils";
+import { VerticalDotsIcon } from "../recruiter/VerticalDotsIcon";
+import { EyeIcon } from "../icons/settings/eyeIcon";
+import { EditIcon } from "../icons/settings/editIcon";
+import {IoNewspaperSharp} from "react-icons/io5";
+import {MdOutlineGroupWork} from "react-icons/md";
+import Swal from "sweetalert2";
+import {useUpdateOfferMutation} from "@/lib/hooks/useOffers";
 
+const columns = [
+    {name: "ID", uid: "id", sortable: true},
+    {name: "CANDIDATE NAME", uid: "name", sortable: true},
+    {name: "JOB TITLE", uid: "title"},
+    {name: "EMAIL", uid: "email"},
+    {name: "STATUS", uid: "status", sortable: true},
+    {name: "OFFERED DATE", uid: "offeredDate", sortable: true },
+    {name: "ACTIONS", uid: "actions"},
+
+];
 
 const capitalize=(str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+const INITIAL_VISIBLE_COLUMNS = ["name", "title", "status", "offeredDate","actions"];
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-    confirmed: "success",
-    canceled: "danger",
-    hold: "warning",
-};
-
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "date"];
-
-type userDetails = {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-    team: string;
-    status: string;
-    date: string;
-    avatar: string;
-    candidateNote:string;
-};
 
 // type JobListTableProps={
 //     users:User[];
 // }
 
-interface JobListTableProps {
-    users: userDetails[];
-    popup: (user: userDetails) => void;
+
+
+function mapToOfferTableRowProps(jobs,candidates:CandidateProp[],offers:OfferProps[]):RowProp[] {
+    return offers.map(offer => {
+        const candidate = candidates.find(r => r.candidateId === offer.candidateId)|| null; // Find matching recruiter
+        const job = jobs.find(j => j.data.jobId == offer.jobId).data || null; // Find matching job
+        const name=toTitleCase(candidate?.firstName+" "+candidate?.lastName)
+
+        return {
+            ...offer,
+            name,
+            candidate,
+            job
+        };
+    });
 }
+type User = RowProp;
 
-export default function jobListTable({users, popup} : JobListTableProps) {
-
+export default function jobListTable({offers,candidates,jobs, popup,updateOffer} : JobListTableProps) {
+    const users=mapToOfferTableRowProps(jobs,candidates,offers);
     
     const [filterValue, setFilterValue] = React.useState("");
     
@@ -95,7 +119,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
 
         if (hasSearchFilter) {
             filteredUsers = filteredUsers.filter((user) =>
-                user.name.toLowerCase().includes(filterValue.toLowerCase()),
+                user.name!.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
         if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
@@ -119,92 +143,162 @@ export default function jobListTable({users, popup} : JobListTableProps) {
 
     
     const sortedItems = React.useMemo(() => {
-        return [...items].sort((a: userDetails, b: userDetails) => {
-            const first = a[sortDescriptor.column as keyof userDetails] as number;
-            const second = b[sortDescriptor.column as keyof userDetails] as number;
+        return [...items].sort((a: User, b: User) => {
+            const first = a[sortDescriptor.column as keyof User] as number;
+            const second = b[sortDescriptor.column as keyof User] as number;
             const cmp = first < second ? -1 : first > second ? 1 : 0;
 
             return sortDescriptor.direction === "descending" ? -cmp : cmp;
         });
     }, [sortDescriptor, items]);
 
+
     
-    const renderCell = React.useCallback((user: userDetails, columnKey: React.Key) => {
-        const cellValue = user[columnKey as keyof userDetails];
+    const renderCell = React.useCallback((user: RowProp, columnKey: React.Key) => {
+        const cellValue = user[columnKey as keyof RowProp];
+
+        const profilePic=(user.candidate?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+user.candidate?.profilePic : "/profileImages/noImage.png";
+
+        function handleView(data: RowProp) {
+            popup(data)
+        }
+
+
+        function handleEdit(data:RowProp) {
+            Swal.fire({
+                title: "Do you want to withdraw the job offer?",
+                icon: "warning",
+                customClass: {
+                    confirmButton: "bg-[#f31260]", // Custom class for confirm button
+                    cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+                },
+                showCancelButton: true,
+                confirmButtonText: "Withdarw"
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+
+                    updateOffer(data)
+
+
+                }
+            });
+        }
 
         switch (columnKey) {
             case "name":
                 return (
                     <User
-                        avatarProps={{radius: "lg", src: user.avatar}}
-                        description={user.email}
-                        name={cellValue}
+                        avatarProps={{radius: "lg", src: profilePic}}
+                        description={user.candidate?.email}
+                        name={user.name}
                     >
-                        {user.email}
+                        {user.candidate?.email}
                     </User>
                 );
-            case "role":
+            case "id":
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold text-small capitalize">{cellValue}</p>
-                        <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
+                        <p className="text-bold text-small capitalize">{user.offerId}</p>
+                    </div>
+                );
+            case "title":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-small capitalize">{truncateString(toTitleCase(user.job!.title!),25)}</p>
+                    </div>
+                );
+            case "email":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold text-small capitalize">{user.candidate?.email}</p>
                     </div>
                 );
             case "status":
                 return (
-                    <Chip className="capitalize min-w-[100px] text-center" color={statusColorMap[user.status]} size="sm" variant="flat">
-                        {cellValue}
+                    <Chip className="capitalize min-w-32 text-center "
+                          style={{ backgroundColor: statusColorMap[user.status], color:"#000000"}}
+                          size="md"
+                          variant="flat">
+                        {statusOptions.find(s=>s.uid==user.status)!.name}
                     </Chip>
                 );
-            case "date":
+            case "offeredDate":
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold text-small capitalize">{cellValue}</p>
+                        <p className="text-bold text-small capitalize">{formatDate(user.createdAt)}</p>
                         {/*<p className="text-bold text-tiny capitalize text-default-400">{user.date}</p>*/}
                     </div>
                 );
-            // case "actions":
-            //     return (
-            //         <div className="relative flex justify-end items-center gap-2">
-            //             <Dropdown>
-            //                 <DropdownTrigger>
-            //                     <Button isIconOnly size="sm" variant="light">
-            //                         <VerticalDotsIcon className="text-default-300" />
-            //                     </Button>
-            //                 </DropdownTrigger>
-            //                 <DropdownMenu>
-            //                     <DropdownItem>View</DropdownItem>
-            //                     <DropdownItem>Edit</DropdownItem>
-            //                     <DropdownItem>Delete</DropdownItem>
-            //                 </DropdownMenu>
-            //             </Dropdown>
-            //         </div>
-            //     );
+            case "actions":
+                return (
+                    <div className="relative flex items-center gap-2 justify-center">
+
+
+                        <Tooltip content="View the offer">
+                            <div className="flex gap-4 items-center">
+                                <Button  onPress={()=>handleView(user)} size={"md"} color="primary" aria-label="Like">
+                                    <EyeIcon/> View
+                                </Button>
+
+                            </div>
+                        </Tooltip>
+                        {user.status=="PENDING" &&
+                        <Tooltip content="Withdraw the offer">
+                            <div className="flex gap-4 items-center">
+                                <Button  onClick={()=>handleEdit(user)} size={"md"} color="primary" aria-label="Like">
+                                    <EditIcon/> Withdraw
+                                </Button>
+
+                            </div>
+                        </Tooltip>
+                        }
+                        <Tooltip content="View Application">
+                            <div className="flex gap-4 items-center">
+                                <Button onClick={() =>
+                                    (location.href = `/recruiter/vacancy/${user.job?.jobId}/applications?applicationId=${user.application.applicationId}`)
+                                } size={"md"} color="primary" aria-label="Like">
+                                    <IoNewspaperSharp/> Application
+                                </Button>
+
+                            </div>
+                        </Tooltip>
+                        <Tooltip content="View Job Vacancy">
+                            <div className="flex gap-4 items-center">
+                                <Button onClick={() =>
+                                    (location.href = `/jobs/${user.job?.jobId}`)
+                                } size={"md"} color="primary" aria-label="Like">
+                                    <MdOutlineGroupWork /> Vacancy
+                                </Button>
+
+                            </div>
+                        </Tooltip>
+                    </div>
+                );
             default:
-                return cellValue;
+                return "cellValue";
         }
     }, []);
 
-    
+
     const onNextPage = React.useCallback(() => {
         if (page < pages) {
             setPage(page + 1);
         }
     }, [page, pages]);
-    
+
     const onPreviousPage = React.useCallback(() => {
         if (page > 1) {
             setPage(page - 1);
         }
     }, [page]);
 
-    
+
     const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setRowsPerPage(Number(e.target.value));
         setPage(1);
     }, []);
 
-    
+
     const onSearchChange = React.useCallback((value?: string) => {
         if (value) {
             setFilterValue(value);
@@ -214,13 +308,13 @@ export default function jobListTable({users, popup} : JobListTableProps) {
         }
     }, []);
 
-    
-    const onClear = React.useCallback(()=>{
+
+    const onClear = React.useCallback(() => {
         setFilterValue("")
         setPage(1)
-    },[])
+    }, [])
 
-    
+
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
@@ -229,7 +323,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
                         isClearable
                         className="w-full sm:max-w-[44%]"
                         placeholder="Search by name..."
-                        startContent={<SearchIcon />}
+                        startContent={<SearchIcon/>}
                         value={filterValue}
                         onClear={() => onClear()}
                         onValueChange={onSearchChange}
@@ -237,7 +331,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
                     <div className="flex gap-3">
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                                <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
                                     Status
                                 </Button>
                             </DropdownTrigger>
@@ -354,20 +448,14 @@ export default function jobListTable({users, popup} : JobListTableProps) {
             topContentPlacement="outside"
             onSelectionChange={setSelectedKeys}
             onSortChange={setSortDescriptor}
-            onRowAction={(key) => {
-                const user = sortedItems.find(item => item.id.toString() === key.toString());
-                console.log(user);
-                if (user) {
-                    popup(user);
-                }
-            }}
+
 
         >
             <TableHeader columns={headerColumns}>
                 {(column) => (
                     <TableColumn
                         key={column.uid}
-                        // align={column.uid === "date" ? "center" : "start"}
+                        align={column.uid === "actions" ? "center" : "start"}
                         allowsSorting={column.sortable}
                         className={column.uid === "date" ?"w-[100px]":""}
                     >
@@ -377,7 +465,7 @@ export default function jobListTable({users, popup} : JobListTableProps) {
             </TableHeader>
             <TableBody emptyContent={"No users found"} items={sortedItems}>
                 {(item) => (
-                    <TableRow key={item.id} className={"hover:cursor-pointer hover:bg-gray-100"}>
+                    <TableRow key={item.offerId} >
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                     </TableRow>
                 )}

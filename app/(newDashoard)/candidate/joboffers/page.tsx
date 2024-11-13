@@ -3,11 +3,39 @@
 import React, {useEffect, useState} from 'react';
 import HeaderBox from "@/components/dashboard/HeaderBox";
 import { InterviewsOffersCard } from "@/components/jobOffers/jobOffersCard";
-import {Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea, useDisclosure} from "@nextui-org/react";
+import {
+    Chip,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    Spacer,
+    Textarea,
+    useDisclosure
+} from "@nextui-org/react";
 import { Button, } from "@nextui-org/button";
 import {Image } from "@nextui-org/react";
 import {Bounce, toast} from "react-toastify";
 import Swal from 'sweetalert2';
+import {useOffersByCandidate, useUpdateOfferMutation} from "@/lib/hooks/useOffers";
+import {useSession} from "next-auth/react";
+import {useCandidates} from "@/lib/hooks/useCandidates";
+import {useJobs} from "@/lib/hooks/useJobs";
+import {useRecruiters} from "@/lib/hooks/useRecruiters";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import JobListTable from "@/components/jobListrecRutiter/jobListTable";
+import {
+    OfferPopUpProps,
+    OfferPopUpProps,
+    OfferUpdateProps,
+    OfferUpdateQueryProps,
+    RowProp,
+    statusColorMap, statusOptions
+} from "@/types/offers";
+import {formatDate, formattedDateAndTime, toTitleCase} from "@/utils/stringUtils";
+import {formatDateTime} from "@/lib/utils";
 
 type InterviewOfferCard = {
     companyName: string;
@@ -61,20 +89,90 @@ const data: InterviewOfferCard[] = [
 ];
 
 const InterviewsOffers = () => {
+    //for user session state
+    const { data: session } = useSession();
 
-    const [selectedCard, setSelectedCard] = useState<InterviewOfferCard | null>(null);
+    const user=session!.user;
+   const offerForCandidateQuery=useOffersByCandidate(user.roleDetails.candidateId)
+
+
+    // Extract recruiterIds and get unique ids
+    const recruiterIdList: string[] = [];
+    const jobIdList: string[] = [];
+
+    offerForCandidateQuery.data?.map(job => {
+        if (recruiterIdList.indexOf(job.recruiterId!) === -1) {
+            recruiterIdList.push(job.recruiterId!)
+        }
+        if (jobIdList.indexOf(job.jobId!) === -1) {
+            jobIdList.push(job.jobId!)
+        }
+    });
+
+    const recruiterBatchQuery=useRecruiters(recruiterIdList)
+    const jobBatchQuery=useJobs(jobIdList)
+
+
+    const [selectedCard, setSelectedCard] = useState<OfferPopUpProps | null>(null);
 
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [text ,setText]=useState("")
 
+    const offerUpdateQuery=useUpdateOfferMutation();
+    const updateOffer=(status:string)=>{
+        const updateObj:OfferUpdateProps={
+            offerId:selectedCard?.offer.offerId!,
+            status:status,
+            statusChangeNote:text
+        }
+
+        const reqObj:OfferUpdateQueryProps={
+            updateReq:updateObj,
+            candidateId:selectedCard?.offer?.candidateId!,
+            recruiterId:selectedCard?.offer.recruiterId!
+        }
+        offerUpdateQuery.mutate(reqObj)
+    }
     // Accept Button Handle-----------------------------------------------
     const acceptButtonHandle = ()=>{
-        confomationPoup("Are you accept that offer?","info")
+        Swal.fire({
+            title: "Do you want to accept  the job offer?",
+            icon: "warning",
+            customClass: {
+                confirmButton: "bg-[#f31260]", // Custom class for confirm button
+                cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+            },
+            showCancelButton: true,
+            confirmButtonText: "Accept"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+
+                updateOffer("ACCEPTED")
+
+
+            }
+        });
         onClose()
     }
     // Decline Button Handle--------------------------------------
     const declineButtonHandle = ()=>{
-        confomationPoup("Are you decline that offer?","warning")
+        Swal.fire({
+            title: "Do you want to decline  the job offer?",
+            icon: "warning",
+            customClass: {
+                confirmButton: "bg-[#f31260]", // Custom class for confirm button
+                cancelButton: "bg-[#a1a1aa]" // Custom class for cancel button
+            },
+            showCancelButton: true,
+            confirmButtonText: "Decline"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+
+                updateOffer("REJECTED")
+
+
+            }
+        });
         onClose()
     }
 
@@ -131,7 +229,7 @@ const InterviewsOffers = () => {
 
 
 
-    const popupview = (card: InterviewOfferCard) => {
+    const popupview = (card: OfferPopUpProps) => {
         console.log("Card clicked:", card);
         setSelectedCard(card);
         onOpen();
@@ -148,55 +246,65 @@ const InterviewsOffers = () => {
                                     alt="company logo"
                                     height={30}
                                     radius="sm"
-                                    src={selectedCard?.imageUrl}
+                                    src={(selectedCard?.recruiter.profilePic)?process.env.NEXT_PUBLIC_S3_URL+selectedCard?.recruiter.profilePic: "/profileImages/noImage.png"}
                                     width={30}
                                 />
                             </div>
-                            <div className={"flex flex-col justify-center"}>{selectedCard?.companyName} - {selectedCard?.position}</div>
+                            <div className={"flex flex-col justify-center"}>{selectedCard?.recruiter.companyName} -{'>'} {toTitleCase(selectedCard?.job.title!)}</div>
 
                         </ModalHeader>
                         <ModalBody className={"gap-0"}>
-                            <div className={"mb-4 text-warningText"}><p>This job offer is accept or decline on or before {selectedCard?.cutoffTime} {selectedCard?.cutoffDate}</p></div>
+                            <div className={"mb-4 text-warningText"}><p>This job offer should be accepted or declined on or before {formattedDateAndTime(selectedCard?.offer.finalAcceptanceDateTime!)}</p></div>
                             <div className={"flex gap-4"}>
                                 <div className={"flex flex-col mb-4 text-sm font-bold text-gray-600"}>
-                                    <div><p>Date:</p></div>
-                                    <div><p>Time:</p></div>
-                                    <div><p>Dress Code:</p></div>
+                                    <div><p>Start Date and Time:</p></div>
                                     <div><p>Location:</p></div>
+                                    <div><p>Description:</p></div>
                                 </div>
                                 <div className={"flex flex-col mb-4 text-sm font-bold text-gray-600"}>
-                                    <div><p>{selectedCard?.date}</p></div>
-                                    <div><p>{selectedCard?.time}</p></div>
-                                    <div><p>{selectedCard?.dressCode}</p></div>
-                                    <div><p>{selectedCard?.location}</p></div>
+                                    <div><p>{formatDate(selectedCard?.offer.startDateTime!)}</p></div>
+                                    <div><p>{selectedCard?.offer.location}</p></div>
+                                    <div><p>{selectedCard?.offer.description}</p></div>
                                 </div>
                             </div>
-                            <div className={"mb-4"}><p>{selectedCard?.description}</p></div>
 
                             <div className={"flex flex-col gap-2"}>
 
-                                <div className={"gap-2 text-md font-bold  flex justify-start"}><p>Add Note</p></div>
+                                <div className={"gap-2 text-md font-bold  flex justify-start"}><p>Add a Note</p></div>
                                 <div className={"ml-0"}>
                                     <Textarea
                                         className={"w-full ml-0"}
                                         name={"overview"}
                                         label={""}
-                                        value={text}
+                                        value={selectedCard?.offer.statusChangeNote || text}
+                                        isDisabled={selectedCard?.offer.status!="PENDING"}
                                         onChange={(element)=>setText(element.target.value)}
                                         placeholder={"Enter some note"}
                                         required={false}
+
                                         />
                                 </div>
                             </div>
+                            <Spacer y={5}/>
+                            <div className={"gap-2 text-md font-bold  flex justify-start"}>Status</div>
+                            <div><Chip className="capitalize min-w-32 text-center "
+                                       style={{ backgroundColor: statusColorMap[selectedCard?.offer.status!], color:"#000000"}}
+                                       size="md"
+                                       variant="flat">
+                                {statusOptions.find(s=>s.uid==selectedCard?.offer.status!)!.name}
+                            </Chip></div>
 
                         </ModalBody>
                         <ModalFooter>
+                            {(selectedCard?.offer.status=="PENDING") &&
+                                <>
                             <Button color="primary"  onPress={acceptButtonHandle}>
                                 Accept
                             </Button>
                             <Button color="danger" variant={"flat"} onPress={declineButtonHandle}>
                                 Decline
                             </Button>
+                                </>}
                             <Button startContent={"<>"} color="danger" variant="light" onPress={onClose}>
                                 Close
                             </Button>
@@ -216,11 +324,26 @@ const InterviewsOffers = () => {
 
             {/*<Button onPress={popupview}> ll</Button>*/}
 
-            <div>
-                {data && data.map((item, index) => (
-                    <InterviewsOffersCard key={index} card={item}  popup={() => popupview(item)} />
-                ))}
-            </div>
+            {
+                (offerForCandidateQuery.isFetching || recruiterBatchQuery.isFetching || jobBatchQuery.some(query => query.isFetching)) ?
+                    <LoadingComponent/>
+                    : (offerForCandidateQuery.isError || recruiterBatchQuery.isError || jobBatchQuery.some(query => query.isError)) ?
+                        < ErrorComponent/>
+                        :(offerForCandidateQuery.data!.length>0)?
+                        <div>
+                            {offerForCandidateQuery.data!.map((item, index) => {
+                                const recruiter=recruiterBatchQuery.data!.find(i=>i.recruiterId==item.recruiterId);
+                                const job=jobBatchQuery.find(x=>x.data.jobId==item.jobId)!.data!;
+                                return(
+                                    <InterviewsOffersCard key={index} offer={item} recruiter={recruiter!} job={job!}
+                                                          popup={popupview}/>
+                                )
+                            })}
+                        </div>
+                        :<div> You have no job offers yet!
+                            </div>
+            }
+
         </div>
     );
 };
