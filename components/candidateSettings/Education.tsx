@@ -58,7 +58,7 @@ export default function Education() {
   const candidateQuery=useCandidate(session?.user.roleDetails.candidateId)
 
   useEffect(() => {
-    if(candidateQuery.isSuccess && candidateQuery.data!.skills!=null) {
+    if(candidateQuery.isSuccess && candidateQuery.data!.education!=null) {
       try {
         const arr:Education[]=JSON.parse(candidateQuery.data!.education||"")
         if(arr.length>0) setEducation(arr)

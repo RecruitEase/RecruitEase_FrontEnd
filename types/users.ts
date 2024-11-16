@@ -96,4 +96,11 @@ export interface Education {
     startDate: string;
     endDate: string;
     fieldOfStudy: string;
-};
+}
+
+export interface Experience {
+    company: string;
+    position: string;
+    startDate: string;
+    endDate: string;
+}
