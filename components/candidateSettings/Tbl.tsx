@@ -8,13 +8,17 @@ import {
   TableCell,
   Button,
 } from "@nextui-org/react";
+import {Education} from "@/types/users";
+import react from "react";
 
 interface TblProps {
   columns: { key: string; name: string }[];
-  rows: { [key: string]: string }[];
+  rows: Education[];
+    setEducation: react.Dispatch<react.SetStateAction<Education[]>>;
+
 }
 
-export default function Tbl({ columns, rows }: TblProps) {
+export default function Tbl({ columns, rows,setEducation }: TblProps) {
   return (
     <Table removeWrapper aria-label="Example dynamic table">
       <TableHeader>
@@ -31,9 +35,17 @@ export default function Tbl({ columns, rows }: TblProps) {
                   <Button
                     auto
                     size="mini"
-                    onClick={() => alert(`Edit row with key: ${rowIndex}`)}
+                    onClick={()=>{
+                        const newArray = rows.filter(
+                            (x) =>
+                                x.school !== row["school"] ||
+                                x.degree !== row["degree"]
+                        );
+                        console.log("Dedwdw",newArray)
+                        setEducation(newArray)
+                    }}
                   >
-                    Edit
+                    Delete
                   </Button>
                 ) : (
                   row[column.key]

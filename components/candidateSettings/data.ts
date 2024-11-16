@@ -1,26 +1,5 @@
 import React from "react";
-const qColumns = [
-    {
-        key: "school",
-        name: "School",
-    },
-    {
-        key: "degree",
-        name: "Degree",
-        sortable: true,
-    },
 
-    {
-        key: "graduationYear",
-        name: "Graduation Year",
-        sortable: true,
-    },
-    {
-        key: "actions",
-        name: "Actions",
-    },
-
-];
 
 const qualificationData = [
     {
@@ -103,4 +82,4 @@ const experienceData = [
     
 ];
     
-export { qColumns, qualificationData, eColumns, experienceData };
+export {  qualificationData, eColumns, experienceData };
