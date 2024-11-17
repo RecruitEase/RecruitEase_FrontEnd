@@ -10,6 +10,9 @@ declare global {
             NEXT_PUBLIC_API_URL: string;
             NEXT_PUBLIC_S3_URL:string;
             NEXTAUTH_SECRET: string;
+            NEXT_PUBLIC_CHAT_APP_ID:string;
+            NEXT_PUBLIC_CHAT_REGION:string;
+            NEXT_PUBLIC_CHAT_AUTH_KEY:string;
             // add more environment variables and their types here
         }
     }
