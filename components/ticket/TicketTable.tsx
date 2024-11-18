@@ -26,6 +26,8 @@ import { ChevronDownIcon } from "@/components/recruiter/ChevronDownIcon";
 import { toTitleCase as capitalize } from "@/lib/utils";
 import { SearchIcon } from "@/components/recruiter/SearchIcon";
 import Link from "next/link";
+import {useSession} from "next-auth/react";
+import {useCandidate} from "@/lib/hooks/useCandidates";
 
 const columns = [
   { name: "Ticket Id", uid: "ticketId" },
@@ -219,6 +221,11 @@ const INITIAL_VISIBLE_COLUMNS = ["ticketId", "subject", "date", "status", "type"
 type User = typeof users[0];
 
 export default function TicketTable() {
+
+  const {data:session}=useSession();
+
+  const user=session?.user;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
@@ -396,7 +403,7 @@ export default function TicketTable() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color="primary" endContent={<PlusIcon />} as={Link} href={"/candidate/tickets/create"}>
+            <Button color="primary" endContent={<PlusIcon />} as={Link} href={`/${user?.role}/tickets/create`}>
               Add New
             </Button>
           </div>

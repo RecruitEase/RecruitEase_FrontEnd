@@ -8,17 +8,17 @@ import {
   TableCell,
   Button,
 } from "@nextui-org/react";
-import {Education} from "@/types/users";
+import {Experience} from "@/types/users";
 import react from "react";
 
-interface TblProps {
+interface TblExpProps {
   columns: { key: string; name: string }[];
-  rows: Education[];
-    setEducation: react.Dispatch<react.SetStateAction<Education[]>>;
+  rows: Experience[];
+    setExperience: react.Dispatch<react.SetStateAction<Experience[]>>;
 
 }
 
-export default function Tbl({ columns, rows,setEducation }: TblProps) {
+export default function TblExp({ columns, rows,setExperience }: TblExpProps) {
   return (
     <Table removeWrapper aria-label="Example dynamic table">
       <TableHeader>
@@ -38,11 +38,10 @@ export default function Tbl({ columns, rows,setEducation }: TblProps) {
                     onClick={()=>{
                         const newArray = rows.filter(
                             (x) =>
-                                x.school !== row["school"] ||
-                                x.degree !== row["degree"]
+                                x.company !== row["company"] ||
+                                x.position !== row["position"]
                         );
-                        console.log("Dedwdw",newArray)
-                        setEducation(newArray)
+                        setExperience(newArray)
                     }}
                   >
                     Delete
