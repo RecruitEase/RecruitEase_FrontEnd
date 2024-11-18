@@ -19,6 +19,7 @@ import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
     dressCode:string;
     remainingDays: string;
     description: string;
+    interviewId:string;
 };
 
 const InterviewsOffers = () => {
@@ -79,10 +80,11 @@ const InterviewsOffers = () => {
                 const mergedData: InterviewOfferCard[] = results
                     .map(({ interview, companyDetails }) => {
                         if (companyDetails) {
+                            console.log(companyDetails)
                             return {
                                 companyName: companyDetails.companyName,
                                 position: companyDetails.position,
-                                imageUrl: companyDetails.imageUrl,
+                                imageUrl: process.env.NEXT_PUBLIC_S3_URL+companyDetails.imageUrl,
                                 type: interview.type,
                                 location: interview.location,
                                 link: interview.link,
@@ -91,6 +93,7 @@ const InterviewsOffers = () => {
                                 dressCode: interview.dressCode,
                                 remainingDays: interview.remainingDays,
                                 description: interview.description,
+                                interviewId:interview.id
                             };
                         } else {
                             return null;
@@ -105,7 +108,9 @@ const InterviewsOffers = () => {
 
     const setModes=(card: InterviewOfferCard)=>{
         if(card.type=="Online"){
-            setMode(card.link)
+            // setMode(card.link)
+            let url = process.env.NEXT_PUBLIC_API_URL+"/room/"+card.interviewId
+            setMode( url);
             setModeName("Link")
         }else if(card.type=="Onsite"){
             setMode(card.location)
@@ -158,7 +163,7 @@ const InterviewsOffers = () => {
                                 <p>{selectedCard?.date}</p>
                                 <p>{selectedCard?.time}</p>
                                 <p>{selectedCard?.dressCode}</p>
-                                <p>{mode}</p>
+                                <p>{modeName === "Link" ?<a href={mode}>{mode}</a>:mode}</p>
                             </div>
 
                         </div>

@@ -87,6 +87,7 @@ const JobList = () =>{
         return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/view/${jobId}`)
             .then(response => {
                 const data =response.data.content
+                
                 return data;
             })
             .catch(error => {
@@ -154,7 +155,7 @@ const JobList = () =>{
                                 id: index+1,
                                 interviewId:interview.id,
                                 team: companyDetails.position,
-                                imageUrl: companyDetails.imageUrl,
+                                imageUrl: process.env.NEXT_PUBLIC_API_URL+candidateDetails.imageUrl,
                                 status:companyDetails.status,
                                 type: interview.type,
                                 location: interview.location,
@@ -165,7 +166,7 @@ const JobList = () =>{
                                 remainingDays: interview.remainingDays,
                                 description: interview.description,
                                 role:jobDetails.title,
-                                avatar:candidateDetails.profilePic,
+                                avatar:process.env.NEXT_PUBLIC_S3_URL+candidateDetails.profilePic,
                                 name:candidateDetails.firstName+" "+candidateDetails.lastName,
                                 email:candidateDetails.email
 
@@ -184,7 +185,9 @@ const JobList = () =>{
 
     const setModes=(card: userDetails)=>{
         if(card.type=="Online"){
-            setMode(card.link)
+            // setMode(card.link)
+            let url = process.env.NEXT_PUBLIC_API_URL+"/room/"+card.interviewId
+            setMode( url);
             setModeName("Link")
         }else if(card.type=="Onsite"){
             setMode(card.location)
@@ -227,7 +230,7 @@ const JobList = () =>{
                                 <div className={"flex flex-col"}>
                                     <p>{selectedCard?.date}</p>
                                     <p>{selectedCard?.time}</p>
-                                    <p>{mode}</p>
+                                    <p>{modeName === "Link" ?<a href={mode}>{mode}</a>:mode}</p>
                                 </div>
 
                             </div>
