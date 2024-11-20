@@ -51,12 +51,21 @@ const InterviewsOffers = () => {
 
     };
 
+    const fetchRecruiterDetails = (recruiterId:String) => {
+
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/recruiter/${recruiterId}`)
+            .then(response => response.data.content)
+            .catch(error => {
+                console.error(`Error fetching company details`, error);
+                return null;
+            });
+    };
     const fetchApplicationDetails = (applicationId:String) => {
 
         return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
             .then(response => response.data.content)
             .catch(error => {
-                console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
+                console.error(`Error fetching company details`, error);
                 return null;
             });
     };
@@ -68,7 +77,7 @@ const InterviewsOffers = () => {
             .then(interviews => {
                 // Fetch company details for each interview
                 const companyDetailsPromises = interviews.map((interview: any) =>
-                    fetchApplicationDetails(interview.applicationId).then(companyDetails => ({
+                    fetchRecruiterDetails(interview.recruiterId).then(companyDetails => ({
                         interview,
                         companyDetails
                     }))
@@ -83,8 +92,8 @@ const InterviewsOffers = () => {
                             console.log(companyDetails)
                             return {
                                 companyName: companyDetails.companyName,
-                                position: companyDetails.position,
-                                imageUrl: process.env.NEXT_PUBLIC_S3_URL+companyDetails.imageUrl,
+                                position: "",
+                                imageUrl:(companyDetails.profilePic)?process.env.NEXT_PUBLIC_S3_URL+companyDetails.profilePic:"/profileImages/noImage.png",
                                 type: interview.type,
                                 location: interview.location,
                                 link: interview.link,
@@ -143,7 +152,7 @@ const InterviewsOffers = () => {
                                     />
                                 </div>
                                 <div>
-                                    {selectedCard?.companyName} - {selectedCard?.position}
+                                    {selectedCard?.companyName}
                                 </div>
 
                             </div>

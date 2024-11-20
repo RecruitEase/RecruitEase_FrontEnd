@@ -35,7 +35,7 @@ export const InterviewsOffersCard = ({ card, popup }: InterviewOfferCardProps) =
                             width={64}
                         />
                         <div className="flex flex-col">
-                            <p className="text-md flex justify-start">{card.companyName} - {card.position}</p>
+                            <p className="text-md flex justify-start">{card.companyName}</p>
                             <p className="text-small text-default-500 flex justify-start">{card.type}</p>
                         </div>
                     </CardHeader>
