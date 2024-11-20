@@ -166,7 +166,7 @@ const JobList = () =>{
                                 remainingDays: interview.remainingDays,
                                 description: interview.description,
                                 role:jobDetails.title,
-                                avatar:process.env.NEXT_PUBLIC_S3_URL+candidateDetails.profilePic,
+                                avatar:(candidateDetails.profilePic)?process.env.NEXT_PUBLIC_S3_URL+candidateDetails.profilePic: "/profileImages/noImage.png",
                                 name:candidateDetails.firstName+" "+candidateDetails.lastName,
                                 email:candidateDetails.email
 
@@ -230,7 +230,7 @@ const JobList = () =>{
                                 <div className={"flex flex-col"}>
                                     <p>{selectedCard?.date}</p>
                                     <p>{selectedCard?.time}</p>
-                                    <p>{modeName === "Link" ?<a href={mode}>{mode}</a>:mode}</p>
+                                    <p className={"text-blue-800"}>{modeName === "Link" ?<a href={mode}>{"Start here"}</a>:mode}</p>
                                 </div>
 
                             </div>

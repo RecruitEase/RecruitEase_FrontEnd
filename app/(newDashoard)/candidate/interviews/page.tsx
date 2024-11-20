@@ -151,7 +151,7 @@ const InterviewsOffers = () => {
                         </ModalHeader>
                         <ModalBody className={"gap-0"}>
                         {/*<div className={"mb-4 font-bold"}> {selectedCard?.type}</div>*/}
-                        <div className={"flex flex-row gap-2 mb-4 text-sm font-bold text-gray-600"}>
+                        <div className={"flex  flex-row gap-2 mb-4 text-sm font-bold text-gray-600"}>
                             <div className={"flex flex-col"}>
                                 <p>Date:</p>
                                 <p>Time:</p>
@@ -159,11 +159,11 @@ const InterviewsOffers = () => {
                                 <p>{modeName}</p>
 
                             </div>
-                            <div className={"flex flex-col"}>
+                            <div className={"flex flex-wrap flex-col"}>
                                 <p>{selectedCard?.date}</p>
                                 <p>{selectedCard?.time}</p>
                                 <p>{selectedCard?.dressCode}</p>
-                                <p>{modeName === "Link" ?<a href={mode}>{mode}</a>:mode}</p>
+                                <p className={"text-blue-800"}>{modeName === "Link" ?<a href={mode}>{"Join here"}</a>:mode}</p>
                             </div>
 
                         </div>
