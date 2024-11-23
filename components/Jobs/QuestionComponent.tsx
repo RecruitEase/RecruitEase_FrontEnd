@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, Trash2, Check, X, Loader } from 'lucide-react';
+import { PlusCircle, Trash2, Check, X, Loader } from '@/node_modules/lucide-react';
 import {Button} from "@nextui-org/button";
 import {Card, CardBody, CardHeader} from "@nextui-org/react";
 import {Input} from "@nextui-org/input";

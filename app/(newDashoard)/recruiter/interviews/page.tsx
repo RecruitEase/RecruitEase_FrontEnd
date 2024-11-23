@@ -9,15 +9,17 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    Textarea,
     useDisclosure
 } from "@nextui-org/react";
 
 import {Button} from "@nextui-org/button";
 import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
+import {useRouter} from "next/navigation";
+import LoadingComponent from "@/components/LoadingComponent";
 
 type userDetails = {
     id: number,
+    interviewId:string,
     name: string,
     role:string,
     team:string,
@@ -32,353 +34,97 @@ type userDetails = {
     description: string
 }
 
-//
-// const users:userDetails[] = [
-//     {
-//         id: 1,
-//         name: "Tony Reichert",
-//         role: "CEO",
-//         team: "Management",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-//         email: "tony.reichert@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."
-//     },
-//     {
-//         id: 2,
-//         name: "Zoey Lang",
-//         role: "Tech Lead",
-//         team: "Development",
-//         status: "hold",
-//         avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-//         email: "zoey.lang@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."
-//     },
-//     {
-//         id: 3,
-//         name: "Jane Fisher",
-//         role: "Sr. Dev",
-//         team: "Development",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-//         email: "jane.fisher@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."
-//     },
-//     {
-//         id: 4,
-//         name: "William Howard",
-//         role: "C.M.",
-//         team: "Marketing",
-//         status: "canceled",
-//         avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
-//         email: "william.howard@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Onsite",
-//         location:"15/1A, 1st lane, Jambugasmulla Road, Nugegoda",
-//         link:"",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."},
-//     {
-//         id: 5,
-//         name: "Kristen Copper",
-//         role: "S. Manager",
-//         team: "Sales",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
-//         email: "kristen.cooper@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."
-//     },
-//     {
-//         id: 6,
-//         name: "Brian Kim",
-//         role: "P. Manager",
-//         team: "Management",
-//         avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-//         email: "brian.kim@example.com",
-//         status: "conformed",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."},
-//     {
-//         id: 7,
-//         name: "Michael Hunt",
-//         role: "Designer",
-//         team: "Design",
-//         status: "hold",
-//         avatar: "https://i.pravatar.cc/150?u=a042581f4e29027007d",
-//         email: "michael.hunt@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career." },
-//     {
-//         id: 8,
-//         name: "Samantha Brooks",
-//         role: "HR Manager",
-//         team: "HR",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?u=a042581f4e27027008d",
-//         email: "samantha.brooks@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."  },
-//     {
-//         id: 9,
-//         name: "Frank Harrison",
-//         role: "F. Manager",
-//         team: "Finance",
-//         status: "canceled",
-//         avatar: "https://i.pravatar.cc/150?img=4",
-//         email: "frank.harrison@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Onsite",
-//         location:"15/1A, 1st lane, Jambugasmulla Road, Nugegoda",
-//         link:"",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."},
-//     {
-//         id: 10,
-//         name: "Emma Adams",
-//         role: "Ops Manager",
-//         team: "Operations",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=5",
-//         email: "emma.adams@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."},
-//     {
-//         id: 11,
-//         name: "Brandon Stevens",
-//         role: "Jr. Dev",
-//         team: "Development",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=8",
-//         email: "brandon.stevens@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."},
-//     {
-//         id: 12,
-//         name: "Megan Richards",
-//         role: "P. Manager",
-//         team: "Product",
-//         status: "hold",
-//         avatar: "https://i.pravatar.cc/150?img=10",
-//         email: "megan.richards@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career." },
-//     {
-//         id: 13,
-//         name: "Oliver Scott",
-//         role: "S. Manager",
-//         team: "Security",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=12",
-//         email: "oliver.scott@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career." },
-//     {
-//         id: 14,
-//         name: "Grace Allen",
-//         role: "M. Specialist",
-//         team: "Marketing",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=16",
-//         email: "grace.allen@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."  },
-//     {
-//         id: 15,
-//         name: "Noah Carter",
-//         role: "IT Specialist",
-//         team: "I. Technology",
-//         status: "hold",
-//         avatar: "https://i.pravatar.cc/150?img=15",
-//         email: "noah.carter@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career." },
-//     {
-//         id: 16,
-//         name: "Ava Perez",
-//         role: "Manager",
-//         team: "Sales",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=20",
-//         email: "ava.perez@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career." },
-//     {
-//         id: 17,
-//         name: "Liam Johnson",
-//         role: "Data Analyst",
-//         team: "Analysis",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=33",
-//         email: "liam.johnson@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."},
-//     {
-//         id: 18,
-//         name: "Sophia Taylor",
-//         role: "QA Analyst",
-//         team: "Testing",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=29",
-//         email: "sophia.taylor@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."  },
-//     {
-//         id: 19,
-//         name: "Lucas Harris",
-//         role: "Administrator",
-//         team: "Information Technology",
-//         status: "hold",
-//         avatar: "https://i.pravatar.cc/150?img=50",
-//         email: "lucas.harris@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career."},
-//     {
-//         id: 20,
-//         name: "Mia Robinson",
-//         role: "Coordinator",
-//         team: "Operations",
-//         status: "conformed",
-//         avatar: "https://i.pravatar.cc/150?img=45",
-//         email: "mia.robinson@example.com",
-//         date:"2024/10/05",
-//         time:"10.00 AM",
-//         type:"Online",
-//         location:"",
-//         link:"https://www.youtube.com/#!",
-//         description:"With any interview question you answer, tie your background to the job by providing examples of solutions and results you’ve achieved in your career." },
-// ];
-
-
 const JobList = () =>{
 
     const axios=useAxiosAuth();
 
-
-const fetchInterviewData = () => {
-    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
-        .then(response => {
-            const data = response.data.content;
-            if (!Array.isArray(data)) {
-                console.error("Unexpected data format:", data);
-                return [];
-            }
-            return data;
-        })
-        .catch(error => {
-            console.error("Error fetching interview data:", error);
-            return [];
-        });
-
-
-};
-
-const fetchApplicationDetails = (applicationId:String) => {
-
-    return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
-        .then(response => response.data.content)
-        .catch(error => {
-            console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
-            return null;
-        });
-};
-
-    
     const [selectedCard, setSelectedCard] = useState<userDetails | null>(null);
-
-    
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-    
     const [text ,setText]=useState("")
-
-    
     const [mode,setMode]=useState("")
-    
     const [modeName,setModeName]=useState("")
-
-    
     const [users, setUsers] = useState<userDetails[]>([]);
+    const[isLording,setIsLording]=useState(false);
 
-    
+
+    const router = useRouter();
+    const handleEdit = (interviewId:any) => {
+        console.log("handleEdit", interviewId);
+        router.push(`interviews/editInterview/${interviewId}`);
+    }
+
+    const fetchInterviewData = () => {
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
+            .then(response => {
+                const data = response.data.content;
+                console.log(data)
+                if (!Array.isArray(data)) {
+                    console.error("Unexpected data format:", data);
+                    return [];
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error("Error fetching interview data:", error);
+                return [];
+            });
+
+
+    };
+
+    const fetchApplicationDetails = (applicationId:String) => {
+
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
+            .then(response => {
+                const data =response.data.content
+                return data;
+            })
+            .catch(error => {
+                console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
+                return null;
+            });
+    };
+    const fetchJobDetails = (jobId:String) => {
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/view/${jobId}`)
+            .then(response => {
+                const data =response.data.content
+                
+                return data;
+            })
+            .catch(error => {
+                console.error( error);
+                return null;
+            });
+    };
+    const fetchCandidateDetails = (candidateId:String) => {
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/candidate/${candidateId}`)
+            .then(response => {
+                const data =response.data.content
+                return data;
+            })
+            .catch(error => {
+                console.error( error);
+                return null;
+            });
+    };
+
     useEffect(() => {
+        setIsLording(true)
         fetchInterviewData()
             .then(interviews => {
                 const companyDetailsPromises = interviews.map((interview: any) =>
-                    fetchApplicationDetails(interview.applicationId).then(companyDetails => ({
-                        interview,
-                        companyDetails
-                    }))
+                    fetchApplicationDetails(interview.applicationId)
+                        .then((companyDetails) =>
+                            Promise.all([
+                                fetchJobDetails(companyDetails.jobId),
+                                fetchCandidateDetails(interview.candidateId)
+                            ]).then(([jobDetails, candidateDetails]) => ({
+                                interview,
+                                companyDetails,
+                                jobDetails,
+                                candidateDetails,
+                            }))
+                        )
                 );
 
                 // Wait for all promises to resolve
@@ -397,15 +143,21 @@ const fetchApplicationDetails = (applicationId:String) => {
                     time: any;
                     type: any;
                     dressCode: any;
-                    status: any
+                    status: any,
+                    role:any,
+                    avatar:any,
+                    name:any,
+                    email:any,
+                    interviewId:any
                 } | null)[] = results
-                    .map(({ interview, companyDetails}) => {
+                    .map(({ interview, companyDetails,jobDetails,candidateDetails},index) => {
                         if (companyDetails) {
                             return {
 
-                                id: 1,
+                                id: index+1,
+                                interviewId:interview.id,
                                 team: companyDetails.position,
-                                imageUrl: companyDetails.imageUrl,
+                                imageUrl: process.env.NEXT_PUBLIC_API_URL+candidateDetails.imageUrl,
                                 status:companyDetails.status,
                                 type: interview.type,
                                 location: interview.location,
@@ -415,23 +167,30 @@ const fetchApplicationDetails = (applicationId:String) => {
                                 dressCode: interview.dressCode,
                                 remainingDays: interview.remainingDays,
                                 description: interview.description,
+                                role:jobDetails.title,
+                                avatar:(candidateDetails.profilePic)?process.env.NEXT_PUBLIC_S3_URL+candidateDetails.profilePic: "/profileImages/noImage.png",
+                                name:candidateDetails.firstName+" "+candidateDetails.lastName,
+                                email:candidateDetails.email
 
                             };
                         } else {
                             return null;
                         }
                     })
-                    // .filter((data): data is userDetails => data !== null);
+                .filter((data): data is userDetails => data !== null);
 
                 // @ts-ignore
                 setUsers(mergedData);
+                setIsLording(false)
             });
     }, []);
 
 
     const setModes=(card: userDetails)=>{
         if(card.type=="Online"){
-            setMode(card.link)
+            // setMode(card.link)
+            let url = "/room/"+card.interviewId
+            setMode( url);
             setModeName("Link")
         }else if(card.type=="Onsite"){
             setMode(card.location)
@@ -445,7 +204,6 @@ const fetchApplicationDetails = (applicationId:String) => {
         setModes(card);
         onOpen();
     };
-
     const myPopUp = (
         <Modal size={"2xl"} isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
             <ModalContent>
@@ -475,7 +233,7 @@ const fetchApplicationDetails = (applicationId:String) => {
                                 <div className={"flex flex-col"}>
                                     <p>{selectedCard?.date}</p>
                                     <p>{selectedCard?.time}</p>
-                                    <p>{mode}</p>
+                                    <p className={"text-blue-800"}>{modeName === "Link" ?<a href={mode}>{"Start here"}</a>:mode}</p>
                                 </div>
 
                             </div>
@@ -483,7 +241,7 @@ const fetchApplicationDetails = (applicationId:String) => {
 
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="primary">
+                            <Button color="primary" onPress={()=>{handleEdit(selectedCard?.interviewId)}}>
                                 Edit
                             </Button>
                             <Button startContent={"<>"} color="danger" variant="light" onPress={onClose}>
@@ -495,16 +253,19 @@ const fetchApplicationDetails = (applicationId:String) => {
             </ModalContent>
         </Modal>
     );
-
-
     return (
         <div>
-        {myPopUp}
+            {myPopUp}
             <header className="home-header">
                 <HeaderBox type="title" title="Interview Schedule List" subtext="Current interview list is here."/>
             </header>
+            {isLording ? (
+                    <LoadingComponent/>
+            ) : (
+                <InterviewListTable users={users} popup={popupview}/>
+            )}
 
-            <InterviewListTable users={users} popup={popupview}/>
+
         </div>
     )
 }

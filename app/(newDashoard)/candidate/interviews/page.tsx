@@ -5,11 +5,10 @@ import HeaderBox from "@/components/dashboard/HeaderBox";
 import { InterviewsOffersCard } from "@/components/interviewsOffers/interviewsOffersCard";
 import {Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/react";
 import { Button } from "@nextui-org/button";
-import axios from 'axios';
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import LoadingComponent from "@/components/LoadingComponent";
 
-const BASE_URL = "http://localhost:8222";
-const token = "eyJhbGciOiJIUzM4NCJ9.eyJjcmVhdGVkQXQiOiIyMDI0LTA4LTA4VDA2OjQ4OjI0LjA2OTExOCIsInJvbGUiOiJjYW5kaWRhdGUiLCJyb2xlRGV0YWlscyI6eyJmaXJzdE5hbWUiOiJDaGF0aHVyYSIsImxhc3ROYW1lIjoiTGFrc2hhbiIsInByb2ZpbGVQaWMiOiJodHRwOi8vZXhkZWFtcGxlLmNvbS9wcm9maWxlLmpwZyIsInByb2ZpbGVTdGF0dXMiOiJDdXJyZW50bHkgV29ya2luZyIsImNhbmRpZGF0ZUlkIjoiMjgyNzc4NzktZmE1NC00ODhhLTliOTMtNWYwMDQ0NDQ5ZGFlIn0sImlkIjoiMjE0NDg3MDItMTRmOS00ZTI5LWI3YzQtYWVjYTg1M2Q1MDYxIiwiaXNBY3RpdmUiOnRydWUsImVtYWlsIjoiY2FuZGlkYXRlQHJlY3J1aXRlYXNlLmxrIiwic3ViIjoiMjE0NDg3MDItMTRmOS00ZTI5LWI3YzQtYWVjYTg1M2Q1MDYxIiwiaWF0IjoxNzIzNjQ4NTM2LCJleHAiOjE3MjM2NTIxMzZ9.Eqglff8KZHf9xWU-ygMcL7TykIPbQWmcuNHAZMlO0X1XEJFbc_Lo7qIcOl8yE_2j"
-    type InterviewOfferCard = {
+   type InterviewOfferCard = {
     companyName: string;
     position: string;
     imageUrl: string;
@@ -21,42 +20,7 @@ const token = "eyJhbGciOiJIUzM4NCJ9.eyJjcmVhdGVkQXQiOiIyMDI0LTA4LTA4VDA2OjQ4OjI0
     dressCode:string;
     remainingDays: string;
     description: string;
-};
-
-const fetchInterviewData = () => {
-    return axios.get(BASE_URL+'/api/v1/interviews/list', {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-        .then(response => {
-            const data = response.data.content;
-            if (!Array.isArray(data)) {
-                console.error("Unexpected data format:", data);
-                return [];
-            }
-            return data;
-        })
-        .catch(error => {
-            console.error("Error fetching interview data:", error);
-            return [];
-        });
-
-
-};
-
-const fetchApplicationDetails = (applicationId:String) => {
-
-    return axios.get(BASE_URL+`/api/v1/applications/view/${applicationId}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(response => response.data.content)
-        .catch(error => {
-            console.error(`Error fetching company details for applicationId: ${applicationId}`, error);
-            return null;
-        });
+    interviewId:string;
 };
 
 const InterviewsOffers = () => {
@@ -65,31 +29,73 @@ const InterviewsOffers = () => {
     const [mode,setMode]=useState("")
     const [modeName,setModeName]=useState("")
     const [interviewOfferCards, setInterviewOfferCards] = useState<InterviewOfferCard[]>([]);
+    const[isLording,setIsLording]=useState(false);
+
+    const axios=useAxiosAuth();
+
+    const fetchInterviewData = () => {
+
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/list`)
+            .then(response => {
+                const data = response.data.content;
+                if (!Array.isArray(data)) {
+                    console.error("Unexpected data format:", data);
+                    return [];
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error("Error fetching interview data:", error);
+                return [];
+            });
+
+
+    };
+
+    const fetchRecruiterDetails = (recruiterId:String) => {
+
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/recruiter/${recruiterId}`)
+            .then(response => response.data.content)
+            .catch(error => {
+                console.error(`Error fetching company details`, error);
+                return null;
+            });
+    };
+    const fetchApplicationDetails = (applicationId:String) => {
+
+        return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${applicationId}`)
+            .then(response => response.data.content)
+            .catch(error => {
+                console.error(`Error fetching company details`, error);
+                return null;
+            });
+    };
+
 
     useEffect(() => {
         // Fetch interviews first
+        setIsLording(true);
         fetchInterviewData()
             .then(interviews => {
                 // Fetch company details for each interview
                 const companyDetailsPromises = interviews.map((interview: any) =>
-                    fetchApplicationDetails(interview.applicationId).then(companyDetails => ({
+                    fetchRecruiterDetails(interview.recruiterId).then(companyDetails => ({
                         interview,
                         companyDetails
                     }))
                 );
 
-                // Wait for all promises to resolve
                 return Promise.all(companyDetailsPromises);
             })
             .then(results => {
-                // Process the results and merge data
                 const mergedData: InterviewOfferCard[] = results
                     .map(({ interview, companyDetails }) => {
                         if (companyDetails) {
+                            console.log(companyDetails)
                             return {
                                 companyName: companyDetails.companyName,
-                                position: companyDetails.position,
-                                imageUrl: companyDetails.imageUrl,
+                                position: "",
+                                imageUrl:(companyDetails.profilePic)?process.env.NEXT_PUBLIC_S3_URL+companyDetails.profilePic:"/profileImages/noImage.png",
                                 type: interview.type,
                                 location: interview.location,
                                 link: interview.link,
@@ -98,6 +104,7 @@ const InterviewsOffers = () => {
                                 dressCode: interview.dressCode,
                                 remainingDays: interview.remainingDays,
                                 description: interview.description,
+                                interviewId:interview.id
                             };
                         } else {
                             return null;
@@ -106,13 +113,16 @@ const InterviewsOffers = () => {
                     .filter((data): data is InterviewOfferCard => data !== null);
 
                 setInterviewOfferCards(mergedData);
+                setIsLording(false)
             });
     }, []);
 
 
     const setModes=(card: InterviewOfferCard)=>{
         if(card.type=="Online"){
-            setMode(card.link)
+            // setMode(card.link)
+            let url ="/room/"+card.interviewId
+            setMode( url);
             setModeName("Link")
         }else if(card.type=="Onsite"){
             setMode(card.location)
@@ -145,7 +155,7 @@ const InterviewsOffers = () => {
                                     />
                                 </div>
                                 <div>
-                                    {selectedCard?.companyName} - {selectedCard?.position}
+                                    {selectedCard?.companyName}
                                 </div>
 
                             </div>
@@ -153,7 +163,7 @@ const InterviewsOffers = () => {
                         </ModalHeader>
                         <ModalBody className={"gap-0"}>
                         {/*<div className={"mb-4 font-bold"}> {selectedCard?.type}</div>*/}
-                        <div className={"flex flex-row gap-2 mb-4 text-sm font-bold text-gray-600"}>
+                        <div className={"flex  flex-row gap-2 mb-4 text-sm font-bold text-gray-600"}>
                             <div className={"flex flex-col"}>
                                 <p>Date:</p>
                                 <p>Time:</p>
@@ -161,11 +171,11 @@ const InterviewsOffers = () => {
                                 <p>{modeName}</p>
 
                             </div>
-                            <div className={"flex flex-col"}>
+                            <div className={"flex flex-wrap flex-col"}>
                                 <p>{selectedCard?.date}</p>
                                 <p>{selectedCard?.time}</p>
                                 <p>{selectedCard?.dressCode}</p>
-                                <p>{mode}</p>
+                                <p className={"text-blue-800"}>{modeName === "Link" ?<a href={mode}>{"Join here"}</a>:mode}</p>
                             </div>
 
                         </div>
@@ -190,12 +200,15 @@ const InterviewsOffers = () => {
             </header>
 
             {/*<Button onPress={popupview}> ll</Button>*/}
-
-            <div>
-                {interviewOfferCards && interviewOfferCards.map((item, index) => (
-                    <InterviewsOffersCard key={index} card={item}  popup={() => popupview(item)} />
-                ))}
-            </div>
+            {isLording?(
+                <LoadingComponent/>
+            ): (
+                <div>
+                    {interviewOfferCards && interviewOfferCards.map((item, index) => (
+                        <InterviewsOffersCard key={index} card={item} popup={() => popupview(item)}/>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

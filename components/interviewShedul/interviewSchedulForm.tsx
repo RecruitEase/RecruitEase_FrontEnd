@@ -1,40 +1,107 @@
 "use client";
-
-import React, {Key, useState} from 'react';
+import React, {Key, useState,useEffect} from 'react';
 import { Input, DatePicker, TimeInput, Button, Textarea } from "@nextui-org/react";
-import { Time } from "@internationalized/date";
+import {parseDate, Time} from "@internationalized/date";
 import { ClockCircleLinearIcon } from "@nextui-org/shared-icons";
 import { DateValue } from "@internationalized/date";
 import Swal from "sweetalert2";
 import {Bounce, toast} from "react-toastify";
 import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import useAxiosAuth from '@/lib/hooks/useAxiosAuth';
 
-const position = "Software Engineer";
 const types = [
     {key:"Online", label:"Online"},
     {key:"Onsite", label:"Onsite"}
 ]
 
-export default function interviewSchedule(){
+export default function interviewSchedule(applicationObj:{ id: string }){
 
 
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [location, setLocation] = useState("");
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [date, setDate] = useState<DateValue | null>(null);
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState<Time | null>(null);
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [description, setDescription] = useState("");
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffDate, setCutoffDate] = useState<DateValue | null>(null);
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [cutoffTime, setCutoffTime] = useState<Time | null>(null);
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [type,setType] = useState<Key | null>(null);
-    
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [dressCode, setDressCode] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [candidateId,setCandidateId] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const[applicationId,setApplicationId] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const[jobId,setJobId] = useState("");
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const[position,setPosition] = useState("");
+
+    type DateObject = {
+        calendar: any;
+        era: string;
+        year: number;
+        month: number;
+        day: number;
+    };
+
+
+    //get candidateId
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const axios=useAxiosAuth();
+
+
+    const getApplicationDetails = (appId:string) => {
+
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/applications/view/${appId}`)
+            .then(response =>{
+                const data = response.data.content;
+                console.log("candidateId "+data.candidateId)
+                setCandidateId(data.candidateId);
+                setJobId(data.jobId);
+                getJobDetails(data.jobId)
+            })
+            .catch(error => {
+                console.error("Error fetching application data:", error);
+                return [];
+            });
+    }
+
+    const getJobDetails = (jId:string)=>{
+        console.log("jobId :"+jobId)
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/jobs/view/${jId}`)
+            .then(response =>{
+                const data = response.data.content;
+                console.log("title "+data.title)
+                positionSet(data.title)
+                // setPosition(data.title);
+            })
+            .catch(error => {
+                console.error("Error fetching job data:", error);
+                return [];
+            });
+    }
+
+
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        setApplicationId(applicationObj.id);
+        getApplicationDetails(applicationObj.id)
+    }, [jobId,position]);
+
+
+    const positionSet = (p:string) => {
+      setPosition(p)
+        console.log("title 1"+p)
+        console.log("title 2"+position)
+    };
 
     const typeSet = (type:Key) => {
         setType(type);
@@ -47,51 +114,118 @@ export default function interviewSchedule(){
     };
     const dateSet = (date: DateValue) => {
         if (date) {
-            setDate(date);
+            // @ts-ignore
+            setDate(formatDate(date));
         }else {
             setDate(null);
         }
     }
     const timeSet = (time: Time) => {
         if (time) {
-            setTime(time);
+            // @ts-ignore
+            setTime(formatTimeToAMPM(time.hour,time.minute));
         }else {
             setTime(null);
         }
     };
     const descriptionSet = (description: string) => {
-        setLocation(description);
+        setDescription(description);
     };
     const cutoffDateSet = (cutoffDate: DateValue) => {
         if (cutoffDate) {
-            setCutoffDate(cutoffDate);
+            // @ts-ignore
+            setCutoffDate(formatDate(cutoffDate));
         }else {
             setCutoffDate(null);
         }
     };
     const cutoffTimeSet = (cutoffTime: Time) => {
         if (cutoffTime) {
-            setCutoffTime(cutoffTime);
+            // @ts-ignore
+            setCutoffTime(formatTimeToAMPM(cutoffTime.hour,cutoffTime.minute));
         }else {
             setCutoffTime(null);
         }
     };
 
-    const sendDetails = () => {
+    function formatDate(dateObj: DateObject): string {
+        const { year, month, day } = dateObj;
+        const formattedMonth = month.toString().padStart(2, '0'); // Ensure month is two digits
+        const formattedDay = day.toString().padStart(2, '0');     // Ensure day is two digits
+
+        return `${year}-${formattedMonth}-${formattedDay}`;
+    }
+
+    function formatTimeToAMPM(hours: number, minutes: number): string {
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const formattedHours = hours % 12 || 12;
+        const formattedMinutes = minutes.toString().padStart(2, '0');
+        return `${formattedHours}:${formattedMinutes} ${period}`;
+    }
+    const sendDetails = async () => {
         const scheduleDetails = {
-            type:type,
-            location:location,
-            date:date,
-            time:time,
-            description:description,
-            cutoffDate:cutoffDate,
-            cutoffTime:cutoffTime,
-            dressCode:dressCode
+            applicationId: applicationObj?.id,
+            candidateId: candidateId,
+            type: type,
+            location: location,
+            date: date,
+            time: time,
+            description: description,
+            cutoffDate: cutoffDate,
+            cutoffTime: cutoffTime,
+            dressCode: dressCode,
+            link: ""
 
         }
+        try {
+            console.log(scheduleDetails);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/interviews/create`, scheduleDetails);
+            console.log(response.status);
+            if (response.status == 201) {
+                toast.success('Interview scheduled successfully!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+                router.push("/recruiter/vacancy/abc1/applications");
 
-        console.log(scheduleDetails)
+            } else {
+                toast.error('Failed!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Bounce,
+                });
+            }
+        } catch (error) {
+            console.error(`Error fetching`, error);
+            toast.error('Failed!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+            });
+            return null;
+        }
+
     };
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const router=useRouter();
 
 
@@ -110,40 +244,9 @@ export default function interviewSchedule(){
 
         }).then(() => {
             sendDetails()
-            const result = {
-                status: 200
-            }
-            if (result?.status == 200) {
-                toast.success('Scheduled successfully!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-                router.push("/recruiter/vacancy/abc1/applications");
-
-            } else {
-                //not logged in
-                //handle error here
-                toast.error('Delete failed!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Bounce,
-                });
-            }
         });
     }
+
 
     return (
         <div className={"flex flex-col gap-4 "}>
@@ -208,7 +311,7 @@ export default function interviewSchedule(){
                         isDisabled
                         type="text"
                         label="Position"
-                        defaultValue={position}
+                        value={position}
                         className="w-full"
                         // onChange={(element) => locationSet(element.target.value)}
                     />
