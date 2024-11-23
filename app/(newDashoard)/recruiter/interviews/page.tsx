@@ -44,6 +44,7 @@ const JobList = () =>{
     const [mode,setMode]=useState("")
     const [modeName,setModeName]=useState("")
     const [users, setUsers] = useState<userDetails[]>([]);
+    const[isLording,setIsLording]=useState(false);
 
 
     const router = useRouter();
@@ -108,6 +109,7 @@ const JobList = () =>{
     };
 
     useEffect(() => {
+        setIsLording(true)
         fetchInterviewData()
             .then(interviews => {
                 const companyDetailsPromises = interviews.map((interview: any) =>
@@ -179,6 +181,7 @@ const JobList = () =>{
 
                 // @ts-ignore
                 setUsers(mergedData);
+                setIsLording(false)
             });
     }, []);
 
@@ -186,7 +189,7 @@ const JobList = () =>{
     const setModes=(card: userDetails)=>{
         if(card.type=="Online"){
             // setMode(card.link)
-            let url = process.env.NEXT_PUBLIC_API_URL+"/room/"+card.interviewId
+            let url = "/room/"+card.interviewId
             setMode( url);
             setModeName("Link")
         }else if(card.type=="Onsite"){
@@ -256,10 +259,10 @@ const JobList = () =>{
             <header className="home-header">
                 <HeaderBox type="title" title="Interview Schedule List" subtext="Current interview list is here."/>
             </header>
-            {users ? (
-                <InterviewListTable users={users} popup={popupview}/>
+            {isLording ? (
+                    <LoadingComponent/>
             ) : (
-                <LoadingComponent/>
+                <InterviewListTable users={users} popup={popupview}/>
             )}
 
 

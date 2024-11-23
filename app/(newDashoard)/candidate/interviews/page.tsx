@@ -6,6 +6,7 @@ import { InterviewsOffersCard } from "@/components/interviewsOffers/interviewsOf
 import {Image, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure} from "@nextui-org/react";
 import { Button } from "@nextui-org/button";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import LoadingComponent from "@/components/LoadingComponent";
 
    type InterviewOfferCard = {
     companyName: string;
@@ -28,7 +29,7 @@ const InterviewsOffers = () => {
     const [mode,setMode]=useState("")
     const [modeName,setModeName]=useState("")
     const [interviewOfferCards, setInterviewOfferCards] = useState<InterviewOfferCard[]>([]);
-
+    const[isLording,setIsLording]=useState(false);
 
     const axios=useAxiosAuth();
 
@@ -73,6 +74,7 @@ const InterviewsOffers = () => {
 
     useEffect(() => {
         // Fetch interviews first
+        setIsLording(true);
         fetchInterviewData()
             .then(interviews => {
                 // Fetch company details for each interview
@@ -111,6 +113,7 @@ const InterviewsOffers = () => {
                     .filter((data): data is InterviewOfferCard => data !== null);
 
                 setInterviewOfferCards(mergedData);
+                setIsLording(false)
             });
     }, []);
 
@@ -118,7 +121,7 @@ const InterviewsOffers = () => {
     const setModes=(card: InterviewOfferCard)=>{
         if(card.type=="Online"){
             // setMode(card.link)
-            let url = process.env.NEXT_PUBLIC_API_URL+"/room/"+card.interviewId
+            let url ="/room/"+card.interviewId
             setMode( url);
             setModeName("Link")
         }else if(card.type=="Onsite"){
@@ -197,12 +200,15 @@ const InterviewsOffers = () => {
             </header>
 
             {/*<Button onPress={popupview}> ll</Button>*/}
-
-            <div>
-                {interviewOfferCards && interviewOfferCards.map((item, index) => (
-                    <InterviewsOffersCard key={index} card={item}  popup={() => popupview(item)} />
-                ))}
-            </div>
+            {isLording?(
+                <LoadingComponent/>
+            ): (
+                <div>
+                    {interviewOfferCards && interviewOfferCards.map((item, index) => (
+                        <InterviewsOffersCard key={index} card={item} popup={() => popupview(item)}/>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
