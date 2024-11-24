@@ -27,204 +27,216 @@ import { toTitleCase as capitalize } from "@/lib/utils";
 import { SearchIcon } from "@/components/recruiter/SearchIcon";
 import Link from "next/link";
 import {useSession} from "next-auth/react";
+import {statusColorMap, TicketProps, typeOptions} from "@/types/tickets";
+import {statusOptions} from "@/types/tickets";
 import {useCandidate} from "@/lib/hooks/useCandidates";
+import {useTicketsByCandidate} from "@/lib/hooks/useTickets";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
+import {formatDate} from "@/utils/stringUtils";
 
 const columns = [
   { name: "Ticket Id", uid: "ticketId" },
   { name: "Subject", uid: "subject" },
   { name: "Type", uid: "type" },
-  { name: "Date", uid: "date", sortable: true },
   { name: "Status", uid: "status", sortable: true },
-  { name: "Actions", uid: "actions" },
+  { name: "Created Date", uid: "createdAt", sortable: true },
 ];
 
-const statusOptions = [
-  { name: "Under Review", uid: "underReview" },
-  { name: "Rejected", uid: "rejected" },
-  { name: "Resolved", uid: "resolved" },
-];
+// const statusOptions = [
+//   { name: "Under Review", uid: "underReview" },
+//   { name: "Rejected", uid: "rejected" },
+//   { name: "Resolved", uid: "resolved" },
+// ];
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  resolved: "success",
-  rejected: "danger",
-  underReview: "warning"
-};
+// const statusColorMap: Record<string, ChipProps["color"]> = {
+//   resolved: "success",
+//   rejected: "danger",
+//   underReview: "warning"
+// };
 
 
-const users = [
-  {
-    id: 1,
-    ticketId: 11212121,
-    subject: "Payment Issue",
-    type: "Job Offer",
-    date: "2024/12/12",
-    status: "underReview"
-  },
-  {
-    id: 2,
-    ticketId: 34567231,
-    subject: "Software Bug",
-    type: "Support",
-    date: "2024/03/05",
-    status: "rejected"
-  },
-  {
-    id: 3,
-    ticketId: 98234765,
-    subject: "New Feature Request",
-    type: "Feature",
-    date: "2024/06/10",
-    status: "resolved"
-  },
-  {
-    id: 4,
-    ticketId: 45671234,
-    subject: "Marketing Campaign",
-    type: "Inquiry",
-    date: "2024/07/15",
-    status: "underReview"
-  },
-  {
-    id: 5,
-    ticketId: 78923456,
-    subject: "Sales Performance",
-    type: "Report",
-    date: "2024/02/20",
-    status: "resolved"
-  },
-  {
-    id: 6,
-    ticketId: 12347890,
-    subject: "Product Launch",
-    type: "Update",
-    date: "2024/05/25",
-    status: "resolved"
-  },
-  {
-    id: 7,
-    ticketId: 98765432,
-    subject: "Design Approval",
-    type: "Approval",
-    date: "2024/04/30",
-    status: "underReview"
-  },
-  {
-    id: 8,
-    ticketId: 23456789,
-    subject: "HR Policies",
-    type: "Inquiry",
-    date: "2024/01/12",
-    status: "resolved"
-  },
-  {
-    id: 9,
-    ticketId: 87654321,
-    subject: "Budget Planning",
-    type: "Report",
-    date: "2024/09/14",
-    status: "rejected"
-  },
-  {
-    id: 10,
-    ticketId: 19283746,
-    subject: "Operational Efficiency",
-    type: "Report",
-    date: "2024/11/19",
-    status: "resolved"
-  },
-  {
-    id: 11,
-    ticketId: 56789012,
-    subject: "Development Update",
-    type: "Update",
-    date: "2024/08/08",
-    status: "resolved"
-  },
-  {
-    id: 12,
-    ticketId: 34567890,
-    subject: "Product Review",
-    type: "Review",
-    date: "2024/07/22",
-    status: "underReview"
-  },
-  {
-    id: 13,
-    ticketId: 90817234,
-    subject: "Security Audit",
-    type: "Audit",
-    date: "2024/03/14",
-    status: "resolved"
-  },
-  {
-    id: 14,
-    ticketId: 31415926,
-    subject: "Marketing Strategy",
-    type: "Plan",
-    date: "2024/10/01",
-    status: "resolved"
-  },
-  {
-    id: 15,
-    ticketId: 27182818,
-    subject: "IT Infrastructure",
-    type: "Support",
-    date: "2024/11/15",
-    status: "underReview"
-  },
-  {
-    id: 16,
-    ticketId: 16180339,
-    subject: "Sales Targets",
-    type: "Report",
-    date: "2024/12/05",
-    status: "resolved"
-  },
-  {
-    id: 17,
-    ticketId: 70710678,
-    subject: "Data Analysis",
-    type: "Report",
-    date: "2024/08/26",
-    status: "resolved"
-  },
-  {
-    id: 18,
-    ticketId: 14142135,
-    subject: "Quality Assurance",
-    type: "Report",
-    date: "2024/09/09",
-    status: "resolved"
-  },
-  {
-    id: 19,
-    ticketId: 57721566,
-    subject: "System Administration",
-    type: "Support",
-    date: "2024/10/18",
-    status: "underReview"
-  },
-  {
-    id: 20,
-    ticketId: 98765432,
-    subject: "Operations Coordination",
-    type: "Task",
-    date: "2024/11/22",
-    status: "resolved"
-  }
-];
+// const users = [
+//   {
+//     id: 1,
+//     ticketId: 11212121,
+//     subject: "Payment Issue",
+//     type: "Job Offer",
+//     date: "2024/12/12",
+//     status: "underReview"
+//   },
+//   {
+//     id: 2,
+//     ticketId: 34567231,
+//     subject: "Software Bug",
+//     type: "Support",
+//     date: "2024/03/05",
+//     status: "rejected"
+//   },
+//   {
+//     id: 3,
+//     ticketId: 98234765,
+//     subject: "New Feature Request",
+//     type: "Feature",
+//     date: "2024/06/10",
+//     status: "resolved"
+//   },
+//   {
+//     id: 4,
+//     ticketId: 45671234,
+//     subject: "Marketing Campaign",
+//     type: "Inquiry",
+//     date: "2024/07/15",
+//     status: "underReview"
+//   },
+//   {
+//     id: 5,
+//     ticketId: 78923456,
+//     subject: "Sales Performance",
+//     type: "Report",
+//     date: "2024/02/20",
+//     status: "resolved"
+//   },
+//   {
+//     id: 6,
+//     ticketId: 12347890,
+//     subject: "Product Launch",
+//     type: "Update",
+//     date: "2024/05/25",
+//     status: "resolved"
+//   },
+//   {
+//     id: 7,
+//     ticketId: 98765432,
+//     subject: "Design Approval",
+//     type: "Approval",
+//     date: "2024/04/30",
+//     status: "underReview"
+//   },
+//   {
+//     id: 8,
+//     ticketId: 23456789,
+//     subject: "HR Policies",
+//     type: "Inquiry",
+//     date: "2024/01/12",
+//     status: "resolved"
+//   },
+//   {
+//     id: 9,
+//     ticketId: 87654321,
+//     subject: "Budget Planning",
+//     type: "Report",
+//     date: "2024/09/14",
+//     status: "rejected"
+//   },
+//   {
+//     id: 10,
+//     ticketId: 19283746,
+//     subject: "Operational Efficiency",
+//     type: "Report",
+//     date: "2024/11/19",
+//     status: "resolved"
+//   },
+//   {
+//     id: 11,
+//     ticketId: 56789012,
+//     subject: "Development Update",
+//     type: "Update",
+//     date: "2024/08/08",
+//     status: "resolved"
+//   },
+//   {
+//     id: 12,
+//     ticketId: 34567890,
+//     subject: "Product Review",
+//     type: "Review",
+//     date: "2024/07/22",
+//     status: "underReview"
+//   },
+//   {
+//     id: 13,
+//     ticketId: 90817234,
+//     subject: "Security Audit",
+//     type: "Audit",
+//     date: "2024/03/14",
+//     status: "resolved"
+//   },
+//   {
+//     id: 14,
+//     ticketId: 31415926,
+//     subject: "Marketing Strategy",
+//     type: "Plan",
+//     date: "2024/10/01",
+//     status: "resolved"
+//   },
+//   {
+//     id: 15,
+//     ticketId: 27182818,
+//     subject: "IT Infrastructure",
+//     type: "Support",
+//     date: "2024/11/15",
+//     status: "underReview"
+//   },
+//   {
+//     id: 16,
+//     ticketId: 16180339,
+//     subject: "Sales Targets",
+//     type: "Report",
+//     date: "2024/12/05",
+//     status: "resolved"
+//   },
+//   {
+//     id: 17,
+//     ticketId: 70710678,
+//     subject: "Data Analysis",
+//     type: "Report",
+//     date: "2024/08/26",
+//     status: "resolved"
+//   },
+//   {
+//     id: 18,
+//     ticketId: 14142135,
+//     subject: "Quality Assurance",
+//     type: "Report",
+//     date: "2024/09/09",
+//     status: "resolved"
+//   },
+//   {
+//     id: 19,
+//     ticketId: 57721566,
+//     subject: "System Administration",
+//     type: "Support",
+//     date: "2024/10/18",
+//     status: "underReview"
+//   },
+//   {
+//     id: 20,
+//     ticketId: 98765432,
+//     subject: "Operations Coordination",
+//     type: "Task",
+//     date: "2024/11/22",
+//     status: "resolved"
+//   }
+// ];
 
 const ticketDetails = [{ type: "Job offer", jobTitle: "Software Engineer", subject: "Payment Issue", description: "Payment issue with the job offer. I am experiencing a problem with the user login functionality on our website. After entering valid credentials and clicking the button, the page attempts to load but eventually times out, returning a  error. " }];
 
-const INITIAL_VISIBLE_COLUMNS = ["ticketId", "subject", "date", "status", "type"];
+const INITIAL_VISIBLE_COLUMNS = ["ticketId", "subject", "type", "status", "createdAt"];
 
-type User = typeof users[0];
+type User = TicketProps;
 
 export default function TicketTable() {
 
   const {data:session}=useSession();
 
   const user=session?.user;
+
+
+  const ticketCandidateQuery=useTicketsByCandidate(user?.roleDetails.candidateId);
+  console.log("ticketData: ",ticketCandidateQuery.data)
+
+  const users=ticketCandidateQuery.data || [];
+
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [filterValue, setFilterValue] = React.useState("");
@@ -290,10 +302,12 @@ export default function TicketTable() {
     switch (columnKey) {
       case "status":
         return (
-          <Chip className="capitalize min-w-24 text-center" color={statusColorMap[user.status]} size="sm" variant="flat">
-            {cellValue}
+          <Chip className="capitalize min-w-24 text-center"  style={{ backgroundColor: statusColorMap[user.status], color:"#000000"}} size="sm" variant="flat">
+            {statusOptions.find(t=>t.uid==cellValue)?.name}
           </Chip>
         );
+      case "type":
+        return typeOptions.find(t=>t.uid==cellValue)?.name;
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2">
@@ -310,6 +324,13 @@ export default function TicketTable() {
               </DropdownMenu>
             </Dropdown>
           </div>
+        );
+      case "createdAt":
+        return (
+            <div className="flex flex-col">
+              <p className="text-bold text-small capitalize">{formatDate(user.createdAt)}</p>
+              {/*<p className="text-bold text-tiny capitalize text-default-400">{user.date}</p>*/}
+            </div>
         );
       default:
         return cellValue;
@@ -463,7 +484,11 @@ export default function TicketTable() {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
+  if(ticketCandidateQuery.isPending) return <LoadingComponent />
+  if(ticketCandidateQuery.isError) return <ErrorComponent />
+
   return (
+
     <>
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
@@ -494,7 +519,7 @@ export default function TicketTable() {
         </TableHeader>
         <TableBody emptyContent={"No users found"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id} className="cursor-pointer hover:bg-gray-200" onClick={onOpen}>
+            <TableRow key={item.ticketId} className="cursor-pointer hover:bg-gray-200" onClick={onOpen}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
             </TableRow>
           )}

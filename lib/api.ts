@@ -8,6 +8,7 @@ import {Job} from "@/types/job";
 import https from "node:https";
 import {OfferCreationProps, OfferUpdateProps} from "@/types/offers";
 import {CandidateProp, CandidateUpdateProp} from "@/types/users";
+import {TicketCreationProps, TicketUpdateProps} from "@/types/tickets";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -150,6 +151,22 @@ export const updateOffer=async (data:OfferUpdateProps)=>{
     return (await axiosInstance.put(`api/v1/offers/update/${data.offerId}`,data));
 }
 
+//ticket apis
+export const getTicketsByCandidate=async (candidateId:string)=>{
+    return (await axiosInstance.get(`api/v1/ticket/candidate/${candidateId}`)).data.content;
+}
+export const getTicketsByRecruiter=async (recruiterId:string)=>{
+    return (await axiosInstance.get(`api/v1/ticket/recruiter/${recruiterId}`)).data.content;
+}
+export const getTicketById=async (ticketId:string)=>{
+    return (await axiosInstance.get(`api/v1/ticket/view/${ticketId}`)).data.content;
+}
+export const updateTicket=async (data:TicketUpdateProps)=>{
+    return (await axiosInstance.put(`api/v1/ticket/update/${data.ticketId}`,data));
+}
+export const createTicket=async (ticket:TicketCreationProps)=>{
+    return (await axiosInstance.post(`api/v1/ticket/create`,ticket)).data.status;
+}
 
 //cv apis
 export const getCvsByCandidateId=async (candidateId:string)=>{
