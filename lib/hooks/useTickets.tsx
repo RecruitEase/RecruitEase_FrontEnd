@@ -5,7 +5,13 @@ import { createTicket,
     getOfferById, getTicketsByCandidate, getTicketsByRecruiter,
     updateTicket
 } from "@/lib/api";
-import {TicketCreationProps, TicketProps, TicketUpdateProps, TicketUpdateQueryProps} from "@/types/tickets";
+import {
+    TicketCreationProps,
+    TicketCreationQueryProps,
+    TicketProps,
+    TicketUpdateProps,
+    TicketUpdateQueryProps
+} from "@/types/tickets";
 
 
 export function useTicketsByCandidate(candidateId: string) {
@@ -40,7 +46,7 @@ export function useCreateTicket(){
     const router=useRouter();
 
     return useMutation({
-        mutationFn:(data:TicketCreationProps)=> createTicket(data),
+        mutationFn:(data:TicketCreationQueryProps)=> createTicket(data.request),
         onSettled:async (data,error,variables)=>{//what to run after the mutation whether its a sucess or error
             //data : output on sucess
             //error : output on error
@@ -48,7 +54,7 @@ export function useCreateTicket(){
 
 
         },
-        onSuccess:()=>{
+        onSuccess:(data,variables)=>{
             toast.success("Ticket created successfully!", {
                 position: "top-right",
                 autoClose: 5000,
@@ -60,7 +66,8 @@ export function useCreateTicket(){
                 theme: "colored",
                 transition: Bounce
             });
-            router.push('/recruiter/tickets');
+            router.push(`/${variables.role}/tickets`);
+
         },
         onError:(error)=>{
             let msg="Error Occurred!"

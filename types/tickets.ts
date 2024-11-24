@@ -29,9 +29,13 @@ export interface TicketUpdateQueryProps {
 export interface TicketCreationProps {
     type:string;
     subject:string;
-    note:string;
+    description:string;
 }
 
+export interface TicketCreationQueryProps {
+    request:TicketCreationProps;
+    role:string;
+}
 
 export const statusColorMap: Record<string, string> = {
     UNDER_REVIEW: "#fbdba7",
