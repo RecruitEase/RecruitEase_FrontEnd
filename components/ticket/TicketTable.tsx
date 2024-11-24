@@ -240,6 +240,7 @@ export default function TicketTable() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [filterValue, setFilterValue] = React.useState("");
+  const [selectedItem, setSelectedItem] = React.useState<TicketProps | undefined>(undefined);
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
   const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
@@ -519,7 +520,10 @@ export default function TicketTable() {
         </TableHeader>
         <TableBody emptyContent={"No users found"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.ticketId} className="cursor-pointer hover:bg-gray-200" onClick={onOpen}>
+            <TableRow key={item.ticketId} className="cursor-pointer hover:bg-gray-200" onClick={()=>{
+              setSelectedItem(item);
+              onOpen();
+            }}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
             </TableRow>
           )}
@@ -533,23 +537,36 @@ export default function TicketTable() {
               <ModalHeader className="flex flex-col gap-1 font-extrabold">Ticket Details</ModalHeader>
               <ModalBody>
                 {ticketDetails.map((item) => (
-                  <div>
-                    <div className="mb-2 font-bold">Subject : {item.subject}</div>
-                    <div className="flex mb-2 w-full">
-                      <div><p className="font-semibold">Ticket Type:</p>{item.type}</div>
-                      <div className=" ml-4"><p className="font-semibold">Job Title:</p>{item.jobTitle}</div>
-                    </div>
-                    <div><p className=" font-semibold">Description:</p></div>
-                    <div>{item.description}</div>
-                    {/* <div><p className=" font-semibold">Resolved Note:</p></div>
+                    <div>
+                      <div className="mb-2 font-bold">Subject : <span
+                          className=" font-normal">{selectedItem.subject}</span></div>
+                      <div className="mb-2 font-bold">Ticket Type
+                        : <span
+                            className=" font-normal">{typeOptions.find(i => i.uid == selectedItem.type)?.name}</span>
+                      </div>
+                      <div className="mb-2 font-bold">Status
+                        : <Chip className="capitalize min-w-24 text-center"
+                                style={{backgroundColor: statusColorMap[selectedItem.status], color: "#000000"}}
+                                size="sm" variant="flat">
+                          {statusOptions.find(t => t.uid == selectedItem.status)?.name}
+                        </Chip></div>
+                      <div className="mb-2 font-bold">Created Date : <span
+                          className=" font-normal">{formatDate(selectedItem?.createdAt)}</span></div>
+                      <div className="mb-2 font-bold">Last Modified Date : <span
+                          className=" font-normal">{formatDate(selectedItem?.modifiedAt)}</span></div>
+                      <div><p className=" font-semibold">Description:</p></div>
+                      <div className={"mb-3"}>{selectedItem.description}</div>
+                      <div><p className=" font-semibold">Status Change Note:</p></div>
+                      <div>{(selectedItem.note) ? selectedItem.note : "Note not found!"}</div>
+                      {/* <div><p className=" font-semibold">Resolved Note:</p></div>
                     <div>{item.note}</div> */}
-                  </div>
+                    </div>
                 ))}
 
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onClick={onClose}>
-                  Close
+                Close
                 </Button>
               </ModalFooter>
             </>
