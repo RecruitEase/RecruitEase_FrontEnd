@@ -1,6 +1,6 @@
 import React from 'react'
-import TicketTable from '@/components/ticket/TicketTable'
 import HeaderBox from '@/components/dashboard/HeaderBox'
+import TicketTableForRecruiter from "@/components/ticket/TicketTableForRecruiter";
 
 function AllTickets() {
   return (
@@ -12,7 +12,7 @@ function AllTickets() {
           subtext="Users can see all the tickets and create tickets here."
         />
       </header>
-      <TicketTable />
+      <TicketTableForRecruiter />
     </div>
   )
 }
