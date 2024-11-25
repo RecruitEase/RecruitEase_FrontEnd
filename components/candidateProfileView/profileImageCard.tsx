@@ -5,6 +5,7 @@ import { HiOutlineMail } from "react-icons/hi";
 
 // @ts-ignore
 const ProfileImage=({profileData})=> {
+    const userProfilePic=(profileData.imageUrl)?process.env.NEXT_PUBLIC_S3_URL+profileData.imageUrl : "/profileImages/noImage.png";
     return (
         <div className="profile-page flex flex-row flex-wrap">
             <div className={" min-w-[50px] "}>
@@ -12,7 +13,7 @@ const ProfileImage=({profileData})=> {
                     alt="nextui logo"
                     style={{width: 120, height: 'auto', aspectRatio: 1}}
                     radius="full"
-                    src={profileData.imageUrl}/>
+                    src={userProfilePic}/>
             </div>
             <div className={"flex flex-col pl-4 justify-center"}>
 

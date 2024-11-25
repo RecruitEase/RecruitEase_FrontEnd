@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Button } from "@nextui-org/react";
 import { Avatar } from "@nextui-org/react";
 import { Chip } from "@nextui-org/react";
 import Carousel from "@/components/carousel";
 import { ScrollShadow } from "@nextui-org/react";
+import TblExp from "../candidateProfile/TblExp";
+import TblEdu from "../candidateProfile/TblEdu";
+
 
 
 interface PersonalDetailsProps {
@@ -15,11 +18,11 @@ interface PersonalDetailsProps {
     education: string[];
     location: string;
     email: string;
-    avatars: string[];
-    carousel: string[];
+    // avatars: string[];
+    // carousel: string[];
 }
 
-const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email, avatars, carousel }) => {
+const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email}) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpand = () => {
@@ -34,9 +37,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                         <p className="text-md font-bold">About me</p>
                     </CardHeader>
                     <Divider />
-                    <ScrollShadow className="w-full h-[120px] pl-4">
+                    {/* <ScrollShadow className="w-full h-[120px] pl-4"> */}
+                        <div className="p-2">
                         {aboutMe}
-                    </ScrollShadow>
+                        </div>
+                    {/* </ScrollShadow> */}
                     <Divider />
                 </Card>
 
@@ -46,13 +51,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     </CardHeader>
                     <Divider />
                     <CardBody>
-                        <ScrollShadow className="w-full h-[116px] pl-4">
-                            <ul className="list-disc">
-                                {experience.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
-                        </ScrollShadow>
+                    {/* <ScrollShadow className="w-full h-[138px] pl-4"> */}
+                            <div className="p-2 w-full">
+                            <TblExp data={experience} />
+                            </div>
+                        {/* </ScrollShadow> */}
                     </CardBody>
                     <Divider />
 
@@ -61,13 +64,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     </CardHeader>
                     <Divider />
                     <CardBody>
-                        <ScrollShadow className="w-full h-[80px] pl-4">
-                            <ul className="list-disc">
-                                {education.map((item, index) => (
-                                    <li key={index}>{item}</li>
-                                ))}
-                            </ul>
-                        </ScrollShadow>
+                    {/* <div className="w-full h-[138px] pl-4"> */}
+                            <div className="p-2 w-full">
+                            <TblEdu data={education} />
+                            {/* </div> */}
+                        </div>
                     </CardBody>
                     <Divider />
                 </Card>
@@ -93,13 +94,13 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     </CardBody>
                     <Divider />
 
-                    <CardBody>
+                    {/* <CardBody>
                         <div className="flex gap-4 items-center">
                             {avatars.map((avatar, index) => (
                                 <Avatar key={index} isBordered radius="full" src={avatar} />
                             ))}
                         </div>
-                    </CardBody>
+                    </CardBody> */}
                     <Divider />
                 </Card>
 
