@@ -8,6 +8,7 @@ import { getCandidate } from '@/lib/api';
 import { user } from '@nextui-org/react';
 import { CandidateProp } from '@/types/users';
 import { set } from 'react-hook-form';
+import ProfileImageCard from "@/components/candidateProfileView/profileImageCard";
 
 
 
@@ -125,7 +126,7 @@ const Profile = () => {
 
     return (
         <>
-            <div className={"pb-4"}><ProfileImage profileData={profileData} /></div>
+            <div className={"pb-4"}><ProfileImageCard profileData={profileData} /></div>
             <div><PersonalDetails {...data as PersonalDetailsProps}></PersonalDetails></div>
             {/* <div className={"w-full mt-4"}><Carousel images={data.carousel} visibleCount={4} /></div> */}
 

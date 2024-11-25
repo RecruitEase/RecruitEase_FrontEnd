@@ -53,9 +53,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                         <p className="text-md font-bold">About me</p>
                     </CardHeader>
                     <Divider />
-                    <ScrollShadow className="w-full h-[120px] pl-4 p-2">
+                    {/* <ScrollShadow className="w-full h-[120px] pl-4 p-2"> */}
+                        <div className="p-4">
                         {aboutMe}
-                    </ScrollShadow>
+                        </div>
+                    {/* </ScrollShadow> */}
                     <Divider />
                 </Card>
 
@@ -80,11 +82,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     </CardHeader>
                     <Divider />
                     <CardBody>
-                        <ScrollShadow className="w-full h-[138px] pl-4">
+                        {/* <ScrollShadow className="w-full h-[138px] pl-4"> */}
                             <div className="p-2 w-full">
                             <TblExp data={experience} />
                             </div>
-                        </ScrollShadow>
+                        {/* </ScrollShadow> */}
 
                     </CardBody>
                     <Divider />
@@ -94,11 +96,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     </CardHeader>
                     <Divider />
                     <CardBody>
-                        <ScrollShadow className="w-full h-[138px] pl-4">
+                        {/* <ScrollShadow className="w-full h-[138px] pl-4"> */}
                             <div className="p-2 w-full">
                             <TblEdu data={education} />
                             </div>
-                        </ScrollShadow>
+                        {/* </ScrollShadow> */}
 
                     </CardBody>
                     <Divider />

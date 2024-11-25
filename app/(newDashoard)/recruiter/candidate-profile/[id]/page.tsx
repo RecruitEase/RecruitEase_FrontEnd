@@ -85,7 +85,7 @@ const Profile = () => {
     useEffect(() => {
         setProfileData({ name: userData?.firstName + " " + userData?.lastName, email: userData?.email || "", location: userData?.city || "", imageUrl: userData?.profilePic || "" });
         setData({ aboutMe: userData?.aboutMe || "", skills: JSON.parse(userData?.skills || '[]'), experience: JSON.parse(userData?.experience || '[]'), education: JSON.parse(userData?.education || '[]'), location: userData?.address || "", email: userData?.email || "" });
-        console.log("aaaaaaaaaaaaaakkkkkkkklllla", userData);
+        // console.log("aaaaaaaaaaaaaakkkkkkkklllla", userData);
     }, [userData]);
 
     return (

@@ -38,7 +38,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
                     </CardHeader>
                     <Divider />
                     {/* <ScrollShadow className="w-full h-[120px] pl-4"> */}
-                        <div className="p-2">
+                        <div className="p-4">
                         {aboutMe}
                         </div>
                     {/* </ScrollShadow> */}
