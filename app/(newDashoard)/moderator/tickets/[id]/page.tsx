@@ -4,9 +4,10 @@ import React, {useEffect, useState} from 'react'
 import { Button, Autocomplete, AutocompleteItem, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Textarea, Divider, Chip, divider,Image } from "@nextui-org/react"
 import CustomTextWithoutValidations from "@/components/form_inputs/CustomTextAreaWithoutValidations"
 import { Bounce, toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
+import { useParams } from 'next/navigation';
+import {ParsedUrlQuery} from "node:querystring";
 
 const status = [
   { label: "Under Review", value: "underReview" },
@@ -42,17 +43,18 @@ const TicketDetails=()=> {
   const [name,setName]=useState("")
   const [avatar,setAvatar]=useState("")
 
-  const router = useRouter()
   const axios=useAxiosAuth();
 
-  const ticketId="21c60a21-27cc-4bb9-b650-4d897394a2a5"
+  const params = useParams();
+  const  ticketId = params.id;
 
-  function getTicket(ticketId:string){
+  function getTicket(ticketId: string | string[]){
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/view/${ticketId}`)
         .then(response => {
           response.data.content
           setTicket(response.data.content)
           getUserDate(response.data.content.creatorId,response.data.content.creatorRole)
+          handleCurrentStatus(response.data.content.status)
         })
         .catch(error => {
           console.error(`Error fetching company details`, error);
@@ -61,7 +63,6 @@ const TicketDetails=()=> {
   }
 
   function getUserDate(userId:string,role:string){
-    console.log("role "+role)
     const url = role === "RECRUITER"
         ? `${process.env.NEXT_PUBLIC_API_URL}/user/recruiter/${userId}`
         : `${process.env.NEXT_PUBLIC_API_URL}/user/candidate/${userId}`;
@@ -109,15 +110,15 @@ const TicketDetails=()=> {
         <div className='col-span-12 md:col-span-7'>
           <div className='mb-4'>
             <div className=" font-bold text-xl mb-4">{ticket?.subject}</div>
-            {currentStatus === "UnderReview" &&
+            {currentStatus === "UNDER_REVIEW" &&
               <Chip className="capitalize min-w-24 text-center mb-2 ml-auto" color="warning" size="sm" variant="flat">
                 UnderReview
               </Chip>}
-            {currentStatus === "Resolved" &&
+            {currentStatus === "RESOLVED" &&
               <Chip className="capitalize min-w-24 text-center mb-2 ml-auto" color="success" size="sm" variant="flat">
                 Resolved
               </Chip>}
-            {currentStatus === "Rejected" &&
+            {currentStatus === "REJECTED" &&
               <Chip className="capitalize min-w-24 text-center mb-2 ml-auto" color="danger" size="sm" variant="flat">
                 Rejected
               </Chip>}
@@ -143,7 +144,7 @@ const TicketDetails=()=> {
             <div className='mb-2'>{ticket?.description}</div>
           </div>
 
-          {(currentStatus === "UnderReview")?<div>
+          {(currentStatus === "UNDER_REVIEW")?<div>
             <Button className='bg-success text-white  mb-2 mr-2' size='sm' onClick={() => { handleButtonClicked("resolve") }}>Resolve</Button>
             <Button className='bg-danger text-white  mb-2 mr-2' size='sm' onClick={() => { handleButtonClicked("reject") }}>Reject</Button>
           </div>:""}
