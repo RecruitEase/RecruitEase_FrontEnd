@@ -1,83 +1,18 @@
 "use client";
 import HeaderBox from '@/components/dashboard/HeaderBox'
-import React from 'react'
-import { Button, Autocomplete, AutocompleteItem, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Textarea, Divider, Chip, divider } from "@nextui-org/react"
+import React, {useEffect, useState} from 'react'
+import { Button, Autocomplete, AutocompleteItem, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Textarea, Divider, Chip, divider,Image } from "@nextui-org/react"
 import CustomTextWithoutValidations from "@/components/form_inputs/CustomTextAreaWithoutValidations"
 import { Bounce, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 const status = [
   { label: "Under Review", value: "underReview" },
   { label: "Resolved", value: "resolved" },
   { label: "Rejected", value: "rejected" },
 ]
-
-const ticketData = [
-  {
-    id: 1,
-    delay: "1h ago",
-    ticketId: "#11212121",
-    subject: "Payment Issue",
-    type: "Job Offer",
-    jobTitle: "Software Developer",
-    date: "2024/12/12",
-    status: "UnderReview",
-    name: "Tony Reichert",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-    description: "A ticket related to a payment issue for a job offer. The issue is currently under review and needs resolution."
-  },
-  {
-    id: 2,
-    delay: "1d ago",
-    ticketId: "#11212122",
-    subject: "Project Update",
-    type: "Team Task",
-    jobTitle: "Software Developer",
-    date: "2024/07/26",
-    status: "Resolved",
-    name: "Zoey Lang",
-    avatar: "https://i.pravatar.cc/150?u=a042581f4e29026704d",
-    description: "Update on the current project status for the development team. The task has been reviewed and is pending further action."
-  },
-  {
-    id: 3,
-    delay: "2d ago",
-    ticketId: "#11212123",
-    subject: "Code Review",
-    type: "Development Task",
-    date: "2024/07/26",
-    status: "Resolved",
-    name: "Jane Fisher",
-    avatar: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-    description: "Code review in progress for the development team. This task has been reviewed and involves evaluating recent code submissions."
-  },
-  {
-    id: 4,
-    delay: "30m ago",
-    ticketId: "#11212124",
-    subject: "Marketing Strategy",
-    type: "Campaign Plan",
-    date: "2024/07/26",
-    status: "Rejected",
-    name: "William Howard",
-    avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d",
-    description: "Vacation notice for marketing strategy discussions. The planning and execution have been rejected until the return from vacation."
-  },
-  {
-    id: 5,
-    delay: "5h ago",
-    ticketId: "#11212125",
-    subject: "Sales Report",
-    type: "Performance Review",
-    date: "2024/07/26",
-    status: "Resolved",
-    name: "Kristen Copper",
-    avatar: "https://i.pravatar.cc/150?u=a092581d4ef9026700d",
-    description: "Active task to review and finalize the sales report. The report has been reviewed and assesses the performance and strategies of the sales team."
-  },
-]
-
 const recruiterData = [
   {
     id: 1,
@@ -86,11 +21,68 @@ const recruiterData = [
   }
 ]
 
-function TicketDetails() {
+interface Ticket {
+  type:string ,
+  ticketId:string ,
+  status:string ,
+  subject:string,
+  description:string ,
+  creatorId:string ,
+  creatorRole:string ,
+  note: string,
+  createdAt:string ,
+  modifiedAt:string
+}
+
+const TicketDetails=()=> {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [buttonClicked, setButtonClicked] = React.useState("");
-  const [currentStatus, setCurrentStatus] = React.useState("UnderReview")
+  const [buttonClicked, setButtonClicked] = useState("");
+  const [currentStatus, setCurrentStatus] = useState("UnderReview")
+  const [ticket,setTicket]=useState<Ticket>()
+  const [name,setName]=useState("")
+  const [avatar,setAvatar]=useState("")
+
   const router = useRouter()
+  const axios=useAxiosAuth();
+
+  const ticketId="21c60a21-27cc-4bb9-b650-4d897394a2a5"
+
+  function getTicket(ticketId:string){
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/ticket/view/${ticketId}`)
+        .then(response => {
+          response.data.content
+          setTicket(response.data.content)
+          getUserDate(response.data.content.creatorId,response.data.content.creatorRole)
+        })
+        .catch(error => {
+          console.error(`Error fetching company details`, error);
+          return null;
+        });
+  }
+
+  function getUserDate(userId:string,role:string){
+    console.log("role "+role)
+    const url = role === "RECRUITER"
+        ? `${process.env.NEXT_PUBLIC_API_URL}/user/recruiter/${userId}`
+        : `${process.env.NEXT_PUBLIC_API_URL}/user/candidate/${userId}`;
+
+    console.log("url "+url)
+    axios.get(url)
+        .then(response => {
+          response.data.content
+          console.log("user:"+response.data.content)
+          setName(response.data.content.firstName + " "+ response.data.content.lastName)
+          {response.data.content.profilePic !=""?setAvatar(process.env.NEXT_PUBLIC_S3_URL+response.data.content.profilePic):setAvatar("/profileImages/noImage.png")}
+        })
+        .catch(error => {
+          console.error(`Error fetching company details`, error);
+          return null;
+        });
+  }
+
+  useEffect(() => {
+    getTicket(ticketId)
+  }, []);
 
 
   const handleButtonClicked = (button: string) => {
@@ -116,7 +108,7 @@ function TicketDetails() {
 
         <div className='col-span-12 md:col-span-7'>
           <div className='mb-4'>
-            <div className=" font-bold text-xl mb-4">{ticketData[0].subject}</div>
+            <div className=" font-bold text-xl mb-4">{ticket?.subject}</div>
             {currentStatus === "UnderReview" &&
               <Chip className="capitalize min-w-24 text-center mb-2 ml-auto" color="warning" size="sm" variant="flat">
                 UnderReview
@@ -130,31 +122,31 @@ function TicketDetails() {
                 Rejected
               </Chip>}
             <div className="flex">
-              <p className="text-sm">{ticketData[0].date}</p>
+              <p className="text-sm">{ticket?.modifiedAt}</p>
             </div>
             <div className="flex">
               <p className="text-sm">Id : </p>
-              <p className="text-sm pl-2">{ticketData[0].ticketId}</p>
+              <p className="text-sm pl-2">{ticket?.ticketId}</p>
             </div>
             <div className="flex">
               <p className="text-sm">Type : </p>
-              <p className='text-sm pl-2'>{ticketData[0].type}</p>
+              <p className='text-sm pl-2'>{ticket?.type}</p>
             </div>
-            <div >
-              {ticketData[0].jobTitle &&
-                <div className="flex mb-2">
-                  <p className="text-sm">Job Title : </p>
-                  <p className="text-sm pl-2">{ticketData[0].jobTitle}</p>
-                </div>}
-            </div>
+            {/*<div >*/}
+            {/*  {ticket. &&*/}
+            {/*    <div className="flex mb-2">*/}
+            {/*      <p className="text-sm">Job Title : </p>*/}
+            {/*      <p className="text-sm pl-2">{ticketData[0].jobTitle}</p>*/}
+            {/*    </div>}*/}
+            {/*</div>*/}
             <div><p className="">Description :</p></div>
-            <div className='mb-2'>{ticketData[0].description}</div>
+            <div className='mb-2'>{ticket?.description}</div>
           </div>
 
-          {(currentStatus === "UnderReview") && <div>
+          {(currentStatus === "UnderReview")?<div>
             <Button className='bg-success text-white  mb-2 mr-2' size='sm' onClick={() => { handleButtonClicked("resolve") }}>Resolve</Button>
             <Button className='bg-danger text-white  mb-2 mr-2' size='sm' onClick={() => { handleButtonClicked("reject") }}>Reject</Button>
-          </div>}
+          </div>:""}
 
           {buttonClicked === "resolve" &&
             <Modal isOpen={isOpen} onOpenChange={onClose}>
@@ -261,13 +253,13 @@ function TicketDetails() {
         <div>
           <div className='mb-4 mt-4 font-semibold'>Ticket Creater Details</div>
           <div className='flex gap-2 items-center'>
-            <img className="w-16 h-16 rounded-md mb-2" src={ticketData[1].avatar} alt="candidate picture" />
+            <Image className="w-16 h-16 rounded-md mb-2" src={avatar} alt="candidate picture" />
             <div>
-              <div className='ml-2'>{ticketData[0].name}</div>
-              {ticketData[1].jobTitle ? <div className="flex mb-1 ml-2 w-full">
-                {/* <p className="text-sm">Job Title : </p> */}
-                {/* <p className="text-sm">{ticketData[0].jobTitle}</p> */}
-              </div> : <p> This is a support Request or other type.</p>}
+              <div className='ml-2'>{name}</div>
+              {/*{ticketData[1].jobTitle ? <div className="flex mb-1 ml-2 w-full">*/}
+              {/*  /!* <p className="text-sm">Job Title : </p> *!/*/}
+              {/*  /!* <p className="text-sm">{ticketData[0].jobTitle}</p> *!/*/}
+              {/*</div> : <p> This is a support Request or other type.</p>}*/}
               <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm' as={Link} href='../chat'>Chat</Button>
               <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm' as={Link} href='../candidate-profile/12'>View Profile</Button>
               <Button className='bg-recruitBlue text-white mb-2' size='sm' as={Link} href='../../jobs/12'>View Job Post</Button>
