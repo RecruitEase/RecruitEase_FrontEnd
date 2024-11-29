@@ -367,42 +367,49 @@ export default function MTicketsTable() {
 
 
   return (
-      <Table
-          aria-label="Example table with custom cells, pagination and sorting"
-          isHeaderSticky
-          bottomContent={bottomContent}
-          bottomContentPlacement="outside"
-          classNames={{ wrapper: "max-h-[382px]" }}
-          sortDescriptor={sortDescriptor}
-          topContent={topContent}
-          topContentPlacement="outside"
-          onSortChange={setSortDescriptor}
-      >
-        <TableHeader columns={headerColumns}>
-          {(column) => (
-              <TableColumn
-                  key={column.uid}
-                  align={column.uid === "actions" ? "center" : "start"}
-                  allowsSorting={column.sortable}
-              >
-                {column.name}
-              </TableColumn>
-          )}
-        </TableHeader>
+      <div>
+        {lording?(
+            <LoadingComponent/>
+        ): (
+            <Table
+                aria-label="Example table with custom cells, pagination and sorting"
+                isHeaderSticky
+                bottomContent={bottomContent}
+                bottomContentPlacement="outside"
+                classNames={{ wrapper: "max-h-[382px]" }}
+                sortDescriptor={sortDescriptor}
+                topContent={topContent}
+                topContentPlacement="outside"
+                onSortChange={setSortDescriptor}
+            >
+              <TableHeader columns={headerColumns}>
+                {(column) => (
+                    <TableColumn
+                        key={column.uid}
+                        align={column.uid === "actions" ? "center" : "start"}
+                        allowsSorting={column.sortable}
+                    >
+                      {column.name}
+                    </TableColumn>
+                )}
+              </TableHeader>
 
-          <TableBody emptyContent={"No users found"} items={sortedItems}>
-            {(item) => (
-                <TableRow
-                    key={item.id}
-                    className="cursor-pointer hover:bg-gray-200"
-                    as={Link}
-                    href={"/moderator/tickets/" + item.ticketId}
-                >
-                  {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                </TableRow>
-            )}
-          </TableBody>
+              <TableBody emptyContent={"No users found"} items={sortedItems}>
+                {(item) => (
+                    <TableRow
+                        key={item.id}
+                        className="cursor-pointer hover:bg-gray-200"
+                        as={Link}
+                        href={"/moderator/tickets/" + item.ticketId}
+                    >
+                      {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                    </TableRow>
+                )}
+              </TableBody>
 
-      </Table>
+            </Table>
+        )}
+      </div>
+
   );
 }
