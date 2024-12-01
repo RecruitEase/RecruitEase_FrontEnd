@@ -7,6 +7,7 @@ import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {Button} from "@nextui-org/button";
 import {Bounce, toast} from "react-toastify";
 import {Link} from "@nextui-org/link";
+import {Spacer} from "@nextui-org/react";
 
 const MAX_STEPS = 3;
 
@@ -38,6 +39,8 @@ const CandidateSignUp: React.FC = () => {
         "firstName",
         "lastName",
         "address",
+        "city",
+        "gender",
         "mobileNumber",
         "nic",
         "dob"
@@ -304,7 +307,57 @@ const CandidateSignUp: React.FC = () => {
                                         </p>
                                     )}
                                 </div>
-
+                                <div className={"m-1 p-2"}>
+                                    <label htmlFor="city">City</label>
+                                    <Input
+                                        placeholder={"Enter the city"}
+                                        type="text"
+                                        id="city"
+                                        variant="bordered"
+                                        {...register('city', {
+                                            required: {
+                                                value: true,
+                                                message: "Please enter the city",
+                                            }
+                                        })}
+                                    />
+                                    {errors.city && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors && errors.city ? errors.city?.message?.toString() : '\u00A0'}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className={"m-1 p-2"}>
+                                    <label>Gender</label><br/>
+                                    <div className={"flex"}>
+                                        <label htmlFor="male" className={"flex"}>
+                                            <input
+                                                {...register("gender")}
+                                                type="radio"
+                                                value="male"
+                                                id="male"
+                                            />
+                                            <Spacer x={2}/>
+                                            Male
+                                        </label>
+                                        <Spacer x={4}/>
+                                        <label htmlFor="female" className={"flex"}>
+                                            <input
+                                                {...register("gender")}
+                                                type="radio"
+                                                value="female"
+                                                id="female"
+                                            />
+                                            <Spacer x={2}/>
+                                            Female
+                                        </label>
+                                    </div>
+                                    {errors.gender && (
+                                        <p className="text-danger text-sm mt-2">
+                                            {errors && errors.gender ? errors.gender?.message?.toString() : '\u00A0'}
+                                        </p>
+                                    )}
+                                </div>
                                 <div className={"m-1 p-2"}>
                                     <label htmlFor="mobileNumber">Mobile Number</label>
                                     <Input
