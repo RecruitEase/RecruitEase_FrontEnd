@@ -2,8 +2,9 @@
 import type { NextPage } from "next";
 import { UserCard } from "@/components/admin/manageModarators/userCard";
 import HeaderBox from "@/components/dashboard/HeaderBox";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { Button } from "@nextui-org/button";
+import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 import {
   Modal,
   ModalBody,
@@ -20,65 +21,35 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 import Swal from 'sweetalert2';
 import {Bounce, toast} from "react-toastify";
+import LoadingComponent from "@/components/LoadingComponent";
 
-const data = [
-  {
-    name: "Sajith Bandara",
-    email: "nishanthasajithbandara@gmail.com",
-    imageUrl: "https://th.bing.com/th/id/OIP.4Y0BXVoEPd7lBZms8uraGAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-    status: "Active",
-    address:"pallebedda Ratnapura",
-    pnumber:"0716676968"
-
-  },
-  {
-    name: "Chathura Lakshan",
-    email: "Chathura@gmail.com",
-    imageUrl: "https://th.bing.com/th/id/OIP.NqY3rNMnx2NXYo3KJfg43gAAAA?w=200&h=200&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-    status: "Disable",
-    address:"colombo 07",
-    pnumber:"0712256987"
-  },
-  {
-    name: "Randunu Kumari",
-    email: "randunu@gmail.com",
-    imageUrl: "https://th.bing.com/th/id/OIP.jryuUgIHWL-1FVD2ww8oWgHaHa?w=200&h=200&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-    status: "Disable",
-    address:"pallebedda Ratnapura",
-    pnumber:"0716676968"
-  },
-  {
-    name: "Akila Demote",
-    email: "akila@gmail.com",
-    imageUrl: "https://th.bing.com/th/id/OIP.XSZAFm-5JI7nriDLwZqRQQAAAA?w=294&h=195&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-    status: "Active",
-    address:"pallebedda Ratnapura",
-    pnumber:"0716676968"
-  },
-  {
-    name: "Sajith Bandara",
-    email: "sajithbanadara@gmail.com",
-    imageUrl: "https://th.bing.com/th/id/OIP.4Y0BXVoEPd7lBZms8uraGAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-    status: "Active",
-    address:"pallebedda Ratnapura",
-    pnumber:"0716676968"
-  },
-  {
-    name: "Sajith Bandara",
-    email: "sajithbandara@gmail.com",
-    imageUrl: "https://th.bing.com/th/id/OIP.4Y0BXVoEPd7lBZms8uraGAHaLH?w=202&h=303&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-    status: "Active",
-    address:"pallebedda Ratnapura",
-    pnumber:"0716676968"
-  }
-];
+interface moderator{
+  id:string ,
+  email:string ,
+  role:string,
+  isActive: true,
+  createdAt: string,
+  firstName: string,
+  lastName: string,
+  city: string,
+  gender: string,
+  profilePic: string,
+  moderatorId:string
+}
 
 const ManageModerators: NextPage = () => {
+
   const { register, handleSubmit, setValue, formState: { errors }, reset } = useForm({ mode: "all" });
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [isVisible, setIsVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [data,setData]=useState<moderator[]>();
+  const [reload,setReload]=useState(false);
+  const [loading,setLoading]=useState(false);
+
+
+  const axios=useAxiosAuth();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -86,86 +57,217 @@ const ManageModerators: NextPage = () => {
     reset();
     setSelectedUser(null);
     setIsEnabled(false);
+
     onOpen();
+  };
+
+  const getModerators = () => {
+
+     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/all/moderators`)
+        .then(response => {
+          const data = response.data.content;
+          if (!Array.isArray(data)) {
+            console.error("Unexpected data format:", data);
+
+          }
+          setData(data)
+          setLoading(false)
+        })
+        .catch(error => {
+          setLoading(false)
+          console.error("Error fetching interview data:", error);
+        });
+
+
   };
 
 
 // editModerator------------------------------------------------------------
   const editModerator = (user) => {
     setSelectedUser(user);
-    setValue("fname", user.name.split(" ")[0]);
-    setValue("lname", user.name.split(" ")[1]);
+    setValue("firstName", user.firstName);
+    setValue("lastName", user.lastName);
     setValue("email", user.email);
-    setValue("pnumber", user.pnumber);
+    setValue("mobileNumber", "0716676968");
     setValue("address", user.address); // Add address if available in user data
-    setIsEnabled(user.status === "Active");
+    // setIsEnabled(user.status === "Active");
     onOpen();
   };
 
+  const activateModerator = (id:string)=>{
+      Swal.fire({
+          title: "Do you want to activate the moderator?",
+          icon:"warning",
+          customClass: {
+              confirmButton: 'bg-recruitBlue', // Custom class for confirm button
+              cancelButton: 'bg-[#a1a1aa]'   // Custom class for cancel button
+          },
+
+          showCancelButton: true,
+          confirmButtonText: "Activate",
+
+      }).then(() => {
+          axios.put(`${process.env.NEXT_PUBLIC_API_URL}/auth/activate-moderator/${id}`)
+              .then(response => {
+                  if (response.status == 201) {
+                      toast.success('Deactivation successfully!', {
+                              position: "top-right",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                              theme: "colored",
+                              transition: Bounce,
+                          }
+
+                      );
+                      setReload(true);
+                  } else {
+                      toast.error('Deactivation failed!', {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "colored",
+                          transition: Bounce,
+                      })
+                  }
+              })
+              .catch(error => {
+                  toast.error('Deactivation failed!', {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      transition: Bounce,
+                  })
+                  console.error("Error fetching interview data:", error);
+              });
+
+      });
+  }
+
+
   // delete moderator------------------------------------------------------
-  const deleteModerator = (user) => {
+  const deleteModerator = (id:string) => {
     Swal.fire({
-      title: "Do you want to delete the moderator?",
+      title: "Do you want to deactivate the moderator?",
       icon:"warning",
       customClass: {
         confirmButton: 'bg-[#f31260]', // Custom class for confirm button
         cancelButton: 'bg-[#a1a1aa]'   // Custom class for cancel button
       },
 
-      // showDenyButton: true,
       showCancelButton: true,
-      // denyButtonText: `Don't save`,
-      confirmButtonText: "Delete",
+      confirmButtonText: "Deactivate",
 
     }).then(() => {
+      axios.put(`${process.env.NEXT_PUBLIC_API_URL}/auth/deactivate-moderator/${id}`)
+          .then(response => {
+            if (response.status == 201) {
+              toast.success('Deactivation successfully!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+              }
 
-      const result = {
-        status: 200
-      }
-      if (result?.status == 200) {
-        toast.success('Delete successfully!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-        // router.push('/');
-        // setIsLoading(false);
-      } else {
-        //not logged in
-        //handle error here
-        toast.error('Delete failed!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          transition: Bounce,
-        });
-        // setErrorText(result?.error ? result?.error:"Something went wrong");
-        // setIsLoading(false);
+              );
+              setReload(true);
+            } else {
+              toast.error('Deactivation failed!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Bounce,
+              })
+            }
+            })
+          .catch(error => {
+              toast.error('Deactivation failed!', {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "colored",
+                  transition: Bounce,
+              })
+            console.error("Error fetching interview data:", error);
+          });
 
-      }
     });
   }
 
   const onSubmit = (data) => {
-    data.status = isEnabled ? "Active" : "Disabled";
-    console.log(data);
+    // data.status = isEnabled ? "Active" : "Disabled";
+    data.gender="Male"
+    data.city="Colombo"
+    data.profilePic="/profileImages/noImage.png"
+
+      console.log(data);
+      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/register-moderator`,data)
+          .then(response => {
+              if (response.status == 201 || response.status == 200 ) {
+                  toast.success('Moderator created successfully!', {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "colored",
+                          transition: Bounce,
+                      }
+
+                  );
+                  setReload(true);
+              } else {
+                  toast.error('Moderator register failed!', {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "colored",
+                      transition: Bounce,
+                  })
+              }
+          })
+          .catch(error => {
+              console.error("Error fetching interview data:", error);
+          });
+
     onClose(); // Close the modal after submitting the form
   };
 
-  const handleSwitchChange = () => {
-    setIsEnabled(!isEnabled);
-  };
+  // const handleSwitchChange = () => {
+  //   setIsEnabled(!isEnabled);
+  // };
 
   const myPopUp = (
       <Modal size={"2xl"} isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
@@ -177,27 +279,11 @@ const ManageModerators: NextPage = () => {
                 </ModalHeader>
                 <ModalBody className={"gap-0"}>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className={"flex justify-end mb-4 "}>
-                      <Switch
-                          checked={isEnabled}
-                          onChange={handleSwitchChange}
-                          size="sm"
-                          classNames={{
-                            base: cn(
-                                "flex flex-row-reverse  max-w-md  justify-start",
-                                "cursor-pointer gap-2 mr-[8px]",
-                                "data-[selected=true]:border-primary"
-                            )
-                          }}
-                      >
-                        Enable
-                      </Switch>
-                    </div>
 
                     <div className={"flex "}>
                       <CustomInput
                           className={" w-full"}
-                          name={"fname"}
+                          name={"firstName"}
                           label={"First Name"}
                           placeholder={"Enter first name"}
                           required={true}
@@ -217,7 +303,7 @@ const ManageModerators: NextPage = () => {
 
                       <CustomInput
                           className={"w-full"}
-                          name={"lname"}
+                          name={"lastName"}
                           label={"Last Name"}
                           placeholder={"Enter last name"}
                           required={true}
@@ -259,7 +345,7 @@ const ManageModerators: NextPage = () => {
 
                       <CustomInput
                           className={" w-full"}
-                          name={"pnumber"}
+                          name={"mobileNumber"}
                           label={"Phone Number"}
                           placeholder={"Enter phone number"}
                           required={true}
@@ -341,6 +427,12 @@ const ManageModerators: NextPage = () => {
       </Modal>
   );
 
+  useEffect(() => {
+    setLoading(true)
+    getModerators()
+    setReload(false)
+  }, [reload]);
+
   return (
       <div>
         {myPopUp}
@@ -354,12 +446,17 @@ const ManageModerators: NextPage = () => {
           </Button>
         </div>
         <br />
+        {loading?(
+            <LoadingComponent/>
+        ): (
+            <div className={"flex sm:flex-row flex-col gap-4 flex-wrap"}>
+              {data && data.map((item, index) => (
+                  <UserCard key={index} user={item} onEdit={() => editModerator(item)}
+                            onDelete={() => deleteModerator(item.id)} onActive={()=>activateModerator(item.id)}/>
+              ))}
+            </div>
+        )}
 
-        <div className={"flex sm:flex-row flex-col gap-4 flex-wrap"}>
-          {data && data.map((item, index) => (
-              <UserCard key={index} user={item} onEdit={() => editModerator(item)} onDelete={() => deleteModerator(item)} />
-          ))}
-        </div>
       </div>
   );
 };
