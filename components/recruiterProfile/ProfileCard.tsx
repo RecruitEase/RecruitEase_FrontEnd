@@ -5,7 +5,11 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import SocialMediaBar from "./SocialMediaBar";
 
-export default function ProfileCard() {
+
+export default function ProfileCard({ data }: { data: any }) {
+
+  const companyImage = (data.profilePic) ? process.env.NEXT_PUBLIC_S3_URL + data.profilePic : "/profileImages/noImage.png";
+
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -74,19 +78,19 @@ export default function ProfileCard() {
       <div className="flex flex-col items-center pb-10">
         <img
           className="w-24 h-24 mb-3 rounded-lg shadow-lg"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1yVQQYwsSmJ6I7MDES_iKomcxl951iV8Haw&s"
+          src={companyImage}
           alt="Bonnie image"
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          Dialog Axiata PLC
+          {data.companyName}
         </h5>
         <div className="flex gap-4">
           <Chip color="default" startContent={<FaLocationDot />}>
-            Colombo
+            {data.city}
           </Chip>
-          <Chip color="default" startContent={<MdOutlinePeopleAlt />}>
+          {/* <Chip color="default" startContent={<MdOutlinePeopleAlt />}>
             10K+ Employees
-          </Chip>
+          </Chip> */}
         </div>
         <div className="flex gap-4">
           <SocialMediaBar />
@@ -95,10 +99,8 @@ export default function ProfileCard() {
           <hr className="w-64 h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
         </div>
         <div className="flex p-4 text-gray-900 dark:text-gray-100">
-          Dialog Axiata PLC, is one of Sri Lanka's largest telecommunications
-          service providers, and the country's largest mobile network operator
-          with over 17 million subscribers which amounts to 57% of the Sri
-          Lankan mobile market
+          {data.companyName} is a forward-thinking organization dedicated to delivering exceptional value to its clients, stakeholders, and community.We operate at the intersection of innovation and customer-centricity, focusing on solving complex challenges and driving sustainable growth.
+          With a robust portfolio of products and services, {data.companyName} is committed to excellence in quality, reliability, and innovation. Our diverse team of professionals brings a wealth of expertise, ensuring we consistently exceed expectations and remain a trusted partner in the industry.
         </div>
       </div>
     </div>
