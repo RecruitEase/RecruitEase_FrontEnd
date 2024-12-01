@@ -2,14 +2,10 @@
 import HeaderBox from '@/components/dashboard/HeaderBox'
 import React, {useEffect, useState} from 'react'
 import { Button, Autocomplete, AutocompleteItem, Card, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Textarea, Divider, Chip, divider,Image } from "@nextui-org/react"
-import CustomTextWithoutValidations from "@/components/form_inputs/CustomTextAreaWithoutValidations"
 import { Bounce, toast } from "react-toastify";
-import Link from "next/link";
 import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
-import { useParams } from 'next/navigation';
-import {ParsedUrlQuery} from "node:querystring";
+import {useParams, useRouter} from 'next/navigation';
 import LoadingComponent from "@/components/LoadingComponent";
-import {router} from "next/client";
 
 const status = [
   { label: "Under Review", value: "underReview" },
@@ -43,6 +39,8 @@ const TicketDetails=()=> {
   const [currentStatus, setCurrentStatus] = useState("UnderReview")
   const [ticket,setTicket]=useState<Ticket>()
   const [name,setName]=useState("")
+    const [email,setEmail]=useState("")
+    const [note,setNote]=useState("")
   const [avatar,setAvatar]=useState("")
   const [lording, setLording]=useState(false)
     const [resolvedNote,setResolvedNote]=useState("")
@@ -50,6 +48,7 @@ const TicketDetails=()=> {
     const[reload,setReload]=useState(false)
 
   const axios=useAxiosAuth();
+    const router = useRouter();
 
   const params = useParams();
   const  ticketId = params.id;
@@ -61,6 +60,10 @@ const TicketDetails=()=> {
           setTicket(response.data.content)
           getUserDate(response.data.content.creatorId,response.data.content.creatorRole)
           handleCurrentStatus(response.data.content.status)
+            setNote(response.data.content.note)
+            console.log("note",response.data.content.note)
+            console.log("note",typeof (response.data.content.note))
+
           setLording(false)
         })
         .catch(error => {
@@ -74,12 +77,12 @@ const TicketDetails=()=> {
         ? `${process.env.NEXT_PUBLIC_API_URL}/user/recruiter/${userId}`
         : `${process.env.NEXT_PUBLIC_API_URL}/user/candidate/${userId}`;
 
-    console.log("url "+url)
     axios.get(url)
         .then(response => {
           response.data.content
-          console.log("user:"+response.data.content)
+          console.log("user:",response.data.content)
           setName(response.data.content.firstName + " "+ response.data.content.lastName)
+            setEmail(response.data.content.email)
           {response.data.content.profilePic !=""?setAvatar(process.env.NEXT_PUBLIC_S3_URL+response.data.content.profilePic):setAvatar("/profileImages/noImage.png")}
         })
         .catch(error => {
@@ -151,6 +154,13 @@ const TicketDetails=()=> {
     setCurrentStatus(status);
   }
 
+    const viewProfile=()=>{
+        if(ticket?.creatorRole=="RECRUITER"){
+            router.push(`/moderator/recruiter-profile/${ticket.creatorId}`);
+        }else if(ticket?.creatorRole=="CANDIDATE"){
+            router.push(`/moderator/candidate-profile/${ticket.creatorId}`);
+        }
+    }
   return (
     <>
       <header className="home-header">
@@ -224,14 +234,14 @@ const TicketDetails=()=> {
                               <ModalHeader className="flex flex-col gap-1 font-extrabold">Resolve Ticket</ModalHeader>
                               <ModalBody>
                                 <div>
-                                  <CustomTextWithoutValidations
+                                  <Textarea
                                       required
                                       name="note"
                                       label="Note:"
                                       variant="bordered"
                                       placeholder="Enter ticket note about the issue."
                                       className="w-full"
-                                      onValChange={handleResoledNote}
+                                      onValueChange={handleResoledNote}
                                   />
                                 </div>
 
@@ -279,13 +289,11 @@ const TicketDetails=()=> {
 
               </div>
 
-              {(currentStatus === "Resolved" || currentStatus === "Rejected") ?
+              {((currentStatus === "RESOLVED" || currentStatus === "REJECTED")) ?
                   <div className='col-span-12 md:col-span-5 border-2 p-2'>
                     <div className='font-extrabold mb-4'>Note</div>
-                    <div>The payment issue for your ticket has been successfully resolved. The transaction has now been
-                      completed, and your ticket is confirmed. Thank you for your patience. If you have any further
-                      questions or concerns, please do not hesitate to reach out to our support team.
-                    </div>
+                      {note && <div>{note}</div>}
+                      {!note && <div>No note has been added!</div>}
                   </div>
                   : (
                       <div className='border-2 col-span-12 md:col-span-5 p-2'>
@@ -298,20 +306,14 @@ const TicketDetails=()=> {
                 <div className='mb-4 mt-4 font-semibold'>Ticket Creater Details</div>
                 <div className='flex gap-2 items-center'>
                   <Image className="w-16 h-16 rounded-md mb-2" src={avatar} alt="candidate picture"/>
-                  <div>
-                    <div className='ml-2'>{name}</div>
-                    {/*{ticketData[1].jobTitle ? <div className="flex mb-1 ml-2 w-full">*/}
-                    {/*  /!* <p className="text-sm">Job Title : </p> *!/*/}
-                    {/*  /!* <p className="text-sm">{ticketData[0].jobTitle}</p> *!/*/}
-                    {/*</div> : <p> This is a support Request or other type.</p>}*/}
-                    <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm' as={Link}
-                            href='../chat'>Chat</Button>
-                    <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm' as={Link}
-                            href='../candidate-profile/12'>View Profile</Button>
-                    <Button className='bg-recruitBlue text-white mb-2' size='sm' as={Link} href='../../jobs/12'>View Job
-                      Post</Button>
-                  </div>
+                    <div>
+                        <div className='ml-2'>{name}</div>
+                        <div className='ml-2'>{email}</div>
+
+                    </div>
                 </div>
+                  <Button className='bg-recruitBlue text-white mb-2 mr-2' size='sm'
+                          onClick={()=>viewProfile()}>View Profile</Button>
               </div>
             </div>
           </div>
