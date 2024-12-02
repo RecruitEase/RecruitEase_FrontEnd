@@ -1,4 +1,8 @@
-import React from 'react'
+"use client";
+import { Button } from '@nextui-org/react';
+import React, {useState} from 'react'
+import {paymentQuery} from "@/lib/api";
+import {useRouter} from "next/navigation";
 
 const includedIcon = <span
     className="w-5 h-5 inline-flex items-center justify-center bg-gray-500 text-white rounded-full flex-shrink-0">
@@ -15,6 +19,29 @@ const excludedIcon = <svg fill="none" stroke="currentColor" stroke-linecap="roun
 
 
 function SubscriptionCards() {
+  const router=useRouter();
+
+  const [isLoading,setIsLoading]=useState(false)
+  const handleClick=()=>{
+    setIsLoading(true);
+
+    paymentQuery({
+      name:"Pro Subscription",
+      quantity:1,
+      amount:1000000,
+      currency:"LKR"
+    }).then((res)=>{
+      console.log(res.sessionUrl)
+      router.push(res.sessionUrl)
+    }).catch((e)=>{
+      console.log(e)
+    })
+
+
+    setIsLoading(false);
+
+  }
+
   return (
       <section className="text-gray-700 body-font overflow-hidden border-t border-gray-200">
         <div className="container px-5 py-24 mx-auto flex flex-wrap">
@@ -114,13 +141,14 @@ function SubscriptionCards() {
                 {includedIcon}
               </p>
               <div className="p-6 text-center border-t border-gray-300">
-                <button
-                    className="flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-indigo-600 rounded">Try PRO
+
+                <Button color="primary" onPress={handleClick} isLoading={isLoading}>
+                  Try PRO
                   <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                        className="w-4 h-4 ml-auto" viewBox="0 0 24 24">
                     <path d="M5 12h14M12 5l7 7-7 7"></path>
                   </svg>
-                </button>
+                </Button>
               </div>
             </div>
           </div>

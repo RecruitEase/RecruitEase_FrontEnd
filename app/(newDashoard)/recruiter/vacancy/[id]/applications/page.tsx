@@ -69,7 +69,7 @@ const Applications = () => {
           <Tab key="All Applications" title="All Applications">
             <Card>
               <CardBody>
-                <AllApplications />
+                <AllApplications  />
               </CardBody>
             </Card>
           </Tab>
