@@ -1,5 +1,5 @@
 import React from 'react'
-import ChangeProfile from "@/components/moderatorSetting/changeProfile";
+import ChangeProfile from "@/components/recruiterSetting/changeProfile";
 import HeaderBox from "@/components/dashboard/HeaderBox";
 
 
