@@ -54,7 +54,7 @@ export default function Public() {
       // setAboutMe(candidateQuery.data!.aboutMe || "")
       setAddress(recruiterQuery.data!.address)
       setData(recruiterQuery.data)
-      console.log("backend ",recruiterQuery.data.profilePic)
+      setWebsite(recruiterQuery.data!.website)
     }
 
     setReload(false)
@@ -304,7 +304,7 @@ export default function Public() {
 
                       type="text"
                       label="Website"
-                      value={data?.website}
+                      value={website}
                       className="col-span-12 md:col-span-4  mb-2"
                       onValueChange={setWebsite}
                   />
