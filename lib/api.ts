@@ -132,6 +132,17 @@ export const updateJob=async (data:Job)=>{
 }
 
 
+//recommendation apis.............................................................................................................................................................................
+
+export const getHistory=async (AtsRequest:{candidateId:string,recruiterId:string})=>{  //get history of a candidate
+    return (await axiosInstance.post(`/api/v1/applications/history`,AtsRequest)).data.content;
+}
+
+export const getHistoryPerApplication=async (applicationId:string)=>{  //get history of a candidate
+    return (await axiosInstance.get(`/api/v1/applications/history/${applicationId}`)).data.content;
+}
+
+
 //offer apis
 export const getOffersByCandidate=async (candidateId:string)=>{
     return (await axiosInstance.get(`api/v1/offers/candidate/${candidateId}`)).data.content;
