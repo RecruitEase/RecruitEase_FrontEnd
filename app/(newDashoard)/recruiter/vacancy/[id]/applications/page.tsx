@@ -10,6 +10,7 @@ import {useApplicationsByJob} from "@/lib/hooks/useApplications";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import {useCandidates} from "@/lib/hooks/useCandidates";
+import ApplicationComponentRecommendation from "@/components/recruiter/ApplicationComponentRecommendation";
 
 
 
@@ -66,10 +67,10 @@ const Applications = () => {
               </CardBody>
             </Card>
           </Tab>
-          <Tab key="All Applications" title="All Applications">
+          <Tab key="All Applications" title="Recommendation">
             <Card>
               <CardBody>
-                <AllApplications  />
+                <ApplicationComponentRecommendation job={fetchedJob!} candidates={getCandidateListQuery.data!} applications={getApplicationsQuery.data!} />
               </CardBody>
             </Card>
           </Tab>

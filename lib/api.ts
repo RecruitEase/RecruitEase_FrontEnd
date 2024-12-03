@@ -183,7 +183,7 @@ export const getInterviewById=async (interviewId:string)=>{
 }
 
 //recommendations
-export const getReankedApplications=async (jobId:string,keywordArr:string[])=>{
+export const getRankedApplications=async (jobId:string,keywordArr:string)=>{
     return (await axiosInstance.get(`/api/v1/recommendations/rank/${jobId}`,{
         params:{
             keywords:keywordArr

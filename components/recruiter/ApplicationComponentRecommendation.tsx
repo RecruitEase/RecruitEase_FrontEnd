@@ -1,19 +1,19 @@
 "use client";
-import React, {Key, useEffect } from "react";
-import { Tabs, Tab, SelectItem, Select } from "@nextui-org/react";
+import React, {Key, useEffect, useState} from "react";
+import {Tabs, Tab, SelectItem, Select, Input} from "@nextui-org/react";
 import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 
 import { useMediaQuery } from "react-responsive";
 import { FaTag } from "react-icons/fa";
 import { MdOutlineMail, MdOutlineLocationOn } from "react-icons/md";
 import { Button } from "@nextui-org/button";
-import ApplicationTable from "@/components/recruiter/ApplicationTable";
+import ApplicationTableRecommendation from "@/components/recruiter/ApplicationTableRecommendation";
 import ViewCvPopup from "./ViewCvPopup";
 import ViewAnswersPopup from "./ViewAnswersPopup";
 import { MdOutlineQuiz } from "react-icons/md";
 import { FaPeopleArrows } from "react-icons/fa6";
 import { FaHistory } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import Link from "next/link";
 import { FaPaste } from "react-icons/fa";
 import { FaPenToSquare } from "react-icons/fa6";
@@ -23,14 +23,31 @@ import {Job} from "@/types/job";
 import {toTitleCase} from "@/lib/utils";
 import {formatDate} from "@/utils/stringUtils";
 import {useApplicationStatusChange} from "@/lib/hooks/useApplications";
-import {applicationStatusChange} from "@/lib/api";
+import {applicationStatusChange, getRankedApplications} from "@/lib/api";
+import {SearchIcon} from "@nextui-org/shared-icons";
+import {IoNewspaperSharp} from "react-icons/io5";
+import ErrorComponent from "@/components/ErrorComponent";
+import LoadingComponent from "@/components/LoadingComponent";
 
 declare interface ApplicationsPerJobComponentProps{
   applications: ApplicationProp[];
   job: Job;
   candidates: CandidateProp[];
 }
-export default function ApplicationComponent({applications,candidates,job}:ApplicationsPerJobComponentProps) {
+export interface RecommendationProps {
+  matchPercentage: number;
+  candidateId: string;
+  applicationId: string;
+  cvId: string;
+  firstName: string;
+  lastName: string;
+}
+
+export default function ApplicationComponentRecommendation({applications,candidates,job}:ApplicationsPerJobComponentProps) {
+  const [keywords,setKeywords]=useState<string>("");
+  const [res,setRes]=useState<RecommendationProps[]>([]);
+  const [isLoading,setIsLoading]=useState(false);
+  const [isErrorFetch,setIsErrorFetch]=useState(false);
 
   console.log("apps",applications)
   console.log("cands",candidates)
@@ -140,7 +157,21 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
       setSelectedApplicantion(copy)
     }
   }
+  const params = useParams<{ id: string }>()
 
+  const handleSearch=()=>{
+    setIsLoading(true);
+    console.log("ll",keywords)
+    const res=getRankedApplications(params.id,keywords);
+    res.then((r)=>{
+      setRes(r)
+      setIsLoading(false)
+    }).catch(r=>{
+      setIsErrorFetch(true)
+      setIsLoading(false)
+    })
+
+  }
   return (
     <div className="flex flex-col px-4 mb-[200px]">
       <ViewCvPopup
@@ -158,30 +189,53 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
         userAnswers={JSON.parse(selectedApplicantion?.answers!)}
       />
       }
+
       <div className="flex w-full flex-col">
-        <Tabs
-          className={"mb-5"}
-          color={"primary"}
-          aria-label="Options"
-          isVertical={isVertical}
-          onSelectionChange={setSelectedTab}
-        >
-          {tabList.map((tab) => (
-            <Tab
-              className={"h-10 w-full"}
-              key={tab.key}
-              title={
-                <>
-                  {tab.title} &nbsp;{" "}
-                  <FaTag style={{ fill: tab.color, display: "unset" }} />
-                </>
-              }
-            >
+        <div className={"flex gap-5 mb-5 align-middle justify-center"}>
+        <Input
+            onValueChange={setKeywords}
+            label="Keywords"
+            isClearable
+            radius="lg"
+            classNames={{
+              label: "text-black/50 dark:text-white/90",
+              input: [
+                "bg-transparent",
+                "text-black/90 dark:text-white/90",
+                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+              ],
+              innerWrapper: "bg-transparent",
+              inputWrapper: [
+                "shadow-xl",
+                "bg-default-200/50",
+                "dark:bg-default/60",
+                "backdrop-blur-xl",
+                "backdrop-saturate-200",
+                "hover:bg-default-200/70",
+                "dark:hover:bg-default/70",
+                "group-data-[focus=true]:bg-default-200/50",
+                "dark:group-data-[focus=true]:bg-default/60",
+                "!cursor-text",
+              ],
+            }}
+            placeholder="Type comma seperated keywords to search..."
+            startContent={
+              <SearchIcon className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
+            }
+        />
+        <Button onClick={handleSearch } size={"md"} color="primary" aria-label="Like">
+          Search
+        </Button>
+        </div>
               <Card className={"w-full bg-transparent border h-[655px]"}>
                 <CardBody>
                   <div className="grid grid-cols-12 gap-1 items-center justify-center h-full">
                     <div className="relative col-span-7 self-start">
-                      <ApplicationTable applications={tabFilteredApplications} candidates={candidates} setSelectedApplication={setSelectedApplicantion} />
+                      {isLoading?<LoadingComponent/>:
+                          isErrorFetch?<ErrorComponent/> :
+                              res.length==0? "Search to check recommendations!":
+                              <ApplicationTableRecommendation recommendations={res} applications={tabFilteredApplications} candidates={candidates} setSelectedApplication={setSelectedApplicantion} />
+                      }
                     </div>
                     {(selectedApplicantion && selectedApplicant)?
                     <div className="relative col-span-5  bg-transparent rounded-lg overflow-hidden shadow-lg ">
@@ -340,9 +394,6 @@ export default function ApplicationComponent({applications,candidates,job}:Appli
                   </div>
                 </CardBody>
               </Card>
-            </Tab>
-          ))}
-        </Tabs>
       </div>
     </div>
   );
