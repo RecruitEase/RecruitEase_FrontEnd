@@ -64,7 +64,7 @@ const SignIn = () => {
                     theme: "colored",
                     transition: Bounce,
                 });
-                setErrorText(result?.error ? result?.error:"Something went wrong");
+                setErrorText(result?.error ? "Invalid Credentials":"Something went wrong");
                 setIsLoading(false);
 
             }
