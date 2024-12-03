@@ -58,8 +58,8 @@ function Page() {
       <header className="home-header">
         <HeaderBox
           type="title"
-          title="Manage JobSeekers"
-          subtext="Manage JobSeekers of the system."
+          title="Manage Recruiters"
+          subtext="Manage recruiters of the system."
         />
       </header>
       <TblRecruiter data={data} />
