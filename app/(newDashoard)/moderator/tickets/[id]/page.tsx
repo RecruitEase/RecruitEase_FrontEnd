@@ -83,7 +83,7 @@ const TicketDetails=()=> {
           console.log("user:",response.data.content)
           setName(response.data.content.firstName + " "+ response.data.content.lastName)
             setEmail(response.data.content.email)
-          {response.data.content.profilePic !=""?setAvatar(process.env.NEXT_PUBLIC_S3_URL+response.data.content.profilePic):setAvatar("/profileImages/noImage.png")}
+          {response.data.content.profilePic?setAvatar(process.env.NEXT_PUBLIC_S3_URL+response.data.content.profilePic):setAvatar("/profileImages/noImage.png")}
         })
         .catch(error => {
           console.error(`Error fetching company details`, error);

@@ -14,7 +14,8 @@ declare type ModeratorCard = {
     city: string,
     gender: string,
     profilePic: string,
-    moderatorId:string
+    moderatorId:string,
+    mobileNumber:string
 };
 
 declare interface UserCardProps {
@@ -47,7 +48,7 @@ export const UserCard = ({ user, onEdit, onDelete,onActive }: UserCardProps) => 
                     // }}
                 >
 
-                    <div className=" flex justify-end mb-4 cursor-pointer">
+                    <div className=" flex justify-end mb-4">
                         <Chip
                             size="sm"
                             className={`${
@@ -55,7 +56,7 @@ export const UserCard = ({ user, onEdit, onDelete,onActive }: UserCardProps) => 
                             }`}
 
                         >
-                            {user.isActive?"Active":"Disable"}
+                            {user.isActive ? "Active" : "Disable"}
                         </Chip>
                     </div>
                 </div>
@@ -63,25 +64,33 @@ export const UserCard = ({ user, onEdit, onDelete,onActive }: UserCardProps) => 
                 <div className="absolute inset-x-0 top-10 flex justify-center mt-4">
                     <Image
                         alt="nextui logo"
-                        style={{ width: 100, height: "auto", aspectRatio: 1 }}
+                        style={{width: 100, height: "auto", aspectRatio: 1}}
                         radius="full"
                         src={user.profilePic}
                     />
                 </div>
 
                 <div className="flex justify-center mt-10">
-                    <p className="font-bold text-lg">{user.firstName+" "+user.lastName}</p>
+                    <p className="font-bold text-lg">{user.firstName + " " + user.lastName}</p>
                 </div>
                 <div className="flex justify-center">
                     <p className="text-sm text-tertiaryText font-bold">{emailLength(user.email)}</p>
                 </div>
+                {user.mobileNumber &&
+                    <div className="flex justify-center">
+                        <p className="text-sm text-tertiaryText font-bold">{user.mobileNumber}</p>
+                    </div>
+                }
+
                 <div className="flex justify-center gap-2 mt-4 mb-4">
                     {
                         user.isActive ?
-                            <Button  onClick={()=>onDelete(user.id)} className="bg-[#F31260] text-white font-bold w-full" >
+                            <Button onClick={() => onDelete(user.id)}
+                                    className="bg-[#F31260] text-white font-bold w-full">
                                 Deactivate
-                            </Button>:
-                            <Button onClick={()=>onActive(user.id)} className="bg-recruitBlue text-white font-bold w-full" >
+                            </Button> :
+                            <Button onClick={() => onActive(user.id)}
+                                    className="bg-recruitBlue text-white font-bold w-full">
                                 Activate
                             </Button>
                     }

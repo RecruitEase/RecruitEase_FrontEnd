@@ -34,7 +34,8 @@ interface moderator{
   city: string,
   gender: string,
   profilePic: string,
-  moderatorId:string
+  moderatorId:string,
+    mobileNumber:string
 }
 
 const ManageModerators: NextPage = () => {
@@ -83,7 +84,7 @@ const ManageModerators: NextPage = () => {
 
 
 // editModerator------------------------------------------------------------
-  const editModerator = (user) => {
+  const editModerator = (user:any) => {
     setSelectedUser(user);
     setValue("firstName", user.firstName);
     setValue("lastName", user.lastName);
@@ -220,7 +221,7 @@ const ManageModerators: NextPage = () => {
     });
   }
 
-  const onSubmit = (data) => {
+  const onSubmit = (data:any) => {
     // data.status = isEnabled ? "Active" : "Disabled";
     data.gender="Male"
     data.city="Colombo"
