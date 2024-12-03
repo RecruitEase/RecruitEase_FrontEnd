@@ -10,3 +10,9 @@ export interface ApplicationProp {
     answers?: string;
     createdAt?: string;
 }
+
+// export interface AtsRequest {
+//     candidateId: string;
+//     recruiterId: string;
+
+// }
