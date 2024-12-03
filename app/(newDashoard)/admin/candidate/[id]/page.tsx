@@ -8,6 +8,13 @@ import { useParams } from 'next/navigation';
 import LoadingComponent from '@/components/LoadingComponent';
 import ErrorComponent from '@/components/ErrorComponent';
 
+interface Experience {
+  title: string;
+  company: string;
+  experience: Experience[];
+  endDate: string;
+}
+
 interface PersonalDetailsProps {
   aboutMe: string;
   skills: string[];
@@ -46,7 +53,12 @@ const Profile = () => {
       try {
         const response = await getCandidate(candidateId);
 
-        // Set userData
+          experience: JSON.parse(response.experience || "[]").map((exp: any) => ({
+            title: exp.title || "",
+            company: exp.company || "",
+            startDate: exp.startDate || "",
+            endDate: exp.endDate || "",
+          })),
         setUserData(response);
 
         // Transform data for PersonalDetails

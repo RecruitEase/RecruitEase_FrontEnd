@@ -2,13 +2,13 @@ import React from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import { useRouter } from "next/navigation";
 
-interface Candidate {
+interface recruiter {
   email: string;
   [key: string]: any; // Add other properties as needed
 }
 
-interface TblCandidatesProps {
-  data: Candidate[];
+interface TblRecruitersProps {
+  data: recruiter[];
 }
 
 const columns = [
@@ -19,20 +19,21 @@ const columns = [
   { key: 'actions', label: 'Actions' },
 ];
 
-export default function TblCandidate({ data }: TblCandidatesProps) {
+export default function Tblrecruiter({ data }: TblRecruitersProps) {
   const router = useRouter();
 
-  const handleRowClick = (candidateId: string) => {
-    router.push(`/admin/candidate/${candidateId}`);
+  const handleRowClick = (recruiterId: string) => {
+    router.push(`/admin/recruiter/${recruiterId}`);
   };
 
-  // Deactivate candidate
-  const deActivateCandidate = (candidateId : string) => {
+  
+// Deactivate recruiter
+  const deActivateRecruiter = (recruiterId : string) => {
   
   };
 
   return (
-    <Table aria-label="Candidates Table">
+    <Table aria-label="recruiters Table">
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
@@ -41,7 +42,7 @@ export default function TblCandidate({ data }: TblCandidatesProps) {
           <TableRow
             key={item.email}
             className="hover:bg-gray-100 cursor-pointer"
-            onClick={() => handleRowClick(item.candidateId)}
+            onClick={() => handleRowClick(item.recruiterId)}
           >
             {(columnKey) =>
               columnKey === 'actions' ? (
@@ -51,7 +52,7 @@ export default function TblCandidate({ data }: TblCandidatesProps) {
                   </button>
                 </TableCell>
               ) : (
-                <TableCell>{item[columnKey as keyof Candidate]}</TableCell>
+                <TableCell>{item[columnKey as keyof recruiter]}</TableCell>
               )
             }
           </TableRow>
