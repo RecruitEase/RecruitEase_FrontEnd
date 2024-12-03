@@ -34,6 +34,7 @@ const CandidateApplicationHistory = () => {
     city: "",
     status: "",
     profilePic: "",
+    id: "",
   });
   const router = useRouter();
   const [historyData, setHistoryData] = useState<AtsResponse[]>([]);
@@ -78,6 +79,7 @@ const CandidateApplicationHistory = () => {
       city: userData?.city || "",
       status: userData?.profileStatus || "",
       profilePic: userData?.profilePic || "",
+      id: userData?.candidateId || "",
     });
   }, [userData]);
 
