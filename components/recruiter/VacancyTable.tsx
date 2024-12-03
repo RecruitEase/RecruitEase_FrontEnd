@@ -41,7 +41,6 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 };
 
 const INITIAL_VISIBLE_COLUMNS = [
-    "id",
     "title",
     "location",
     "createdDate",
