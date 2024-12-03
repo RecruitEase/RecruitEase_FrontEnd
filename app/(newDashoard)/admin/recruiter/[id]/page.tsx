@@ -7,15 +7,20 @@ import { getJobsByRecruiterId, getRecruiter } from "@/lib/api";
 import { JobProps } from "@/types";
 import { set } from "react-hook-form";
 import { RecruiterProp } from "@/types/users";
+import LoadingComponent from "@/components/LoadingComponent";
+import ErrorComponent from "@/components/ErrorComponent";
 
 export default function Page() {
 const [jobs, setJobs] = useState<JobProps[]>([]);
 const [recruiterDetails, setRecruiterDetails] = useState<RecruiterProp>();
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(false);
 
   const params = useParams();
   const recruiterId: string = (params?.id as string);
 
   useEffect(()=>{
+    setLoading(true);
     try{
       const jobRes = getJobsByRecruiterId(recruiterId);
     jobRes.then((data)=>{setJobs(data)});
@@ -26,15 +31,16 @@ const [recruiterDetails, setRecruiterDetails] = useState<RecruiterProp>();
     }
     catch(error){
       console.error("Error fetching jobs:", error);
+      setError(true);
+    }finally{
+      setLoading(false);
     }
   }, [recruiterId])
-  
-  useEffect(()=>{
-    console.log("jobs",jobs);
-    console.log("recDetails",recruiterDetails);
-  })
 
   return (
+    (loading) ? <LoadingComponent />:
+    (error) ? <ErrorComponent />:
+    <>
     <div className="min-h-screen flex flex-col xl:flex-row xl:justify-center">
       {/* Main Section */}
 
@@ -47,5 +53,6 @@ const [recruiterDetails, setRecruiterDetails] = useState<RecruiterProp>();
       {recruiterDetails && <ProfileCard data={recruiterDetails} />}
       </div>
     </div>
+    </>
   );
 }
