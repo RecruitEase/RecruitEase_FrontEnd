@@ -111,16 +111,7 @@ export default function AllApplications() {
 
   return (
     <div className="grid grid-cols-12 gap-1 items-center justify-center">
-            <ViewCvPopup
-        isOpen={isOpenCV}
-        onOpenChange={handleOpenChangeCV}
-        applicant={selectedApplicant}
-      />
-      <ViewAnswersPopup
-        isOpen={isOpenAnswers}
-        onOpenChange={handleOpenChangeAnswers}
-        applicant={selectedApplicant}
-      />
+
       <div className="relative col-span-7">
         <div className="relative inline-flex group p-4 w-full items-center justify-center text-center">
           {/* <div className="absolute transition-all duration-1000 opacity-70 -inset-px bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] rounded-xl blur-lg group-hover:opacity-100 group-hover:-inset-1 group-hover:duration-200 animate-tilt"></div>
@@ -145,7 +136,7 @@ export default function AllApplications() {
         )}
         {showTable && (
           <div id="table">
-            <ApplicationTable />
+            {/*<ApplicationTable />*/}
           </div>
         )}
       </div>

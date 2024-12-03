@@ -9,6 +9,7 @@ import https from "node:https";
 import {OfferCreationProps, OfferUpdateProps} from "@/types/offers";
 import {CandidateProp, CandidateUpdateProp} from "@/types/users";
 import {TicketCreationProps, TicketUpdateProps} from "@/types/tickets";
+import {PaymentRequestProp} from "@/types/payment";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -180,6 +181,21 @@ export const getCvById=async (cvId:string)=>{
 export const getInterviewById=async (interviewId:string)=>{
     return (await axiosInstance.get(`api/v1/interviews/${interviewId}`)).data.content;
 }
+
+//recommendations
+export const getReankedApplications=async (jobId:string,keywordArr:string[])=>{
+    return (await axiosInstance.get(`/api/v1/recommendations/rank/${jobId}`,{
+        params:{
+            keywords:keywordArr
+        }
+    })).data.content;
+}
+
+//payment
+export const paymentQuery=async (paymentReq:PaymentRequestProp)=>{
+    return (await axiosInstance.post(`/api/v1/payment/checkout`,paymentReq)).data.content;
+}
+
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);
