@@ -76,14 +76,14 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, expe
 
             <div className="details">
                 <Card className="min-w-[400px] flex-1">
-                    <CardHeader className="flex gap-3">
+                    {/* <CardHeader className="flex gap-3">
                         <p className="text-md font-bold">Location</p>
                     </CardHeader>
                     <Divider />
                     <CardBody>
                         <p>{location}</p>
                     </CardBody>
-                    <Divider />
+                    <Divider /> */}
 
                     <CardHeader className="flex gap-3">
                         <p className="text-md font-bold">Email</p>

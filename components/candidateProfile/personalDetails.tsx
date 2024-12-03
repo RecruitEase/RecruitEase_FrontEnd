@@ -33,9 +33,6 @@ interface PersonalDetailsProps {
     education: string[];
     location: string;
     email: string;
-    // avatars: string[];
-    // carousel:string[];
-    // upcomingEvents:UpcomingEvent[];
 }
 
 const PersonalDetails: React.FC<PersonalDetailsProps> = ({ aboutMe, skills, experience, education, location, email }) => {
