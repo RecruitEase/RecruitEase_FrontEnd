@@ -246,7 +246,7 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                                         isActive={pathname === `/${role}/settings`}
                                         title="Settings"
                                         icon={<SettingsIcon/>}
-                                        href={`/${role}/settings`}
+                                        href={`/${role}/edit-profile`}
                                     />
 
                                     <SidebarItem
