@@ -5,84 +5,60 @@ import { Input, Avatar, Button } from "@nextui-org/react";
 import { SearchIcon } from "../icons/searchicon";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import ChatUser from "./ChatUser";
-import { MsgProp, SenderProp } from "@/types";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import {
+  MsgProp,
+  SenderProp,
+  getGenericUserDetailProps,
+  getChatsProps,
+} from "@/types";
+import { getGenericUserDetails, getChatMessages } from "@/lib/api";
+
 const nChats = 24;
 
-const senders: SenderProp[] = [
-  {
-    img: "/assets/landing/jane.png",
-    name: "Mary Jane",
-    lastMsg: {
-      content: "Every time I attempt to launch the software, it crashes",
-      timestamp: "12:00",
-    },
-    unreadCount: 2,
-    isOnline: true,
-  },
-  {
-    img: "/assets/users/5.jpg",
-    name: "John Doe",
-    lastMsg: {
-      content: "Is there an update available for the app?",
-      timestamp: "15:30",
-    },
-    unreadCount: 1,
-    isOnline: false,
-  },
-  {
-    img: "/assets/users/1.jpg",
-    name: "Emily Clark",
-    lastMsg: {
-      content: "The app freezes when I try to upload a file.",
-      timestamp: "10:45",
-    },
-    unreadCount: 3,
-    isOnline: true,
-  },
-  {
-    img: "/assets/users/4.jpg",
-    name: "Alex Johnson",
-    lastMsg: {
-      content: "Can I get a refund for my purchase?",
-      timestamp: "11:15",
-    },
-    unreadCount: 5,
-    isOnline: false,
-  },
-  {
-    img: "/assets/users/6.jpg",
-    name: "Michael Smith",
-    lastMsg: {
-      content: "How do I reset my password?",
-      timestamp: "12:30",
-    },
-    unreadCount: 0,
-    isOnline: true,
-  },
-  {
-    img: "/assets/users/2.jpg",
-    name: "Sarah Lee",
-    lastMsg: {
-      content: "Is there a way to change the language settings?",
-      timestamp: "14:00",
-    },
-    unreadCount: 4,
-    isOnline: false,
-  },
-];
-
-const logedUser: SenderProp = {
-  img: "/assets/landing/superman.jpg",
-  name: "Chathura Lakshan",
-  lastMsg: {
-    content: "Hello, how are you?",
-    timestamp: "12:00",
-  },
-  unreadCount: 2,
-  isOnline: true,
-};
-
 function ChatLayout() {
+  const [chatMessages, setChatMessages] = useState<string[]>([]); // List of user IDs
+  const [chatUsers, setChatUsers] = useState<getGenericUserDetailProps[]>([]);
+  const [senders, setSenders] = useState<SenderProp[]>([]); // Final formatted senders
+  const { data: session } = useSession();
+  const myId = session?.user?.id as string;
+
+  useEffect(() => {
+    const fetchChatData = async () => {
+      try {
+        // Fetch chat messages (user IDs)
+        const userIds = await getChatMessages(myId);
+        setChatMessages(userIds);
+
+        // Fetch user details for those IDs
+        if (userIds.length > 0) {
+          const userDetails = await getGenericUserDetails(userIds);
+          setChatUsers(userDetails);
+
+          // Transform data into `senders` format
+          const mappedSenders = userDetails.map(
+            (user: { name: any; role: any }) => ({
+              img: "/test/png", // Placeholder image
+              name: user.name, // Name from user details
+              lastMsg: {
+                content: user.role, // Use role as the last message content
+                timestamp: null, // Timestamp is unspecified
+              },
+              unreadCount: null, // Set to null as instructed
+              isOnline: null, // Set to null as instructed
+            })
+          );
+          setSenders(mappedSenders); // Update senders state
+        }
+      } catch (error) {
+        console.error("Error fetching chat data:", error);
+      }
+    };
+
+    fetchChatData();
+  }, [myId]);
+
   const [selectedUser, setSelectedUser] = React.useState<SenderProp | null>(
     null
   );
