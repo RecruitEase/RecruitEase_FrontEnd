@@ -513,3 +513,15 @@ declare interface getBankProps {
 declare interface getBankByAccountIdProps {
   accountId: string;
 }
+
+declare interface getGenericUserDetailProps {
+ role:string,
+  userId:string
+  email:string
+  name:string
+  roleId:string
+}
+
+declare interface getChatsProps {
+  userIds: string[];
+}
