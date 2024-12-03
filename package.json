@@ -85,6 +85,7 @@
 		"react-to-print": "^2.14.10",
 		"react-toastify": "^10.0.5",
 		"recharts": "^2.12.7",
+		"recruit-ease": "file:",
 		"scss": "^0.2.4",
 		"sweetalert2": "^11.12.2",
 		"tailwind-variants": "0.1.20",
