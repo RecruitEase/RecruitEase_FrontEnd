@@ -17,7 +17,7 @@ import {
   CardFooter,
   Image,
 } from "@nextui-org/react";
-import React, { useCallback } from "react";
+import React, {useCallback, useState} from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import EmblaCarouselJobs from "./EmblaCarouselJobs";
 import EmblaCarouselCategories from "./EmblaCarouselCategories";
@@ -32,6 +32,7 @@ import {useLiveJobs} from "@/lib/hooks/useJobs";
 import {useRecruiters} from "@/lib/hooks/useRecruiters";
 import LoadingComponent from "../LoadingComponent";
 import ErrorComponent from "../ErrorComponent";
+import {useRouter} from "next/navigation";
 
 const wrapper = {
   hidden:{
@@ -209,6 +210,15 @@ const fieldValues: FieldProps[] = [
   { key: 54, label: "Travel/Ticketing/Airline/Shipping", id: "54", nJobs: 28 },
 ];
 const HomeNew = () => {
+  const [searchVal,setSearchVal]=useState('');
+  const router=useRouter()
+
+  const handleSearch=()=>{
+    console.log("adseadewdew ",searchVal)
+    window.location.href = '/jobs?q='+searchVal;
+  }
+
+
   const jobQuery=useLiveJobs();
   const recruiterIdList:string[] = [];
 
@@ -257,9 +267,11 @@ const HomeNew = () => {
                       type="text"
                       placeholder='Try "software developer"'
                       className="text-black border-none outline-none w-full"
+                      onChange={(e)=>setSearchVal(e.target.value)}
                   />
                 </div>
                 <button
+                    onClick={handleSearch}
                     className="w-[120px] h-[50px] bg-success text-white border-none rounded-tr-md rounded-br-md cursor-pointer">
                   Search
                 </button>

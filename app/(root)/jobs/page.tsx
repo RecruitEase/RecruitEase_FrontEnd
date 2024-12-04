@@ -1,10 +1,10 @@
 "use client"
-import React from 'react'
+import React, {useState} from 'react'
 import {Card, CardHeader, Image, Autocomplete, AutocompleteItem, Checkbox, Chip, ChipProps} from "@nextui-org/react";
 import {IoLocationOutline} from "react-icons/io5";
 import {MdAccessTime} from "react-icons/md";
 import {CiFilter} from "react-icons/ci";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import LoadingComponent from '@/components/LoadingComponent';
 import {useLiveJobs} from "@/lib/hooks/useJobs";
 import {fieldValues, jobTypes, locations} from "@/components/recruiter/data";
@@ -64,6 +64,10 @@ const jobTypeColorMatch: Record<string, ChipProps["color"]> = {
 
 function Jobs() {
     const router = useRouter();
+    const searchParams = useSearchParams()
+
+    const search = searchParams.get('q')
+    console.log("kwjncewiw",search )
     const handleFilter = () => {
     }
     const jobQuery = useLiveJobs();
@@ -84,6 +88,13 @@ function Jobs() {
     const recruitersQuery = useRecruiters(recruiterIdList,false);
     console.log("recruiterssQuery", recruitersQuery.data)
 
+    const [searchVal,setSearchVal]=useState('');
+
+    const handleSearch=()=>{
+        console.log("dxewdewhmbdewdnwkndkew")
+        window.location.href = '/jobs?q='+searchVal;
+    }
+
 
     return (
         <div>
@@ -101,9 +112,10 @@ function Jobs() {
                         placeholder="I'm looking for...   (Eg : Job title, Position, Company)"
                         name="q"
                         className="px-6 py-2 w-full rounded-md flex-1 outline-none bg-white text-black"
+                        onChange={(e)=>setSearchVal(e.target.value)}
                     />
                     <button
-                        type="submit"
+                        onClick={handleSearch}
                         className="w-full md:w-auto px-6 py-3 bg-black border-black text-white fill-white active:scale-95 duration-100 border will-change-transform overflow-hidden relative rounded-xl transition-all"
                     >
                         <div className="flex items-center transition-all opacity-1">
@@ -191,7 +203,9 @@ function Jobs() {
 
 
                             <div className="col-span-1 md:col-span-3">
-                                {jobQuery.data?.map((item) =>{
+                                {jobQuery.data?.filter(item =>
+                                    item.title.toLowerCase().includes(search || "")
+                                ).map((item) =>{
 
                                   const currentRecruiter=recruitersQuery.data!.find(r => r.recruiterId === item.recruiterId);
                                     const userProfilePic=(currentRecruiter?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+currentRecruiter.profilePic : "/profileImages/noImage.png";

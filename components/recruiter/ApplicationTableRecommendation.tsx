@@ -560,7 +560,11 @@ export default function ApplicationTableRecommendation({recommendations,applicat
                     </TableColumn>
                 )}
             </TableHeader>
-            <TableBody emptyContent={"No applications found"} items={sortedItems}>
+            <TableBody emptyContent={"No applications found"} items={sortedItems.sort((a, b) => {
+                const scoreA = recommendations.find(i=>i.applicationId!=a.applicationId)?.matchPercentage;
+                const scoreB = recommendations.find(i=>i.applicationId!=b.applicationId)?.matchPercentage;
+                return scoreB! - scoreA!; // Descending order (highest score first)
+            })}>
                 {(item) => (
                     <TableRow key={item.applicationId}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
