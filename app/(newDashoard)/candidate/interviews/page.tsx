@@ -207,6 +207,7 @@ const InterviewsOffers = () => {
                     {interviewOfferCards && interviewOfferCards.map((item, index) => (
                         <InterviewsOffersCard key={index} card={item} popup={() => popupview(item)}/>
                     ))}
+                    {!interviewOfferCards && <h2>You have no interviews yet!</h2>}
                 </div>
             )}
         </div>

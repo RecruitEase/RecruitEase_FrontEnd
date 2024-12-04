@@ -31,7 +31,7 @@ function ChatLayout() {
   });
   const recipientId = candidateData?.id;
   const name = candidateData?.firstName + " " + candidateData?.lastName;
-  const profileImage = candidateData?.profilePic;
+  const profileImage = (candidateData?.profilePic)?process.env.NEXT_PUBLIC_S3_URL+candidateData?.profilePic : "/profileImages/noImage.png";
 
   // Initialize WebSocket connection
   useEffect(() => {
