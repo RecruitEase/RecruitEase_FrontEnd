@@ -79,6 +79,10 @@ export const updateCandidate=async (data:CandidateUpdateProp)=>{
     return (await axiosInstance.put('user/update-candidate',data));
 }
 
+export const getGenericUserDetails=async (userId:string)=>{
+    return (await axiosInstance.get(`user/generic/user-details/${userId}`)).data.content;
+}
+
 
 // application detail apis.............................................................................................................................................................................
 export const getApplications=async (candidateId:string)=>{
@@ -207,6 +211,10 @@ export const paymentQuery=async (paymentReq:PaymentRequestProp)=>{
     return (await axiosInstance.post(`/api/v1/payment/checkout`,paymentReq)).data.content;
 }
 
+//chat
+export const getChatMessages=async (recipientId:string)=>{
+    return (await axiosInstance.get(`/chat/${recipientId}`)).data.content;
+}
 
 // export const getTodosIds= async()=>{
 //     return (await axiosInstance.get<Todo[]>('todos')).data.map(todo=>todo.id);
