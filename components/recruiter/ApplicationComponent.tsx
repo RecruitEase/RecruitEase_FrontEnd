@@ -358,7 +358,7 @@ export default function ApplicationComponent({
                                 color={"secondary"}
                                 className={"w-full bg-gray-900 text-whiteText"}
                                 as={Link}
-                                href="/recruiter/candidate-profile/abc123/history"
+                                href={`/recruiter/candidate-profile/${selectedApplicantion?.candidateId}/history`}
                               >
                                 Applicant History <FaHistory />
                               </Button>
@@ -366,7 +366,7 @@ export default function ApplicationComponent({
                                 color={"secondary"}
                                 className={"w-full bg-gray-900 text-whiteText"}
                                 as={Link}
-                                href="/recruiter/candidate-profile/abc123"
+                                href={`/recruiter/candidate-profile/${selectedApplicantion?.candidateId}`}
                               >
                                 Applicant Profile <FaPaste />
                               </Button>
