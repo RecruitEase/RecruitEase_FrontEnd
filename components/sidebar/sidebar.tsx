@@ -258,6 +258,11 @@ export const SidebarWrapper = ({role}: SideBarProps) => {
                                     </>
                                 )
                             }
+                            <SidebarItem
+                                title="Home"
+                                icon={<HomeIcon/>}
+                                href={`/`}
+                            />
                         </SidebarMenu>
 
 
