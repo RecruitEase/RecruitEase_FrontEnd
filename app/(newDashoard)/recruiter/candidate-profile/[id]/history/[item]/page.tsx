@@ -14,6 +14,7 @@ import {
   getJobById,
   getCandidate,
 } from "@/lib/api";
+import LoadingComponent from "@/components/LoadingComponent";
 
 interface AtsResponse {
   applicationId: string;
@@ -39,6 +40,7 @@ const CandidateApplicationHistory = () => {
   const router = useRouter();
   const [historyData, setHistoryData] = useState<AtsResponse[]>([]);
   const [jobTitle, setJobTitle] = useState<string>("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -57,6 +59,8 @@ const CandidateApplicationHistory = () => {
         setHistoryData(history);
       } catch (error) {
         console.error("Failed to fetch application or job details:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -82,6 +86,14 @@ const CandidateApplicationHistory = () => {
       id: userData?.candidateId || "",
     });
   }, [userData]);
+
+  if (loading) {
+    return (
+      <div>
+        <LoadingComponent />
+      </div>
+    );
+  }
 
   return (
     <div>

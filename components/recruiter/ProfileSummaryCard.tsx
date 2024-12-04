@@ -31,7 +31,11 @@ export default function ProfileSummaryCard({
       <div className="flex flex-col items-center pb-10 mt-5">
         <img
           className="w-24 h-24 mb-3 rounded-full shadow-lg"
-          src={profile.profilePic}
+          src={
+            profile?.profilePic
+              ? process.env.NEXT_PUBLIC_S3_URL + profile?.profilePic
+              : "/profileImages/noImage.png"
+          }
           alt={`'s profile picture`}
         />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">

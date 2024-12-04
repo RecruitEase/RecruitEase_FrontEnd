@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { getCandidate } from "@/lib/api";
 import { CandidateProp } from "@/types/users";
+import LoadingComponent from "@/components/LoadingComponent";
 interface JobSummary {
   title: string;
   status: string;
@@ -74,6 +75,14 @@ const RecruiterDashboard = () => {
       name: userData?.firstName + " " + userData?.lastName,
     });
   }, [userData]);
+
+  if (loading) {
+    return (
+      <div>
+        <LoadingComponent />
+      </div>
+    );
+  }
   return (
     <div>
       <header className="home-header">
